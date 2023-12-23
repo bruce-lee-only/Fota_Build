@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package carota.telemetry;
+
+option java_package = "com.carota.protobuf";
+
+/*
+* Usage :
+*   Trace API process
+*/
+message CallTrace {
+    string tag = 1;
+    string req = 2;
+    string rsp = 3;
+}
+
+/*
+* Usage :
+*   Empty response message
+*/
+message EmptyRsp {
+    repeated CallTrace trace = 1;
+}
+
+/*
+* Usage :
+*   Empty request message
+*/
+message EmptyReq {
+    string tag = 1;
+}

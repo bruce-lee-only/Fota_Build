@@ -11,6 +11,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/ota.agent" />
+            <option value="$PROJECT_DIR$/ota.component" />
             <option value="$PROJECT_DIR$/ota.lib.common" />
             <option value="$PROJECT_DIR$/ota.lib.sdk" />
             <option value="$PROJECT_DIR$/ota.lib.slave" />

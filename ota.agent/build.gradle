@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+
+initDefaultConfigure(project)
+
+android {
+    compileSdkVersion build_versions.target_sdk
+
+    defaultConfig {
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode build_versions.ver_code
+        versionName genVersionName(projectDir.path)
+    }
+
+    buildTypes {
+        release {
+            versionNameSuffix '-r'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+        }
+        sdk.initWith(release)
+        sdk {
+            versionNameSuffix '-rs'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        lite.initWith(sdk)
+    }
+    compileOptions {
+        sourceCompatibility "1.8"
+        targetCompatibility "1.8"
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+}

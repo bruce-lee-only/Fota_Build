@@ -1,0 +1,115 @@
+ext.timestamp = new Date()
+println "BUILD DATE : ${timestamp}"
+
+def initModuleConfig(Project project) {
+    def android = project.android
+
+    android.compileSdkVersion 33
+
+    android.defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    def buildTimeMinutes = (int)(timestamp.time / (60 * 1000))
+    def buildTimeWeek = timestamp.format("yyww", TimeZone.getTimeZone("UTC+08:00"))
+    def verName = new File(project.projectDir, '/VERSION').text.trim() + '.' + buildTimeWeek
+
+    if(project.pluginManager.hasPlugin("com.android.library")) {
+        // Set as Library Module
+        android.defaultConfig {
+            consumerProguardFiles "consumer-rules.pro"
+            buildConfigField "String", "VERSION_NAME", "\"${verName}\""
+            buildConfigField "int", "VERSION_CODE", "${buildTimeMinutes}"
+        }
+    } else {
+        // Set as Application Module
+        android.defaultConfig {
+            versionCode buildTimeMinutes
+            versionName verName
+        }
+    }
+
+    android.compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    if(project.pluginManager.hasPlugin("kotlin-android")) {
+        android.kotlinOptions {
+            jvmTarget = '1.8'
+        }
+
+        android.composeOptions {
+            kotlinCompilerExtensionVersion '1.1.0-rc02'
+            kotlinCompilerVersion '1.6.10'
+        }
+    }
+
+    project.dependencies {
+        testImplementation 'junit:junit:4.13.2'
+        // dependencies.testImplementation 'org.mockito:mockito-core:2.19.0'
+        // DO NOT CHANGE RIGHT NOW, V4.6 NEED JDK 15+
+        testImplementation "org.robolectric:robolectric:4.5.+"
+        testImplementation 'org.powermock:powermock-module-junit4:2.0.4'
+        testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.4'
+        testImplementation 'org.powermock:powermock-api-mockito2:2.0.4'
+
+        testImplementation 'org.json:json:20220320'
+        testImplementation 'xmlpull:xmlpull:1.1.3.4d_b4_min'
+
+        testImplementation 'androidx.test:core:1.4.0'
+
+        androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+        androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+        androidTestImplementation "androidx.test.ext:truth:1.4.0"
+        androidTestImplementation "androidx.test:runner:1.4.0"
+        androidTestUtil "androidx.test:orchestrator:1.4.1"
+    }
+}
+
+def initSignConfig(Project project) {
+    def android = project.android
+    def signRoot = project.rootDir
+
+    android.signingConfigs {
+        'kld' {
+            keyAlias 'megaPlatform'
+            keyPassword '@megatronix'
+            storeFile new File(signRoot, 'bitech_platform.keystore')
+            storePassword '@megatronix'
+        }
+        'aosp' {
+            keyAlias 'platform'
+            keyPassword 'android'
+            storeFile new File(signRoot, 'aosp.keystore')
+            storePassword 'android'
+        }
+        'e0x' {
+            keyAlias 'megaplatform'
+            keyPassword '@megatronix'
+            storeFile new File(signRoot, 'chery_platform.keystore')
+            storePassword '@megatronix'
+        }
+    }
+    
+    android.buildTypes {
+        release {
+            signingConfig android.signingConfigs.e0x
+        }
+        debug {
+            signingConfig android.signingConfigs.e0x
+        }
+    }
+}
+
+def setDefConfig(Project project) {
+    initSignConfig(project)
+    initModuleConfig(project)
+}
+
+ext.initDefaultConfigure = this.&setDefConfig
+
+

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.carota.agent">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <!-- create bind permission for security
+
+    <permission android:name="ota.permission.RAS_IVI" android:protectionLevel="signatureOrSystem"/>
+    <uses-permission android:name="ota.permission.RAS_IVI"/>
+
+    <permission android:name="ota.permission.VEHICLE" android:protectionLevel="signatureOrSystem" />
+    <uses-permission android:name="ota.permission.VEHICLE"/>
+    -->
+    <application>
+        <!-- set action as below
+
+        <service android:name=".RemoteAgentService" android:permission="ota.permission.RAS_IVI">
+            <intent-filter>
+                <action android:name="ota.intent.action.BIND_RAS"/>
+            </intent-filter>
+        </service>
+
+        <service android:name=".VehicleService" android:permission="ota.permission.VEHICLE">
+            <intent-filter>
+                <action android:name="ota.intent.action.BIND_VEHICLE"/>
+            </intent-filter>
+        </service>
+        -->
+
+    </application>
+
+</manifest>

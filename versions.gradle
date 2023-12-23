@@ -1,0 +1,106 @@
+Date BUILD_TIME = new Date()
+
+def buildTimeMinutes = (int)(BUILD_TIME.time / (60 * 1000))
+def buildTimeWeek = BUILD_TIME.format("yyww", TimeZone.getTimeZone("UTC+08:00"))
+println "BUILD TIME : ${buildTimeWeek} [${buildTimeMinutes}]"
+
+def build_ver = [
+        compile_sdk    : 31,
+        min_sdk        : 24,
+        target_sdk     : 31,
+        build_tool_version:"29.0.3",
+        ver_code       : buildTimeMinutes,
+        build_time     : "${buildTimeWeek}"
+]
+ext.build_versions = build_ver
+
+def genVerName(projDir) {
+    def version = new File(projDir, '/VERSION').text.trim()
+    version + '.' + build_versions.build_time
+}
+ext.genVersionName = this.&genVerName
+
+def dep_ver = [
+        support     : "28.0.0",
+        espresso    : "3.0.1",
+        lifecycle   : "1.1.1",
+        protobuf    : "3.0.0",
+        coroutines  : "1.6.0",
+        skin        : "4.0.5",
+        ftp         : '3.8.0',
+        ftpserver   : '1.2.0',
+        eventbus    : "1.8.0",
+        lifecycle   : "2.5.0",
+        room        : "2.3.0",
+        lombok      : "1.18.20"
+]
+
+def deps = [
+        // Jetpack
+        annotations                 : "androidx.annotation:annotation:1.3.0",
+        startup                     : "androidx.startup:startup-runtime:1.1.1",
+        constraint_layout           : "androidx.constraintlayout:constraintlayout:2.0.4",
+        app_compat                  : "androidx.appcompat:appcompat:1.3.0",
+        recyclerview                : "androidx.recyclerview:recyclerview:1.2.1",
+        material                    : "com.google.android.material:material:1.4.0",
+
+        // kotlinx
+        ktx_core                    : 'androidx.core:core-ktx:1.7.0',
+        ktx_coroutines_core         : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${dep_ver.coroutines}",
+        ktx_coroutines_android      : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${dep_ver.coroutines}",
+
+        // 3th
+        okhttp                      : "com.squareup.okhttp3:okhttp:4.9.3",
+        mockwebserver               : "com.squareup.okhttp3:mockwebserver:3.9.1",
+        hamcrest                    : "org.hamcrest:hamcrest-library:1.3",
+
+        // UI
+        design_material             : 'com.google.android.material:material:1.4.0',
+        wheelview                   : 'com.contrarywind:wheelview:4.1.0',
+
+        //junit
+        junit_junit                 : "junit:junit:4.13.2",
+        junit_ext                   : "androidx.test.ext:junit:1.1.3",
+        junit_espresso              : "androidx.test.espresso:espresso-core:3.4.0",
+
+        // protobuf
+        proto_java                  : "com.google.protobuf:protobuf-lite:${dep_ver.protobuf}",
+        protoc_gen                  : "com.google.protobuf:protoc-gen-javalite:${dep_ver.protobuf}",
+        protoc                      : "com.google.protobuf:protoc:${dep_ver.protobuf}",
+        proto_lite                  : "com.google.protobuf:protobuf-javalite:3.18.0",
+        proto_datastore             : "androidx.datastore:datastore:1.0.0",
+
+        //gson
+        gson                        : 'com.google.code.gson:gson:2.8.6',
+        guava                       : 'com.google.guava:guava:31.0.1-android',
+
+        //skin-support
+        skin_support                : "skin.support:skin-support:${dep_ver.skin}",
+        skin_appcompat              : "skin.support:skin-support-appcompat:${dep_ver.skin}",
+        skin_design                 : "skin.support:skin-support-design:${dep_ver.skin}",
+        skin_cardview               : "skin.support:skin-support-cardview:${dep_ver.skin}",
+        skin_layout                 : "skin.support:skin-support-constraint-layout:${dep_ver.skin}",
+
+        //ftp
+        ftp                         : "commons-net:commons-net:${dep_ver.ftp}",
+        ftpserver                   : "org.apache.ftpserver:ftpserver-core:${dep_ver.ftpserver}",
+
+        //LiveEventBus
+        live_eventbus               : "io.github.jeremyliao:live-event-bus-x:${dep_ver.eventbus}",
+
+        //room
+        room_runtime                : "androidx.room:room-runtime:${dep_ver.room}",
+        room_compiler               : "androidx.room:room-compiler:${dep_ver.room}",
+        room_ktx                    : "androidx.room:room-ktx:${dep_ver.room}",
+        lombok                      : "org.projectlombok:lombok:${dep_ver.lombok}",
+
+        //lifecycle
+        lifecycle_viewmodel         : "androidx.lifecycle:lifecycle-viewmodel-ktx:${dep_ver.lifecycle}",
+        lifecycle_runtime           : "androidx.lifecycle:lifecycle-runtime-ktx:${dep_ver.lifecycle}",
+        lifecycle_components        : "com.trello.rxlifecycle2:rxlifecycle-components:2.2.2",
+
+        //javax
+        javax_inject                :"javax.inject:javax.inject:1"
+
+]
+ext.deps = deps
