@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="CheryAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
+        <!--<item name="android:windowLightStatusBar" tools:targetApi="m">true</item>-->
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowNoTitle">true</item>
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:windowBackground">@color/white</item>
+
+        <!--        <item name="navigationIcon">@android:color/transparent</item>-->
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
+    </style>
+</resources>

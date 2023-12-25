@@ -3,13 +3,19 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+apply plugin: 'kotlin-kapt'
+
 android {
     namespace 'com.carota.lib.ui'
-    compileSdk 33
+    compileSdk 34
+
+    dataBinding {
+        enabled = true
+    }
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
+        targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
