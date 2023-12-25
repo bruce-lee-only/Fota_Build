@@ -35,8 +35,7 @@ public class ActionCMH implements IActionCMH {
         PrivReqHelper.Response resp =
                 PrivReqHelper.doPost("http://" + mHost + IActionCMH.GMH_SET_FIELD,
                         req.toByteArray());
-        Logger.info(CALL_TAG + "Set ScheduleField RSP : %1d", resp.getStatusCode());
-
+        Logger.info(CALL_TAG + "RSP : %1d", resp.getStatusCode());
         return PrivStatusCode.OK.equals(resp.getStatusCode());
     }
 
@@ -53,7 +52,7 @@ public class ActionCMH implements IActionCMH {
         PrivReqHelper.Response resp =
                 PrivReqHelper.doPost("http://" + mHost + IActionCMH.GMH_GET_FIELD,
                         req.build().toByteArray());
-        Logger.info(CALL_TAG + "Get ScheduleField RSP : %1d", resp.getStatusCode());
+        Logger.info(CALL_TAG + "RSP : %1d", resp.getStatusCode());
         if (PrivStatusCode.OK.equals(resp.getStatusCode())) {
             try {
                 ControlMessageHandler.QueryFieldRsp rsp = ControlMessageHandler.QueryFieldRsp.parseFrom(resp.getBody());

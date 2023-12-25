@@ -9,36 +9,25 @@
  ******************************************************************************/
 package com.carota.util;
 
-import android.content.Context;
-import android.text.TextUtils;
-
-import com.carota.build.ParamLocal;
-import com.carota.protobuf.HttpProxy;
-import com.carota.svr.PrivReqHelper;
+import com.carota.httpproxy.IActionProxy;
 import com.momock.util.FileHelper;
 import com.momock.util.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import kotlin.text.Charsets;
 import okhttp3.Call;
-import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -189,10 +178,9 @@ public class HttpHelper {
     }
 
     public static Response doGet(String url, Map<String, String> params) {
-        if (isNeedProxy(url)) {
-            return doProxy(url, params, null, null, 1);
+        if (sIActionProxy != null && sIActionProxy.isNeedProxy(url)) {
+            return sIActionProxy.doProxyGet(url,params);
         }
-
         Request.Builder req = new Request.Builder().url(getFullUrl(url, params));
         return doHttpRequest(req, null);
     }
@@ -202,10 +190,9 @@ public class HttpHelper {
     }
 
     public static Response doPost(String url, Map<String, String> params, Map<String, String> headers, Object body) {
-        if (isNeedProxy(url)) {
-            return doProxy(url, params, headers, body, 0);
+        if (sIActionProxy != null && sIActionProxy.isNeedProxy(url)) {
+            return sIActionProxy.doProxyPost(url, params, headers, body);
         }
-
         Request.Builder req = new Request.Builder().url(getFullUrl(url, params));
         if(body instanceof JSONObject || body instanceof JSONArray) {
             req.post(RequestBody.create(JSON, body.toString()));
@@ -270,6 +257,7 @@ public class HttpHelper {
         try {
             okhttp3.Response response = call.execute();
             length = response.body().contentLength();
+            response.body().close();
         } catch (Exception e) {
             Logger.error(e);
         }
@@ -296,6 +284,9 @@ public class HttpHelper {
 
     /**
      * 下载文件
+     *
+     * @param startIndex 起始位置
+     * @param endIndex   结束位置
      * @param url        下载地址
      * @return
      * @throws IOException
@@ -411,34 +402,25 @@ public class HttpHelper {
 
     public static HttpProxyResponse doHttpProxyPost(String url,
                                                     Map<String, String> headers,
-                                                    byte[] body) {
+                                                    Object body) {
         HttpProxyResponse httpProxyResponse = null;
-        String type = "application/json";
-        if (headers != null && headers.containsKey("Content-Type")) {
-            type = headers.get("Content-Type");
-        }
-        if (type == null) {
-            type = "application/json";
-        }
         try {
             Request.Builder req = new Request
                     .Builder()
                     .url(getFullUrl(url, null));
 
-            if (headers != null && headers.size() > 0) {
-                for (Map.Entry<String, String> entry : headers.entrySet()) {
-                    req.addHeader(entry.getKey(), entry.getValue());
-                }
-            }
-
-            if (type.startsWith("application/json")) {
-                req.post(RequestBody.create(JSON, new String(body)));
-            } else if (type.startsWith("application/octet-stream")) {
-                req.post(RequestBody.create(STREAM, body));
-            } else if (type.startsWith("application/cj")) {
-                req.post(RequestBody.create(CJ, ByteString.of(body, 0, body.length)));
+            if (body instanceof JSONObject || body instanceof JSONArray) {
+                req.post(RequestBody.create(JSON, body.toString()));
+            } else if (body instanceof File) {
+                req.post(RequestBody.create(STREAM, (File) body));
+            } else if (body instanceof ByteString) {
+                req.post(RequestBody.create(CJ, (ByteString) body));
+            } else if (body instanceof byte[]) {
+                req.post(RequestBody.create(STREAM, (byte[]) body));
+            } else if (body instanceof InputStream) {
+                req.post(create(STREAM, (InputStream) body));
             } else {
-                req.post(RequestBody.create(TEXT, null == body ? "" : new String(body)));
+                req.post(RequestBody.create(TEXT, null == body ? "" : body.toString()));
             }
 
             if (headers != null && headers.size() > 0) {
@@ -501,162 +483,9 @@ public class HttpHelper {
             return contentType;
         }
     }
+    private static IActionProxy sIActionProxy = null;
 
-    /**
-     * 使用代理发出网络请求
-     *
-     * @param url
-     * @param params
-     * @param headers     请求头
-     * @param body
-     * @param proxyMethod 0为POST，1为GET
-     * @return 请求结果
-     */
-    private static Response doProxy(String url,
-                                    Map<String, String> params,
-                                    Map<String, String> headers,
-                                    Object body,
-                                    int proxyMethod) {
-        HttpProxy.HttpProxyReq.Builder builder = HttpProxy.HttpProxyReq.newBuilder();
-
-        //RequestBody requestBody = null;
-        String conType = null;
-        long contentLength = 0;
-        try {
-            if (body instanceof JSONObject) {
-                conType = JSON.toString();
-                MediaType contentType = JSON;
-                Charset charset = contentType.charset();
-                if (charset == null) {
-                    charset = Charsets.UTF_8;
-                    contentType = MediaType.parse(contentType + ";charset=utf-8");
-                    conType = contentType.toString();
-                }
-                byte[] bytes = ((JSONObject) body).toString().getBytes(charset);
-                contentLength = bytes.length;
-                builder.setBody(com.google.protobuf.ByteString.copyFrom(bytes));
-            } else if (body instanceof JSONArray) {
-                conType = JSON.toString();
-                MediaType contentType = JSON;
-                Charset charset = contentType.charset();
-                if (charset == null) {
-                    charset = Charsets.UTF_8;
-                    contentType = MediaType.parse(contentType + ";charset=utf-8");
-                    conType = contentType.toString();
-                }
-                byte[] bytes = ((JSONArray) body).toString().getBytes(charset);
-                contentLength = bytes.length;
-                builder.setBody(com.google.protobuf.ByteString.copyFrom(bytes));
-            } else if (body instanceof File) {
-                //requestBody = RequestBody.create(STREAM, (File) body);
-                conType = STREAM.toString();
-                contentLength = ((File) body).length();
-                InputStream inputStream = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    inputStream = Files.newInputStream(((File) body).toPath());
-                }
-                builder.setBody(com.google.protobuf.ByteString.readFrom(inputStream));
-            } else if (body instanceof ByteString) {
-                //requestBody = RequestBody.create(CJ, (ByteString) body);
-                conType = CJ.toString();
-                byte[] bytes = ((ByteString) body).toByteArray();
-                contentLength = bytes.length;
-                builder.setBody(com.google.protobuf.ByteString.copyFrom(bytes));
-            } else if (body instanceof byte[]) {
-                //requestBody = RequestBody.create(STREAM, (byte[]) body);
-                conType = STREAM.toString();
-                contentLength = ((byte[]) body).length;
-                InputStream inputStream = new ByteArrayInputStream((byte[]) body);
-                builder.setBody(com.google.protobuf.ByteString.readFrom(inputStream));
-            } else if (body instanceof InputStream) {
-                //requestBody = create(STREAM, (InputStream) body);
-                conType = STREAM.toString();
-                contentLength = ((InputStream) body).available();
-                builder.setBody(com.google.protobuf.ByteString.readFrom((InputStream) body));
-            } else {
-                //requestBody = RequestBody.create(TEXT, null == body ? "" : body.toString());
-                conType = TEXT.toString();
-                Charset charset = null;
-                MediaType contentType = TEXT;
-                charset = contentType.charset();
-                if (charset == null) {
-                    charset = StandardCharsets.UTF_8;
-                    contentType = MediaType.parse(contentType + "; charset=utf-8");
-                    conType = contentType.toString();
-                }
-                String content = null == body ? "" : body.toString();
-                byte[] bytes = content.getBytes(charset);
-                contentLength = bytes.length;
-                builder.setBody(com.google.protobuf.ByteString.copyFrom(bytes));
-            }
-
-            if (headers == null) {
-                headers = new HashMap<>();
-            }
-            Logger.error("doProxy conType = " + conType + " contentLength = " + contentLength);
-            headers.put("Content-Type", conType);
-            headers.put("Content-Length", Long.toString(contentLength));
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                HttpProxy.HeaderReq.Builder headerReq = HttpProxy.HeaderReq.newBuilder();
-                headerReq.setKey(entry.getKey());
-                headerReq.setValStr(entry.getValue());
-                Logger.error("doProxy entry.getKey() = " + entry.getKey() + " entry.getValue() = " + entry.getValue());
-                builder.addHeader(headerReq.build());
-            }
-
-            HttpProxy.HttpProxyReq.Method method = HttpProxy.HttpProxyReq.Method.POST;
-            if (proxyMethod == 1) {
-                method = HttpProxy.HttpProxyReq.Method.GET;
-            }
-            String sendUrl = getFullUrl(url, params);
-            builder.setUrl(sendUrl);
-            builder.setMethod(method);
-        } catch (Exception e) {
-            Logger.error("doProxy e = " + e.getMessage());
-        }
-        return doProxyRequest(builder.build());
-    }
-
-    private static Response doProxyRequest(HttpProxy.HttpProxyReq req) {
-        Response resp = new Response();
-        try {
-            PrivReqHelper.Response privResp = PrivReqHelper.doPost("http://ota_net_proxy/http_proxy", req.toByteArray());
-            resp.setStatusCode(privResp.getStatusCode());
-
-            String type = privResp.getContentType();
-            Logger.debug("HttpHelper doProxyRequest Content-Type : " + type);
-            if (MimeType.LZSTRING.equals(type)) {
-                resp.setBody(LZStringHelper.decompress(new ByteArrayInputStream(privResp.getBody())));
-            } else {
-                resp.setBody(new String(privResp.getBody()));
-            }
-        } catch (InterruptedIOException iie) {
-            Logger.error(iie);
-            resp.setInterrupted(true);
-        } catch (Exception e) {
-            Logger.error(e);
-        }
-        return resp;
-    }
-
-    private static boolean isNeedProxy(String url) {
-        if (TextUtils.isEmpty(url)) {
-            return false;
-        }
-
-//        https://api-fota-uat.mychery.com:8443/v0/data
-        //todo: 非PKI
-//        if (url.startsWith("https://api-fota.mychery.com")
-//         || url.startsWith("https://api-fota-uat.mychery.com")) {
-//            return true;
-//        }
-
-        //todo: PKI
-        if (url.startsWith("https://apis-fota.mychery.com")
-         || url.startsWith("https://apis-fota-uat.mychery.com")) {
-            return true;
-        }
-
-        return false;
+    public static void setExternalProxy(IActionProxy actionProxy) {
+        sIActionProxy = actionProxy;
     }
 }

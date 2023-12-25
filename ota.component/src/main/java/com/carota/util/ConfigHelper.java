@@ -18,15 +18,14 @@ import com.carota.build.IConfiguration;
 import com.carota.build.ParamCMH;
 import com.carota.build.ParamDM;
 import com.carota.build.ParamAnalytics;
-import com.carota.build.ParamDM;
 import com.carota.build.ParamDTC;
-import com.carota.build.ParamDisclaimer;
+import com.carota.build.ParamExternalHttpProxy;
+import com.carota.build.ParamHtml;
 import com.carota.build.ParamHttpProxy;
 import com.carota.build.ParamHub;
 import com.carota.build.ParamLocal;
 import com.carota.build.ParamMDA;
 import com.carota.build.ParamRAS;
-import com.carota.build.ParamRMDA;
 import com.carota.build.ParamRSM;
 import com.carota.build.ParamRoute;
 import com.carota.build.ParamSOTA;
@@ -62,7 +61,6 @@ public class ConfigHelper {
                 .setDefaultParser(paramLocal)
                 .addNodeParser(new ParamDM())
                 .addNodeParser(new ParamMDA())
-                .addNodeParser(new ParamRMDA())
                 .addNodeParser(new ParamHub())
                 .addNodeParser(new ParamRAS())
                 .addNodeParser(new ParamRoute())
@@ -73,8 +71,9 @@ public class ConfigHelper {
                 .addNodeParser(new ParamDTC())
                 .addNodeParser(new ParamSOTA())
 				.addNodeParser(new ParamCMH())
-                .addNodeParser(new ParamDisclaimer())
+				.addNodeParser(new ParamHtml())
                 .addNodeParser(new ParamHttpProxy())
+                .addNodeParser(new ParamExternalHttpProxy())
                 .setSrc(cfg).build();
     }
 

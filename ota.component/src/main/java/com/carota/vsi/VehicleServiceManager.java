@@ -23,7 +23,6 @@ import com.carota.mda.remote.info.IVehicleStatus;
 import com.carota.core.SystemAttribute;
 import com.carota.mda.remote.info.VehicleDesc;
 import com.carota.util.ConfigHelper;
-import com.momock.util.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -101,14 +100,4 @@ public class VehicleServiceManager implements IActionVSI {
     public SystemAttribute setSystemAttribute(List<SystemAttribute.Configure> cfg) {
         return getRealVSI(mParamVSM.getEvent()).setSystemAttribute(cfg);
     }
-
-    @Override
-    public boolean cleanEvent(String action, long delaySec, Bundle extra) {
-        String name = mParamVSM.getEvent();
-        if (!VehicleEvent.EVENT_SCHEDULE.equals(action)) {
-            name = mParamVSM.getPower();
-        }
-        return getRealVSI(name).cleanEvent(action, delaySec, extra);
-    }
-
 }

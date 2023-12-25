@@ -87,6 +87,8 @@ public class CheckHandler extends SimpleHandler {
                 .setRn(us.getReleaseNote())
                 .setCampaignId(us.getCampaignId())
                 .setScheduleId(us.getScheduleId())
+                .addAllOperation(us.getOperation())
+                .setDisplayInfoUrl(us.getDisplayInfoUrl())
                 .addAllEnvironment(us.getCondition());
 
         switch (us.getMode()) {

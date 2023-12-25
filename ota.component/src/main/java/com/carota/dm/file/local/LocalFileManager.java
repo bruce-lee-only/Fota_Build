@@ -29,7 +29,7 @@ public class LocalFileManager extends AppFileManager {
      */
     private void prepareWorkDir() {
         FileHelper.mkdir(mWorkDir);
-        SystemHelper.execScript("chmod -R 777 " + mWorkDir.getAbsolutePath());
+//        SystemHelper.execScript("chmod -R 777 " + mWorkDir.getAbsolutePath());
     }
 
 }

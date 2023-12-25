@@ -115,4 +115,23 @@
         <name>ota_cmh</name>
     </node>
 
+    <node
+        enabled="true"
+        id="net_proxy">
+        <name>ota_net_proxy</name>
+    </node>
+
+    <!--If you do not need any proxy from other device,please make enabled false.
+    This proxy is usually not mixed with net_proxy.-->
+    <node
+        enabled="true"
+        id="external_proxy">
+        <name>ota_net_proxy</name>
+        <!--If you want use external proxy all the time,please make whitelist enabled false.-->
+        <whitelist enabled="true">https://xxx.xxx.xxx,https://xxx.xxx.bbb</whitelist>
+    </node>
+
+    <node id="html" enabled="true">
+        <dir>/sdcard/xxx</dir>
+    </node>
 </carota>

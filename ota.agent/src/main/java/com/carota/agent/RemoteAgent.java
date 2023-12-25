@@ -99,7 +99,7 @@ public abstract class RemoteAgent {
 
 
     /**
-     * @param name   name of device(assign by OTA)
+     * @param name name of device(assign by OTA)
      */
     public RemoteAgent(Context context, String name) {
         NAME = name;
@@ -120,9 +120,9 @@ public abstract class RemoteAgent {
     private Bundle queryInfo(int flag, String name, Bundle bomInfo) throws RemoteException {
         Bundle ret = new Bundle();
         ret.putString("id", NAME);
-//        ret.putBundle(KEY_BOM, bomInfo);
+        ret.putBundle(KEY_BOM, bomInfo);
 
-        if(0 != (flag & FLAG_SDK)) {
+        if (0 != (flag & FLAG_SDK)) {
             ret.putString("sdk_v", BuildConfig.VERSION_NAME);
             ret.putInt("sdk_vc", BuildConfig.VERSION_CODE);
         }
@@ -137,21 +137,22 @@ public abstract class RemoteAgent {
                 ret.putInt(KEY_STATUS_PROGRESS, result.getProgress());
                 ret.putInt(RemoteAgent.KEY_STATUS_RESULT, result.getResult());
                 ret.putInt(RemoteAgent.KEY_ERROR_CODE, result.getErrorCode());
-                if (result.getExtra()!=null) {
+                if (result.getExtra() != null) {
                     ret.putAll(result.getExtra());
                 }
             }
         }
 
-        if(0 != (flag & FLAG_APP)) {
+        if (0 != (flag & FLAG_APP)) {
             onGetAppInfo(ret);
         }
 
-        if(0 != (flag & FLAG_PROP)) {
+        if (0 != (flag & FLAG_PROP)) {
             onGetProp(ret);
         }
         return ret;
     }
+
     private synchronized int triggerUpgrade(ParcelFileDescriptor data, Bundle extra) {
         mIsRunning = true;
         if (extra.getBoolean("is_sub", false)) {
@@ -181,10 +182,10 @@ public abstract class RemoteAgent {
     }
 
     private boolean archiveLogs(String type, Bundle extra) throws RemoteException {
-        if(null != mCallback) {
+        if (null != mCallback) {
             try {
                 File logFile = packageLogFiles(type, extra);
-                if(null != logFile) {
+                if (null != logFile) {
                     try (ParcelFileDescriptor pfd = ParcelFileDescriptor.open(logFile, ParcelFileDescriptor.MODE_READ_ONLY)) {
                         return mCallback.onLogArchived(NAME, type, extra, pfd);
                     } finally {
@@ -208,9 +209,9 @@ public abstract class RemoteAgent {
 
     final public void setUpgradeTriggered(String descriptor) {
         try {
-            if(TextUtils.isEmpty(descriptor)){
+            if (TextUtils.isEmpty(descriptor)) {
                 mSpec.delete();
-            }else{
+            } else {
                 mSpec.getParentFile().mkdirs();
                 FileHelper.writeTextImmediately(mSpec, descriptor, null);
             }
@@ -234,7 +235,7 @@ public abstract class RemoteAgent {
     }
 
     private void onGetAppInfo(Bundle ret) {
-        try{
+        try {
             String appId = mContext.getPackageName();
             PackageInfo pi = mContext.getPackageManager().getPackageInfo(appId, 0);
             ret.putString(KEY_APPID, appId);
@@ -263,9 +264,9 @@ public abstract class RemoteAgent {
         }
         ret.putString(KEY_SERIAL_NUMBER, sn);
         Bundle extra = getExtraInfo(ret.getBundle(KEY_BOM));
-        if(null != extra) {
-            for(String key : extra.keySet()) {
-                if(ret.containsKey(key)) {
+        if (null != extra) {
+            for (String key : extra.keySet()) {
+                if (ret.containsKey(key)) {
                     extra.remove(key);
                 }
             }
@@ -279,7 +280,7 @@ public abstract class RemoteAgent {
 
     public abstract String getSerialNumber(Bundle bomInfo);
 
-    public String getSecureId () {
+    public String getSecureId() {
         return null;
     }
 
@@ -299,24 +300,26 @@ public abstract class RemoteAgent {
      * 2. upload file
      * 3. start install(if possible)
      * 4. wait install finished(if possible)
+     *
      * @param descriptor task ID
-     * @param pkg  upgrade file
-     * @param extra   Reserved
-     * @return  trigger result
+     * @param pkg        upgrade file
+     * @param extra      Reserved
+     * @return trigger result
      */
     protected abstract boolean triggerInstall(String descriptor,
-                                           InputStream pkg, Bundle extra,
-                                           boolean isTriggered) throws IOException;
+                                              InputStream pkg, Bundle extra,
+                                              boolean isTriggered) throws IOException;
 
 
     /**
      * This is a part of Diagnosis Function. collect log files.
      * 1. find available log files by type
      * 2. zip file into one
+     *
      * @param type  log type, null means ALL
-     * @param extra  Reserved
-     * @return  null-not support or error;
-     *          object-zipped log file
+     * @param extra Reserved
+     * @return null-not support or error;
+     * object-zipped log file
      */
     public File packageLogFiles(String type, Bundle extra) {
         return null;
@@ -325,14 +328,15 @@ public abstract class RemoteAgent {
 
     /**
      * This is a part of Diagnosis Function, collect custom event.
-     * @param type    log type
-     * @param event   event describe
-     * @param extra   Reserved
-     * @return   true-recorded and wait to send
-     *           false-fail to record
+     *
+     * @param type  log type
+     * @param event event describe
+     * @param extra Reserved
+     * @return true-recorded and wait to send
+     * false-fail to record
      */
     final public boolean logCustomEvent(String type, String event, Bundle extra) {
-        if(null != mCallback) {
+        if (null != mCallback) {
             try {
                 mCallback.onEventProcess(NAME, type, event, extra);
             } catch (RemoteException e) {

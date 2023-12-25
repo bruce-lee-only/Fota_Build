@@ -16,10 +16,7 @@ import com.carota.agent.RemoteAgent;
 import com.momock.util.JsonHelper;
 import com.momock.util.Logger;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Iterator;
 
 public final class SlaveInfo {
 
@@ -67,14 +64,5 @@ public final class SlaveInfo {
     @Override
     public String toString() {
         return mData.toString();
-    }
-
-    /**
-     * 适配md主控对于该字段的处理逻辑，去掉json数据前后的大括号，以键值对的方式传输extra数据
-     * @return 键值对
-     */
-    public String subJsonString(){
-        String str = mData.toString();
-        return str.substring(1, str.length() - 1);
     }
 }

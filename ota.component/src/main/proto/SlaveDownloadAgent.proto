@@ -216,7 +216,7 @@ message EventRsp {
 }
 
 /*
-* Path : /event
+* Path : /log
 * Feture :
 *   1. Fetch log list
 *   2. Delete log via ID

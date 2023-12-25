@@ -36,7 +36,6 @@ public class ResultHandler extends SimpleHandler {
 
     @Override
     public HttpResp post(String path, Map<String, List<String>> params, byte[] body, Object extra) {
-        Logger.debug("master query ecu upgrade status");
         SlaveDownloadAgent.ResultRsp.Builder builder = SlaveDownloadAgent.ResultRsp.newBuilder();
         PrivStatusCode code;
         try {
@@ -47,8 +46,8 @@ public class ResultHandler extends SimpleHandler {
                     .setName(state.name)
                     .setError(state.getErrorCode())
                     .setProgress(state.getProgress());
-            Logger.debug("[SlaveDownloadAgent1]->" + "name:" + state.name + "," + "state:" + state.getState());
             switch (state.getState()) {
+                case SlaveState.STATE_DOWNLOAD:
                 case SlaveState.STATE_UPGRADE:
                     ret.setStatus(SlaveDownloadAgent.ResultRsp.Status.UPGRADE);
                     break;

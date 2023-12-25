@@ -10,14 +10,12 @@
 
 package com.carota.core.remote;
 
-import android.content.BroadcastReceiver;
 import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.carota.core.ClientState;
 import com.carota.core.ISession;
 import com.carota.core.ITask;
-import com.carota.core.VehicleEvent;
 import com.carota.core.data.UpdateSession;
 import com.carota.core.remote.info.DownloadProgress;
 import com.carota.core.remote.info.InstallProgress;
@@ -25,7 +23,6 @@ import com.carota.core.remote.info.MDAInfo;
 import com.carota.core.remote.info.VehicleInfo;
 import com.carota.mda.remote.info.EcuInfo;
 import com.carota.protobuf.MasterDownloadAgent;
-import com.carota.protobuf.VehicleStatusInformation;
 import com.carota.svr.PrivReqHelper;
 import com.carota.svr.PrivStatusCode;
 import com.carota.util.LogUtil;
@@ -72,8 +69,6 @@ public class ActionMDA implements IActionMDA {
                 case CONN_ACTION_VERIFY:
                     builder.setAction(MasterDownloadAgent.ConnReq.Action.VERIFY);
                     break;
-                case CONN_ACTION_RESCUE:
-                    builder.setAction(MasterDownloadAgent.ConnReq.Action.RESCUE);
                 default:
                     return null;
             }
@@ -116,11 +111,7 @@ public class ActionMDA implements IActionMDA {
                     case AUTO_UPDATE_FACTORY:
                         mode = ISession.MODE_AUTO_UPDATE_FACTORY;
                         break;
-                    case BY_RESCUE:
-                        mode = ISession.MODE_RESCUE;
-                        break;
                 }
-
                 JSONObject joRoot = new JSONObject()
                         .put(UpdateSession.PROP_USID, rsp.getUsid())
                         .put("strategy_desc", new JSONObject().put("rn", rsp.getRn()))
@@ -129,9 +120,7 @@ public class ActionMDA implements IActionMDA {
                         .put(UpdateSession.PROP_OPERATION, new JSONArray(rsp.getOperationList()))
                         .put(UpdateSession.PROP_MODE,mode)
                         .put(UpdateSession.PROP_CAMPAIGN_ID,rsp.getCampaignId())
-                        .put(UpdateSession.PROP_APPOINTMENT_TIME,rsp.getAppointmentTime())
                         .put(UpdateSession.PROP_SCHEDULE_ID, rsp.getScheduleId())
-                        .put(UpdateSession.PROP_UPDATE_TIME, rsp.getUpdateTime())
                         .put(UpdateSession.DISPLAY_INFO_URL, rsp.getDisplayInfoUrl())
                         .put("ecus", jaEcus);
                 UpdateSession s = new UpdateSession(joRoot, PrivStatusCode.OK.equals(statusCode));
@@ -200,8 +189,7 @@ public class ActionMDA implements IActionMDA {
                 JSONObject joRoot = new JSONObject()
                         .put("ret", jaEcus)
                         .put("state", getState(rsp.getStatus()))
-                        .put("usid", rsp.getUsid())
-                        .put("target", getTarget(rsp.getStep()));
+                        .put("usid", rsp.getUsid());
                 InstallProgress insPg = InstallProgress.create(joRoot);
                 Logger.debug(CALL_TAG + "DATA : %1s", insPg.toString());
                 return insPg;
@@ -212,16 +200,6 @@ public class ActionMDA implements IActionMDA {
         return null;
     }
 
-    private String getTarget(MasterDownloadAgent.UpgradeStep step) {
-        switch (step) {
-            case SLAVE:
-                return "slave";
-            case MASTER:
-            case UI:
-                return "master";
-        }
-        return null;
-    }
     private int getState(MasterDownloadAgent.UpgradeResultRsp.Status status) {
         switch (status) {
             case UPGRADE:
@@ -239,13 +217,13 @@ public class ActionMDA implements IActionMDA {
         }
     }
 
-    private boolean triggerUpgrade(String usid, MasterDownloadAgent.UpgradeStep step) throws InterruptedException{
+    @Override
+    public boolean upgradeEcuInMaster(String usid) throws InterruptedException{
         final String CALL_TAG = LogUtil.TAG_RPC_MDA + "[INS-TRIG] ";
-        Logger.info(CALL_TAG + "%1d", step.getNumber());
+        Logger.info(CALL_TAG + "%1s", usid);
         MasterDownloadAgent.UpgradeReq.Builder builder = MasterDownloadAgent.UpgradeReq.newBuilder()
                 .setTag(ReqTag.TAG_SRC_CORE)
-                .setUsid(usid)
-                .setStep(step);
+                .setUsid(usid);
 
         PrivReqHelper.Response resp = PrivReqHelper.doPost(mBaseUrl + "/upgrade", builder.build().toByteArray());
         int responseCode = resp.getStatusCode();
@@ -257,16 +235,6 @@ public class ActionMDA implements IActionMDA {
             throw new InterruptedException("Interrupted in REQUEST");
         }
         return false;
-    }
-
-    @Override
-    public boolean upgradeEcuInSlave(String usid) throws InterruptedException {
-        return triggerUpgrade(usid, MasterDownloadAgent.UpgradeStep.SLAVE);
-    }
-
-    @Override
-    public boolean upgradeEcuInMaster(String usid) throws InterruptedException {
-        return triggerUpgrade(usid, MasterDownloadAgent.UpgradeStep.MASTER);
     }
 
     private boolean triggerDownload(String usid, MasterDownloadAgent.DownloadReq.Action action) throws InterruptedException{
@@ -440,7 +408,6 @@ public class ActionMDA implements IActionMDA {
         final String CALL_TAG = LogUtil.TAG_RPC_MDA + "[ENVM-SET] ";
         Logger.info(CALL_TAG + "%1b", isUat);
         MasterDownloadAgent.EnvmReq.Builder builder = MasterDownloadAgent.EnvmReq.newBuilder();
-        builder.setTag("space");
         if (isUat) {
             builder.setAction(MasterDownloadAgent.EnvmReq.EnvmAction.UAT);
         } else {
@@ -522,53 +489,6 @@ public class ActionMDA implements IActionMDA {
             Logger.error(e);
         }
         return false;
-    }
-
-    @Override
-    public int fireRescue(String action, Bundle bundle) {
-        MasterDownloadAgent.RescueReq.Builder req = MasterDownloadAgent.RescueReq.newBuilder();
-        req.setTag("space");
-        switch (action) {
-            case IActionMDA.EVENT_RESCUE_QUERY:
-                req.setEvent(MasterDownloadAgent.RescueReq.Event.QUERY);
-                break;
-            case IActionMDA.EVENT_RESCUE_VERIFY:
-                req.setEvent(MasterDownloadAgent.RescueReq.Event.VERIFY);
-                break;
-            case IActionMDA.EVENT_RESCUE_RESULT:
-                req.setEvent(MasterDownloadAgent.RescueReq.Event.RESULT);
-                break;
-        }
-        PrivReqHelper.Response resp = PrivReqHelper.doPost(mBaseUrl + "/rescue", req.build().toByteArray());
-        Logger.info("fireRescue rsp code:" + resp.getStatusCode());
-        if(resp.getStatusCode() == PrivStatusCode.OK.getStatusCode()) {
-            try {
-                int ret = MasterDownloadAgent.RescueResp.parseFrom(resp.getBody()).getResult();
-                Logger.info("fireRescue rsp result:" + ret);
-                return ret;
-            } catch (InvalidProtocolBufferException e) {
-                e.printStackTrace();
-            }
-        }
-        return 0;
-    }
-
-    @Override
-    public boolean eCallEvent() {
-        MasterDownloadAgent.EcallReq.Builder req = MasterDownloadAgent.EcallReq.newBuilder();
-        Logger.info("E-Call event send to mda");
-        PrivReqHelper.Response resp = PrivReqHelper.doPost(mBaseUrl + "/ecall", req.build().toByteArray());
-        Logger.info("eCallEvent rsp code:" + resp.getStatusCode());
-        return resp.getStatusCode() == PrivStatusCode.OK.getStatusCode();
-    }
-
-    @Override
-    public boolean updateTimeOut() {
-        MasterDownloadAgent.TimeOutReq.Builder req = MasterDownloadAgent.TimeOutReq.newBuilder();
-        Logger.info("update time out event send to mda");
-        PrivReqHelper.Response resp = PrivReqHelper.doPost(mBaseUrl + "/timeout", req.build().toByteArray());
-        Logger.info("update time out rsp code:" + resp.getStatusCode());
-        return resp.getStatusCode() == PrivStatusCode.OK.getStatusCode();
     }
 
 }

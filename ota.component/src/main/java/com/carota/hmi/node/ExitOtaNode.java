@@ -4,23 +4,16 @@ import android.os.Handler;
 
 import com.carota.CarotaVehicle;
 import com.carota.hmi.EventType;
+import com.carota.hmi.callback.CallBackManager;
+import com.carota.hmi.callback.IExitOtaCall;
+import com.carota.hmi.status.HmiStatus;
 
 /**
  * Exit Ota
  */
 class ExitOtaNode extends BaseNode {
-    ExitOtaNode(StateMachine status) {
-        super(status);
-    }
-
-    @Override
-    void onStart() {
-        mCallBack.exitOta().onStart();
-    }
-
-    @Override
-    void onStop(boolean success) {
-        mCallBack.exitOta().onStop(success);
+    ExitOtaNode(HmiStatus hmiStatus, Handler handler, CallBackManager callback) {
+        super(hmiStatus, handler, callback);
     }
 
     @Override
@@ -30,20 +23,10 @@ class ExitOtaNode extends BaseNode {
 
     @Override
     protected boolean execute() {
-        //todo: mode by lipiyan for 2023-06-16 退ota失败结果回调只做一次，后续进行持续退出操作
-        boolean result = true;
-        boolean send = false;
-        while (result) {
-            result = !CarotaVehicle.setUpgradeRuntimeEnable(false, false);
-            if (!send) {
-                mCallBack.exitOta().onResult(!result);
-                send = true;
-            }
-            sleep(5000);
+        boolean inOta = true;
+        if (CarotaVehicle.setUpgradeRuntimeEnable(false, false)) {
+            inOta = ((IExitOtaCall) mCallBack.getICall(getType())).inOta();
         }
-        sleep(3000);
-        mStatus.saveInOta(false);
-        return true;
-        //todo: mode by lipiyan 2023-06-16 for 退ota失败结果回调只做一次，后续进行持续退出操作
+        return !inOta;
     }
 }

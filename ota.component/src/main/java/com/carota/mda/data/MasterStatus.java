@@ -20,8 +20,6 @@ public class MasterStatus {
     private static final String SP = "mda.status";
     private static final String KEY_USID = "USID";
     private static final String KEY_PACKAGE = "PACKAGE";
-    private static final String KEY_MASTER = "MASTER";
-    private static final String KEY_SLAVE = "SLAVE";
 
     private SharedPreferences mSP;
     public MasterStatus(Context context) {
@@ -36,24 +34,12 @@ public class MasterStatus {
         return mSP.getBoolean(KEY_PACKAGE, false);
     }
 
-    public boolean getUpgradeSlave() {
-        return mSP.getBoolean(KEY_SLAVE, false);
-    }
-
-    public boolean getUpgradeMaster() {
-        return mSP.getBoolean(KEY_MASTER, false);
-    }
-
     public String getUSID() {
         return mSP.getString(KEY_USID, "");
     }
 
     public void setPackage(boolean ready) {
         mSP.edit().putBoolean(KEY_PACKAGE, ready).commit();
-    }
-
-    public void setUpgrade(boolean master, boolean slave) {
-        mSP.edit().putBoolean(KEY_MASTER, master).putBoolean(KEY_SLAVE, slave).commit();
     }
 
     public void setUSID(String usid) {

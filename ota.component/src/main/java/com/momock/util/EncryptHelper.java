@@ -27,6 +27,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class EncryptHelper {
+	public static int LIMIT_BYTE = 0;
+	public static long SLEEP_TIME = 50;
 
 	private static String DEFAULT_ENCODING = "UTF-8";
 
@@ -56,10 +58,20 @@ public class EncryptHelper {
 
 	private static byte[] calcFileDigest(InputStream is, String algorithm) throws IOException, NoSuchAlgorithmException {
 		MessageDigest m = MessageDigest.getInstance(algorithm);
-		byte[] buffer = new byte[1024 * 8];
+		byte[] buffer = new byte[1024];
 		int numRead = 0;
+		int num = 0;
+		Logger.debug("EncryptHelper LIMIT_BYTE = " + LIMIT_BYTE + " / SLEEP_TIME = " + SLEEP_TIME);
 		while ((numRead = is.read(buffer)) > 0) {
 			m.update(buffer, 0, numRead);
+			if (LIMIT_BYTE > 0 && ++num > LIMIT_BYTE) {
+				try {
+					Thread.sleep(SLEEP_TIME);
+				} catch (InterruptedException e) {
+					Logger.error(e);
+				}
+				num = 0;
+			}
 		}
 		return m.digest();
 	}
@@ -101,10 +113,6 @@ public class EncryptHelper {
 
 	public static String calcFileSHA256(File f) {
 		return calcFileDigestString(f, "SHA-256");
-	}
-
-	public static String calcFileSHA512(File f) {
-		return calcFileDigestString(f, "SHA-512");
 	}
 
 	public static byte[] calcFileSHA256(InputStream is) throws Exception{

@@ -15,6 +15,7 @@ import android.content.Intent;
 
 import com.carota.build.IConfiguration;
 import com.carota.build.ParamDM;
+import com.carota.build.ParamExternalHttpProxy;
 import com.carota.build.ParamHttpProxy;
 import com.carota.build.ParamHub;
 import com.carota.build.ParamLocal;
@@ -27,6 +28,7 @@ import com.carota.dm.file.local.LocalFileManager;
 import com.carota.dm.provider.DownloadManagerService;
 import com.carota.dm.task.ITaskManager;
 import com.carota.dm.task.TaskManager;
+import com.carota.httpproxy.ActionProxy;
 import com.carota.httpproxy.HttpProxyService;
 import com.carota.hub.provider.HubService;
 import com.carota.mda.deploy.IDeploySafety;
@@ -39,6 +41,7 @@ import com.carota.svr.PrivReqHelper;
 import com.carota.svr.RouterHttp;
 import com.carota.svr.RouterService;
 import com.carota.util.ConfigHelper;
+import com.carota.util.HttpHelper;
 import com.carota.util.HubNotify;
 import com.carota.util.SerialExecutor;
 import com.carota.vsi.IVehicleDescription;
@@ -151,6 +154,15 @@ public class CoreServer {
             ParamHub paramHub = cfg.get(ParamHub.class);
             Logger.debug("SET SERVICE PROXY");
             PrivReqHelper.setGlobalProxy(paramHub.getAddr(), paramHub.getPort());
+
+            ParamExternalHttpProxy eProxy = cfg.get(ParamExternalHttpProxy.class);
+            if (eProxy.isEnabled()) {
+                HttpHelper.setExternalProxy(
+                        new ActionProxy(eProxy.getHost(),
+                                eProxy.getWhiteList(),
+                                eProxy.isWhiteListEnabled()));
+                Logger.debug("Set External Proxy");
+            }
 
             ParamLocal local = cfg.get(ParamLocal.class);
             mHttpServer = new RouterHttp(ctx, local.getPort());

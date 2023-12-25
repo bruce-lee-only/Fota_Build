@@ -43,7 +43,7 @@ public final class SlaveTask {
         ret.putString("name", task.name);
         ret.putString("tgt_id", task.targetId);
         ret.putString("tgt_ver", task.targetVer);
-        ret.putString("tgt_sign", task.srcSign);
+        ret.putString("tgt_sign", task.targetSign);
         ret.putInt("domain", task.domain);
         ret.putString("src_id", task.srcId);
         ret.putString("src_ver", task.srcVer);
@@ -57,13 +57,17 @@ public final class SlaveTask {
         SlaveTask task = new SlaveTask(data.getString("name"), data.optInt("domain"));
         task.targetId = data.getString("tgt_id");
         task.targetVer = data.getString("tgt_ver");
+        task.targetSign = data.getString("tgt_sign");
 
         task.srcId = data.optString("src_id");
         task.srcVer = data.optString("src_ver");
+        task.srcSign = data.optString("src_sign");
         task.hostDM = data.getString("host");
+
         if (task.srcId.isEmpty() || task.srcVer.isEmpty()) {
             task.srcId = null;
             task.srcVer = null;
+            task.srcSign = null;
         }
         return task;
     }
@@ -81,6 +85,7 @@ public final class SlaveTask {
             tmp = data.getSrc(0);
             task.srcId = tmp.getFile();
             task.srcVer = tmp.getVer();
+            task.srcSign = tmp.getSign();
         }
         if (data.getApplyInfo() != null) {
             task.applyInfo = data.getApplyInfo().toByteArray();

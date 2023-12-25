@@ -17,12 +17,10 @@ import com.carota.core.ISession;
 import com.carota.core.ITask;
 import com.carota.html.DisplayInfo;
 import com.momock.util.JsonHelper;
-import com.momock.util.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class UpdateSession implements ISession {
@@ -38,7 +36,6 @@ public class UpdateSession implements ISession {
     public static final String PROP_SCHEDULE_ID = "schedule_id";
     public static final String PROP_VMID = "vmid";
     public static final String PROP_CAMPAIGN_ID = "campaign_id";
-    public static final String PROP_APPOINTMENT_TIME = "appointment_time";
     public static final String PROP_UPDATE_TIME = "update_time";
     public static final String DISPLAY_INFO_URL = "displayInfoUrl";
 
@@ -151,29 +148,11 @@ public class UpdateSession implements ISession {
         return mRawData.optString(PROP_SCHEDULE_ID);
     }
 
-    public long getAppointmentTimeLeft() {
-        long st =  mRawData.optLong(PROP_APPOINTMENT_TIME,0)*1000;//ms
-        if(st == 0) {
-            st = 24 * 60 * 60 *1000;
-        }
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int min = calendar.get(Calendar.MINUTE);
-        long cur = (hour * 60 + min) * 60 * 1000;
-        long diff = st - cur;
-        return diff >= 0 ? diff : diff + 24 * 3600 * 1000;
-    }
-
     @Override
     public long getUpdateTime() {
         long t = 0;
-        long time = mRawData.optInt(PROP_UPDATE_TIME, 0);
-        if (time > 0){
-            t = time;
-        }else {
-            for (ITask task : mTasks) {
-                t += task.getProp(PROP_UPDATE_TIME, 0);
-            }
+        for (ITask task : mTasks) {
+            t += task.getProp(PROP_UPDATE_TIME, 0);
         }
         return t;
     }

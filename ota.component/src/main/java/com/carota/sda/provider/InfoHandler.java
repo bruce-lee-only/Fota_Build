@@ -45,7 +45,7 @@ public class InfoHandler extends SimpleHandler {
                     .setSoftware(si.getProp(SlaveInfo.PROP_VER_SW))
                     .setDa(si.getProp(SlaveInfo.PROP_VER_DA))
                     .setSn(si.getProp(SlaveInfo.PROP_SN))
-                    .setExtra(si.subJsonString());
+                    .setExtra(si.toString());
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }

@@ -19,7 +19,6 @@ import com.carota.core.IDownloadCallback;
 import com.carota.core.IInstallViewHandler;
 import com.carota.core.ISession;
 import com.carota.core.UpdateCore;
-import com.carota.core.remote.IActionMDA;
 import com.carota.html.HtmlHelper;
 import com.carota.util.CrashHandler;
 import com.carota.util.LogUtil;
@@ -46,9 +45,6 @@ public class CarotaClient {
     private static long sSystemBootTimeout;
     private static long DEFAULT_BOOT_TIMEOUT = 60 * 5 * 1000;
 
-    //todo: add by lipiyan 2023-06-28 for set resume boot mark
-    private static Boolean sResume = false;
-
     public static void init(Context context, IInstallViewHandlerFactory viewHandlerFactory, long bootTimeout) {
         LogUtil.initLogger(context);
         CrashHandler.register(context);
@@ -57,7 +53,6 @@ public class CarotaClient {
         }
         sViewHandlerFactory = viewHandlerFactory;
         sSystemBootTimeout = bootTimeout > 0 ? bootTimeout : DEFAULT_BOOT_TIMEOUT;
-        CarotaAnalytics.init(context);
         CarotaVehicle.init(context);
         HtmlHelper.init();
         Intent intent = new Intent("ota.intent.action.DAEMON").setPackage(context.getPackageName());
@@ -74,19 +69,10 @@ public class CarotaClient {
         if(!initLocalSystem(context) && !sCore.syncDataFromMaster()) {
             Logger.debug("CLIENT Boot finish");
             sLostEcuName.clear();
-            //todo: add by lipiyan 2023-06-28
-            sResume = false;
-            sCore.getCurState().setIsRescue(false);
             sCore.waitRemoteSystemReady(sSystemBootTimeout, sLostEcuName);
         } else {
-            //todo: add by lipiyan 2023-06-28
-            if ( !sCore.getCurState().getIsRescue() ){
-                Logger.debug("CLIENT Boot resume: Normal");
-                sResume = true;
-                sCore.resumeInstall(sViewHandlerFactory.create(context));
-            }else {
-                Logger.error("CLIENT Boot resume: Normal, Normal Client do nothing");
-            }
+            Logger.debug("CLIENT Boot resume");
+            sCore.resumeInstall(sViewHandlerFactory.create(context));
         }
         sBootCompleted.set(true);
     }
@@ -194,11 +180,6 @@ public class CarotaClient {
         return sBootCompleted.get();
     }
 
-    //todo: add by lipiyan 2023-06-28
-    public static boolean isResume(){
-        return sResume;
-    }
-
     public static void wakeup(Context context) {
         if (null != sMainService) {
             Logger.debug("CLIENT Wake Active");
@@ -262,23 +243,5 @@ public class CarotaClient {
     public static boolean getMDAEnvm(boolean isUat) {
         waitMainCtrlReady("G-ENVM");
         return sCore.setMDAEnvm(isUat);
-    }
-
-    /**
-     * set ECALL Event
-     * @return
-     */
-    public static boolean eCallEvent() {
-        waitMainCtrlReady("G-ENVM");
-        return sCore.eCallEvent();
-    }
-
-    /**
-     * set update time out
-     * @return
-     */
-    public static boolean updateTimeOut() {
-        waitMainCtrlReady("G-ENVM");
-        return sCore.updateTimeOut();
     }
 }

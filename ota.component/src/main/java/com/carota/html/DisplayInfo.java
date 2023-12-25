@@ -6,7 +6,6 @@ import com.carota.core.IDisplayInfo;
 import com.momock.util.FileHelper;
 import com.momock.util.JsonHelper;
 import com.momock.util.Logger;
-import com.momock.util.SystemHelper;
 
 import org.json.JSONObject;
 
@@ -18,7 +17,7 @@ public class DisplayInfo implements IDisplayInfo {
     private static final String DISPLAY_INFO_NAME_CONDITION_TEXT = "cc_text";
     private static final String DISPLAY_INFO_NAME_VERSION_AND_RELEASE = "f_ver_desc";
 
-    private final Map<String, JSONObject> mInfo;
+    private final Map<String, Info> mInfo;
     private final Context mContext;
 
 
@@ -31,37 +30,40 @@ public class DisplayInfo implements IDisplayInfo {
 
     public JSONObject getConditionText() {
 
-        return getData(DISPLAY_INFO_NAME_CONDITION_TEXT, false);
+        return getData(DISPLAY_INFO_NAME_CONDITION_TEXT);
     }
 
     @Override
-    public JSONObject getVersionAndRelease(Boolean isBackup) {
-        return getData(DISPLAY_INFO_NAME_VERSION_AND_RELEASE, isBackup);
+    public JSONObject getVersionAndRelease() {
+        return getData(DISPLAY_INFO_NAME_VERSION_AND_RELEASE);
     }
 
-    private JSONObject getData(String name, Boolean isBackup) {//name = "f_ver_desc"
-        JSONObject object = null;
-        try {
-            File file = HtmlHelper.getFileForLanguage(mContext, name, isBackup);
-            JSONObject root = JsonHelper.parseObject(FileHelper.readText(file));
-            String language = DISPLAY_INFO_NAME_VERSION_AND_RELEASE.concat("_")
-                    .concat(SystemHelper.getLanguage(mContext))
-                    .concat("-")
-                    .concat(SystemHelper.getCountry(mContext).toUpperCase());
-            object = root.getJSONObject(DISPLAY_INFO_NAME_VERSION_AND_RELEASE);
-            object = root.getJSONObject(language);
-        } catch (Exception e) {
-            Logger.error(e);
+    private JSONObject getData(String name) {
+        if (mInfo.get(name) == null) {
+            mInfo.put(name, new Info(name));
         }
+        Info info = mInfo.get(name);
+        JSONObject object = info != null ? info.getJsonObject(name) : null;
         return object == null ? new JSONObject() : object;
     }
 
-    private JSONObject getInfoJson(String name) {
-        if (mInfo.get(name) != null) {
-            String[] names = HtmlHelper.getLanguageNames(name, mContext);
+    private class Info {
+        private Map<String, JSONObject> map;
 
+        public Info(String name) {
+            this.map = new HashMap<>();
+            HtmlHelper.getDisplayInfo(mContext, name, map);
         }
-        return null;
-    }
 
+        public JSONObject getJsonObject(String name) {
+            String[] languageNames = HtmlHelper.getLanguageNames(name, mContext);
+            for (int i = languageNames.length - 1; i > 0; i--) {
+                if (map.containsKey(languageNames[i])) {
+                    return map.get(languageNames[i]);
+                }
+            }
+            return map.get(name);
+        }
+
+    }
 }

@@ -137,41 +137,43 @@ message VehicleConditionRsp {
         SENTINEL_MODE_OFF = 1;
         SENTINEL_MODE_ON = 2;
     }
-
+    
+    enum DcdcMode {
+        DCDC_MODE_UNKNOWN = 0;
+        DCDC_MODE_OFF = 1;
+        DCDC_MODE_ON = 2;
+    }
+    
+    enum OtaMode {
+        OTA_MODE_UNKNOWN = 0;
+        OTA_MODE_OFF = 1;
+        OTA_MODE_ON = 2;
+    }
     repeated carota.telemetry.CallTrace trace = 1;
     int32 speed = 2;    // m/s
-    //todo: 动力电池电量
     int32 battery_power = 3;    // %
-    //todo: 小电池电压
     int32 battery_voltage = 4;    // mV
     Ready power_ready = 5;
     Handbrake handbrake = 6;
     Power power = 7;
-    //todo: 充电状态
     Charging charging = 8;
     Gear gear = 9;
-    //todo: OBD诊断
     Diagnose diagnose = 10;
-    //todo: 远程诊断
     TelDiagnose tel_diagnose = 11;
     VehicleMode vehicle_mode = 12;
     Lock lock = 13;
     Window window = 14;
     Security security = 15;
-    //todo: 电车的ready状态
     Motor motor = 16;
     Engine engine = 17;
-    //todo: 小电池电量
     int32 battery_level = 19; // % storage battery energy
     reserved 18;
-    //todo: 动力电池是否ready
     HvReady hv_ready = 20;
-    //todo: 移动电站（放电）
     Vtol vtol = 21;
-    //todo: 童宠模式
     PetMode pet_mode = 22;
-    //todo: 哨兵模式
     SentinelMode sentinel_mode = 23;
+    DcdcMode dcdc_mode = 24;
+    OtaMode ota_mode = 25;
 }
 
 /*
@@ -257,7 +259,6 @@ message EventReq {
         MODE_OTA = 1;
         MODE_PWR_OTA = 2;
         ACC_OFF = 3;
-        ACC_ON = 4;
     }
 
     Action action = 1;
@@ -265,7 +266,5 @@ message EventReq {
     int64 delay = 3;    // active delay
     repeated string data = 4;
     string tag = 5;
-    string mode = 6;
-    int32 force = 7; //1 force exit ota, other ignore
 }
 

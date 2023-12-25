@@ -206,7 +206,7 @@ public class SystemHelper {
 		return new PhoneInfo(imei, imsi, mcc, mnc);
 	}
 	public static String getOsVersion(){
-		return android.os.Build.VERSION.RELEASE;
+		return Build.VERSION.RELEASE;
 	}
 	public static String getAppId(Context context){
 		return context.getPackageName();
@@ -281,14 +281,14 @@ public class SystemHelper {
 	public static String getUA(boolean withAndroidVersion){		
 		String ua = "android";	
 		if (withAndroidVersion)
-			ua += ";VERSION/" + android.os.Build.VERSION.RELEASE;
-		ua += ";MANUFACTURER/" + android.os.Build.MANUFACTURER;
-		ua += ";MODEL/" + android.os.Build.MODEL;
-		ua += ";BOARD/" + android.os.Build.BOARD;
-		ua += ";BRAND/" + android.os.Build.BRAND;
-		ua += ";DEVICE/" + android.os.Build.DEVICE;
-		ua += ";HARDWARE/" + android.os.Build.HARDWARE;
-		ua += ";PRODUCT/" + android.os.Build.PRODUCT;
+			ua += ";VERSION/" + Build.VERSION.RELEASE;
+		ua += ";MANUFACTURER/" + Build.MANUFACTURER;
+		ua += ";MODEL/" + Build.MODEL;
+		ua += ";BOARD/" + Build.BOARD;
+		ua += ";BRAND/" + Build.BRAND;
+		ua += ";DEVICE/" + Build.DEVICE;
+		ua += ";HARDWARE/" + Build.HARDWARE;
+		ua += ";PRODUCT/" + Build.PRODUCT;
 		return ua;
 	}
 	public static Location getLastLocation(Context context){
@@ -543,7 +543,7 @@ public class SystemHelper {
 	}
 	
 	public static boolean hasSdcard(Context context){
-		return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
 	}
 	static Boolean gpInstalled = null;
 	public static boolean isGooglePlayInstalled(Context context){
@@ -756,7 +756,7 @@ public class SystemHelper {
 	}
 	
 	public static String getOSBuildType(){
-		return android.os.Build.TYPE == null ? "" : android.os.Build.TYPE;	
+		return Build.TYPE == null ? "" : Build.TYPE;
 	}
 	
 	public static boolean checkUSBConnect(Context context){
@@ -804,7 +804,7 @@ public class SystemHelper {
 		if(!TextUtils.isEmpty(appId)) {
 			try {
 				info = context.getPackageManager().getApplicationInfo(appId, 0);
-			} catch (PackageManager.NameNotFoundException e) {
+			} catch (NameNotFoundException e) {
 				e.printStackTrace();
 			}
 		}

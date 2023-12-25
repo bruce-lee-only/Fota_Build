@@ -69,36 +69,3 @@ message CommandRsp {
     string extra = 3;
     repeated carota.telemetry.CallTrace trace = 4;
 }
-
-/*
-* Path : /digest
-* Feture :
-*   1. Get file digest hex data
-*/
-message DigestReq {
-    enum Type {
-        SHA1 = 0;
-        SHA256 = 1;
-        SHA512 =2;
-    }
-    enum Action {
-        START = 0;
-        CHECK = 1;
-    }
-    Type type = 1;
-    string id = 2;
-    Action action = 3;
-}
-
-message DigestResp {
-    enum DigestStatus {
-        UNKNOW = 0;
-        WAIT = 1;
-        SUCCESS = 2;
-        FAIL = 3;
-        UNDO = 4;
-    }
-    string id = 1;
-    string hexData = 2;
-    DigestStatus status = 3;
-}

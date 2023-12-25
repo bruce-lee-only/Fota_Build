@@ -47,7 +47,7 @@ public class AppFileManager implements IFileManager {
 
     @Override
     public void clearDm() {
-        FileHelper.delete(mWorkDir);
+        FileHelper.cleanDir(mWorkDir);
     }
 
     /**
@@ -168,7 +168,7 @@ public class AppFileManager implements IFileManager {
     public boolean downloadInit(String name, long startIndex, long fileLength) throws Exception {
         File file = createFile(name);
         if (file != null) {
-            tmpAccessFile = new RandomAccessFile(file, "rw");
+            tmpAccessFile = new RandomAccessFile(file, "rws");
             tmpAccessFile.seek(startIndex);
             return true;
         }

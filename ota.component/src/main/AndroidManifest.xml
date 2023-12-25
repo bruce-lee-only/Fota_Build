@@ -18,8 +18,6 @@
     <uses-permission android:name="android.permission.REBOOT"/>
     <uses-permission android:name="android.permission.RECOVERY"/>
     <uses-permission android:name="android.permission.ACCESS_CACHE_FILESYSTEM"/>
-    <permission android:name="ota.permission.VEHICLE" />
-    <uses-permission android:name="ota.permission.VEHICLE"/>
 
     <application
         android:usesCleartextTraffic="true" >
@@ -37,30 +35,11 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.carota.rescue.RescueDaemonService"
-            android:enabled="true"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="ota.intent.action.RESCUEDAEMON" />
-            </intent-filter>
-        </service>
-        <service
             android:name="com.carota.MainService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="ota.intent.action.CORE"/>
-            </intent-filter>
-        </service>
-
-        <service
-            android:name="com.carota.vsi.VehicleEventServerService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="ota.permission.VEHICLE"
-            >
-            <intent-filter>
-                <action android:name="ota.intent.action.VEHICLE"/>
             </intent-filter>
         </service>
 

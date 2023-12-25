@@ -1,11 +1,12 @@
 package com.carota.html;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 
+import com.carota.build.ParamHtml;
+import com.carota.util.ConfigHelper;
 import com.carota.util.HttpHelper;
 import com.momock.util.FileHelper;
 import com.momock.util.JsonHelper;
@@ -16,17 +17,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 public class HtmlHelper {
     private final static String HTML_BASE_PATH = "/DisplayInfo";
     private final static String HTML_UNZIP_PATH = "/DisplayInfo/unzip";
-    private final static String HTML_UNZIP_BACKUP_PATH = "/unzip_back";
+    private final static String HTML_UNZIP_FOR_SUCCESS_PATH = "/DisplayInfoSuccess";
     private final static String HTML_UNZIP_PATH_TMP = "/DisplayInfo/unzip.tmp";
 
     @SuppressLint("SoonBlockedPrivateApi")
@@ -89,24 +92,37 @@ public class HtmlHelper {
 
     public static synchronized void downloadHtml(Context context, String url, String scheduleID) {
         String infoUrl = url;
+        File dir = ConfigHelper.get(context).get(ParamHtml.class).getDownloadDir(context);
+        copyOldHtml(context.getFilesDir(), dir);
         if (TextUtils.isEmpty(infoUrl)) {
             Logger.info("Html url is null");
         } else if (!infoUrl.startsWith("http")) {
             Logger.info("Html url have error");
         } else {
             try {
-                for(int i = 0; i < 3; i++){
-                    File html = downFile(context.getFilesDir(), infoUrl);
-                    if (html.exists()) {
-                        unzipFile(html, context.getFilesDir());
-                        break;
-                    }
-                    Thread.sleep(2000);
+                File html = downFile(dir, infoUrl);
+                if (html.exists()) {
+                    unzipFile(html, dir);
                 }
             } catch (Exception e) {
                 Logger.error(e);
                 Logger.info("Html is downloaded Fail");
             }
+        }
+    }
+
+    /**
+     * 兼容老版本固定保存到/data/data/包名/files/目录下的html
+     *
+     * @param filesDir
+     * @param downloadDir
+     */
+    private static void copyOldHtml(File filesDir, File downloadDir) {
+        File file = new File(filesDir, HTML_BASE_PATH);
+        if (file.exists() && !downloadDir.getAbsolutePath().equals(filesDir.getAbsolutePath())) {
+            Logger.info("Html Copy Old Html");
+            boolean success = file.renameTo(new File(downloadDir, HTML_BASE_PATH));
+            Logger.info("Html Copy Old Html %b", success);
         }
     }
 
@@ -154,47 +170,20 @@ public class HtmlHelper {
         return html;
     }
 
-
-
     private static String parseUrlName(final String url) {
         return url.substring(url.lastIndexOf("/"));
     }
 
 
-
-    public static File getHtml(Context context, String fileName, Boolean isBackup) {
+    public static File getHtml(Context context, String fileName, boolean loadSuccssHtml) {
         String[] names = getLanguageNames(fileName.concat("*.html"), context);
-        return getFileForLanguage(context, names, isBackup);
+        return getFileForLanguage(context, names, loadSuccssHtml);
     }
 
-    public static void copyHtml(Context context) {
-        File source = new File(context.getFilesDir(), HTML_UNZIP_PATH);
-        File target = new File(context.getFilesDir(), HTML_UNZIP_BACKUP_PATH);
+    private static File getFileForLanguage(Context context, String[] names, boolean loadSuccssHtml) {
         try {
-            if (source.exists()){
-                FileHelper.cleanDir(target);
-                FileHelper.copyDir(source, target);
-                if (target.exists()){
-                    Logger.debug("copyHtml target file size:" + target.list().length);
-                }
-            }else {
-                Logger.error("backup Html file error, source file not exist");
-            }
-        }catch (Exception e){
-            Logger.error("backup Html file exception:" + e);
-        }
-    }
-
-    static File getFileForLanguage(Context context, String name,  Boolean isBackup){
-        if (TextUtils.isEmpty(name)) return null;
-        return getFileForLanguage(context, new String[]{name}, isBackup);
-    }
-
-    private static File getFileForLanguage(Context context, String[] names, Boolean isBackup) {
-        try {
-            String path = isBackup? HTML_UNZIP_BACKUP_PATH : HTML_UNZIP_PATH;
-            Logger.debug("getFileForLanguage path:" + path);
-            File htmlUnzip = new File(context.getFilesDir(), path);
+            File dir = ConfigHelper.get(context).get(ParamHtml.class).getDownloadDir(context);
+            File htmlUnzip = new File(dir, loadSuccssHtml ? HTML_UNZIP_FOR_SUCCESS_PATH : HTML_UNZIP_PATH);
             List<String> strings = Arrays.asList(htmlUnzip.list());
             if (strings.size() > 0) {
                 for (String s : names) {
@@ -213,12 +202,43 @@ public class HtmlHelper {
     }
 
     static String[] getLanguageNames(String name, Context context) {
-        String file = name.replace("*","");
+        String file = name.replace("*", "");
         String fileLanguage = name.replace("*", "_".concat(SystemHelper.getLanguage(context)));
         String fileLanguageCountry =
                 name.replace("*", "_".concat(SystemHelper.getLanguage(context))
                         .concat("-")
-                        .concat(SystemHelper.getCountry(context).toUpperCase()));
+                        .concat(SystemHelper.getCountry(context)));
         return new String[]{fileLanguageCountry, fileLanguage, file};
     }
+
+    public static void setSuccessHtml(Context context) {
+        Logger.info("Html copy Html to %s", HTML_UNZIP_FOR_SUCCESS_PATH);
+        File dir = ConfigHelper.get(context).get(ParamHtml.class).getDownloadDir(context);
+        File file = new File(dir, HTML_UNZIP_FOR_SUCCESS_PATH);
+        File newHtml = new File(dir, HTML_UNZIP_PATH);
+        FileHelper.cleanDir(file);
+        FileHelper.copyDir(newHtml, file);
+        Logger.info("Html copy Html to %s End", HTML_UNZIP_FOR_SUCCESS_PATH);
+    }
+
+    static void getDisplayInfo(Context context, String name, Map<String, JSONObject> map) {
+        try {
+            File dir = ConfigHelper.get(context).get(ParamHtml.class).getDownloadDir(context);
+            File htmlUnzip = new File(dir, HTML_UNZIP_PATH);
+            htmlUnzip.list((dir1, fileName) -> {
+                if (fileName.startsWith(name)) {
+                    try {
+                        JSONObject object = JsonHelper.parseObject(FileHelper.readText(new File(dir1, fileName)));
+                        if (object != null) map.put(fileName, object);
+                    } catch (IOException e) {
+                        Logger.error(e);
+                    }
+                }
+                return false;
+            });
+        } catch (Exception e) {
+            Logger.error(e);
+        }
+    }
+
 }

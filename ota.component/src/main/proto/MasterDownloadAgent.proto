@@ -19,9 +19,7 @@ message ConnReq {
         SYNC = 1;
         VERIFY = 2;
         FACTORY = 3;
-        RESCUE = 4;
     }
-
     Action action = 1;
     string tag = 2;
     string lang = 3;
@@ -35,7 +33,7 @@ message ConnRsp {
         BY_USER_LIMIT = 3;
         AUTO_INSTALL_SCHEDULE = 4;
         AUTO_UPDATE_FACTORY = 5;//auto-update-factory
-        BY_RESCUE = 6;
+        BY_RESCUE = 6;//by_rescue
     }
     message UpgradeInfo {
         string name = 1;
@@ -46,10 +44,6 @@ message ConnRsp {
         string desc = 6;
         int64 time =7;
     }
-//    enum IsEcuNeedCheck {
-//        CHECK_SUC   = 0;
-//        CHECK_FAIL  = 1;
-//    }
     string vin = 1;
     string usid = 2;
     string rn = 3;
@@ -62,9 +56,8 @@ message ConnRsp {
     string campaign_id = 10;
     int64 appointment_time = 11;
     string schedule_id = 12;
-    reserved 13;
+    string reserved = 13;    // reserved for hozon to send vconnect response json
     string displayInfoUrl = 14;
-    int32 update_time = 15;
 }
 
 /*
@@ -136,7 +129,7 @@ message DownloadRsp {
 /*
 * Path : /result
 * Feature :
-*   1. Query upgrade result 
+*   1. Query upgrade result
 */
 enum UpgradeStep {
     SLAVE = 0;
@@ -161,7 +154,7 @@ message UpgradeResultRsp {
     }
     string usid = 1;
     Status status = 2;
-    UpgradeStep step = 3;
+    UpgradeStep step = 3;// reserved in the future
     repeated Task tasks = 4;
     repeated carota.telemetry.CallTrace trace = 5;
 }
@@ -169,19 +162,19 @@ message UpgradeResultRsp {
 /*
 * Path : /upgrade
 * Feature :
-*   1. Trigger upgrade step Slave 
+*   1. Trigger upgrade step Slave
 *   2. Trigger upgrade step Master
 */
 message UpgradeReq {
     string usid = 1;
-    UpgradeStep step = 2;
+    UpgradeStep step = 2;// reserved in the future
     string tag = 3;
 }
 
 /*
 * Path : /test
 * Feature :
-*   1. Check module status from RPC 
+*   1. Check module status from RPC
 *   2. Test controller is alive
 */
 message TestReq {  
@@ -201,23 +194,24 @@ message TestRsp {
 /*
 * Path : /sync
 * Feature :
-*   1. Get controller status 
+*   1. Get controller status
 *   2. Get environment limit from session @ controller
 */
 message SyncRsp {
     enum EnvmAction {
-      PRODUCE = 0;
-      UAT = 1;
+        PRODUCE = 0;
+        UAT = 1;
     }
     string usid = 1;
     // 0x0001 - downloading
     // 0x0002 - upgrading
     // 0x0100 - downloaded
-    // 0x0200 - step slave triggered
-    // 0x0400 - step master triggered
-    // 0x0800 - step UI triggered
+	
+	
+    // 0x0200 - step slave triggered (reserved in the future)
+    // 0x0400 - step master triggered (reserved in the future)
+    // 0x0800 - step UI triggered (reserved in the future)
     int32 state = 2;
-    //TODO: use id to instead ? 
     repeated string environment = 3;
     EnvmAction action = 4;
     repeated carota.telemetry.CallTrace trace = 5;
@@ -238,6 +232,7 @@ message SyncClockReq {
 * Path : /environment
 * Feature :
 *   1. Set Mda connect to Service Environment
+*   2. reserved in hozon
  */
 message EnvmReq {
     enum EnvmAction {
@@ -247,12 +242,11 @@ message EnvmReq {
     EnvmAction action = 1;
     string tag = 2;
 }
-
 /*
 * Path : /event
 * Feature :
 *   1. Send UI Point Data
-*   2. Send UI Event Data(Schedule Time?Upgrade Result?Car condition)
+*   2. Send UI Event Data(Schedule Time、Upgrade Result、Car condition)
 *   3. Send FOTA Data
 */
 message EventReq {
@@ -289,64 +283,5 @@ message EventReq {
     repeated Point point = 3;
     repeated Event event = 4;
     repeated Fota fota = 5;
-}
-
-/*
-* Path : /rescue
-* Feature :
-*   1. QUERY: query rescue verify flag
-*   2. VERIFY execute verify
-*   3. RESULT query verify result
-*/
-message RescueReq {
-    enum Event {
-        QUERY = 0;
-        VERIFY = 1;
-        RESULT = 2;
-    }
-    message Data {
-        string id = 1;
-        string msg = 2;
-    }
-    Event event = 1;
-    repeated Data data = 2;
-    string tag = 3;
-}
-
-message RescueResp {
-    message Data {
-        string id = 1;
-        string msg = 2;
-    }
-    int32 result = 1;   //0 fail, 1 success, -1 wait
-    repeated carota.telemetry.CallTrace trace = 4;
-    repeated Data data = 2;
-}
-
-/*
-* Path : /ecall
-* Feature :
-*   1. QUERY: query rescue verify flag
-*   2. VERIFY execute verify
-*   3. RESULT query verify result
-*/
-message EcallReq {
-    string tag = 1;
-}
-
-message EcallResp {
-    repeated carota.telemetry.CallTrace trace = 1;
-}
-
-
-/*
-* Path : /timeout
-*/
-message TimeOutReq {
-    string tag = 1;
-}
-
-message TimeOutResp {
-    repeated carota.telemetry.CallTrace trace = 1;
 }
 

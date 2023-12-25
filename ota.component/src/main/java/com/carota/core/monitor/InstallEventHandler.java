@@ -14,7 +14,7 @@ import com.carota.core.ClientState;
 import com.carota.core.IInstallViewHandler;
 import com.carota.core.ISession;
 import com.carota.core.data.CoreStatus;
-import com.momock.util.Logger;
+import com.carota.html.HtmlHelper;
 
 public class InstallEventHandler implements InstallMonitor.IEvent {
 
@@ -29,13 +29,11 @@ public class InstallEventHandler implements InstallMonitor.IEvent {
     @Override
     public void onStart(ISession s) {
         mStatus.setUpgradeState(ClientState.UPGRADE_STATE_IDLE);
-        if (s.getMode().equals(ISession.MODE_RESCUE))
-            mStatus.setIsRescue(true);
         mStatus.setUpgradeTriggered(true);
     }
 
     @Override
-    public void onTrigger(ISession s, String target) {
+    public void onTrigger(ISession s) {
 //        if(InstallProgress.TARGET_SLAVE.equals(target)) {
 //            mStatus.setStatus(Instal);
 //        }
@@ -52,12 +50,11 @@ public class InstallEventHandler implements InstallMonitor.IEvent {
 
     @Override
     public void onStop(ISession s, boolean cancel, int state) {
+
         if(!cancel) {
             mStatus.setUpgradeTriggered(false);
-            mStatus.setIsRescue(false);
         }
         mStatus.setUpgradeState(state);
-        Logger.debug("lipiyan****************mView stop");
         mView.onInstallStop(s, state);
     }
 }

@@ -19,8 +19,6 @@ public class MDAInfo {
     public static final int FLAG_DOWNLOADING = SyncHandler.FLAG_DOWNLOADING;
     public static final int FLAG_INSTALLING = SyncHandler.FLAG_INSTALLING;
     public static final int FLAG_DOWNLOADED = SyncHandler.FLAG_DOWNLOADED;
-    public static final int FLAG_UPGRADE_SLAVE = SyncHandler.FLAG_UPGRADE_SLAVE;
-    public static final int FLAG_UPGRADE_MASTER = SyncHandler.FLAG_UPGRADE_MASTER;
     private final boolean isUat;
 
     private String mUsid;

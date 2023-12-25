@@ -25,7 +25,7 @@ public final class SlaveState {
     public static final String STATE_FAILURE = "failure";
     public static final String STATE_ERROR = "error";
 
-    public final String name;
+    public String name;
     public final int domain;
     private String mState;
     private int mProgress;

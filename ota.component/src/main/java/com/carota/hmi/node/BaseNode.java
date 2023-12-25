@@ -2,46 +2,42 @@ package com.carota.hmi.node;
 
 import android.os.Handler;
 
-import com.carota.core.VehicleCondition;
 import com.carota.hmi.EventType;
-import com.carota.hmi.ICallBack;
-import com.carota.hmi.callback.ICondition;
+import com.carota.hmi.callback.CallBackManager;
+import com.carota.hmi.callback.ICallBack;
+import com.carota.hmi.status.HmiStatus;
+import com.carota.hmi.status.UpgradeStaus;
 import com.momock.util.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 abstract class BaseNode implements INode {
-    protected final StateMachine mStatus;
-    private boolean isAutoRunNextNode;
-    final ICallBack mCallBack;
-    private boolean isSuccess;
+    protected final HmiStatus mStatus;
+    final CallBackManager mCallBack;
     final Handler mHandler;
 
-    BaseNode(StateMachine status) {
-        this.mStatus = status;
-        mCallBack = mStatus.getCallback();
-        mHandler = mStatus.getHandler();
+    BaseNode(HmiStatus hmiStatus, Handler handler, CallBackManager callback) {
+        mCallBack = callback;
+        mHandler = handler;
+        mStatus = hmiStatus;
     }
 
     protected abstract boolean execute();
 
-    abstract void onStart();
-
-    abstract void onStop(boolean success);
-
     @Override
-    public boolean runNode() {
-        isSuccess = false;
-        mHandler.post(this::onStart);
-        sleep(100);
-        Logger.debug("lipiyan run node execute");
-        isSuccess = execute();
-        sleep(100);
-        Logger.debug("lipiyan run node onStop");
-        mHandler.post(() -> onStop(isSuccess));
-        return isSuccess;
+    public final Boolean call() {
+        Logger.info("Hmi start run Node @1s", getType());
+        mStatus.setUpgradeStatus(getType(), UpgradeStaus.RUNNING);
+        if (getType() != EventType.INSTALL) {
+            mHandler.post(() -> mCallBack.getICall(getType()).onStart(mStatus.getUpgradeType()));
+        }
+        boolean result = execute();
+        Logger.info("Hmi Node run End,Result:%1b @2s ", result, getType());
+        if (getType() != EventType.INSTALL || !result) {
+            mStatus.setUpgradeStatus(getType(), result ? UpgradeStaus.SUCCESS : UpgradeStaus.FAIL);
+            mHandler.postDelayed(() -> mCallBack.getICall(getType()).onEnd(mStatus.getUpgradeType(), result, mStatus), 1000);
+            mCallBack.removeCallBack(getType());
+        }
+        return result;
     }
 
     void sleep(long millis) {
@@ -50,33 +46,6 @@ abstract class BaseNode implements INode {
         } catch (InterruptedException e) {
             Logger.error(e);
         }
-    }
-
-    @Override
-    public final boolean isAutoRunNextNode() {
-        return isAutoRunNextNode;
-    }
-
-    VehicleCondition getVehicleCondition() {
-        return null;
-    }
-
-    //todo: add by lipiyan 2022-02-22
-    List<ICondition.IConditionItem> getVerifyResult() {
-        return null;
-    }
-
-    void setExtraCondition(ArrayList<VehicleCondition.Precondition> extraCondition){}
-    //todo: add by lipiyan 2022-02-22
-
-    final void setAutoRunNextNode(boolean autoRunNextNode) {
-        Logger.info("HMI-Node Set AutoRunNextNode: %b @%s", autoRunNextNode, getType());
-        isAutoRunNextNode = autoRunNextNode;
-    }
-
-    @Override
-    public boolean isSuccess() {
-        return isSuccess;
     }
 
 }

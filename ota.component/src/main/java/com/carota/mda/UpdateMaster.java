@@ -61,13 +61,11 @@ import com.momock.util.JsonHelper;
 import com.momock.util.Logger;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -180,17 +178,17 @@ public class UpdateMaster {
                 }
             }
             List<BomInfo> bomInfos = mBomDataCache.getBomInfoList();
-            List<BomInfo> validBomInfoList = new ArrayList<>();
+            //List<BomInfo> validBomInfoList = new ArrayList<>();
             for (BomInfo info : bomInfos) {
                 EcuInfo ecuInfo = mActionSDA.queryInfo(mParamRoute.getSubHost(), info.getName(), info);
                 String flashHv = info.getFlashConfig().getHv();
                 // TODO
                 if (ecuInfo != null && !flashHv.isEmpty() && flashHv.equals(ecuInfo.hwVer)) {
                     map.put(info.getName(), ecuInfo);
-                    validBomInfoList.add(info);
+                    //validBomInfoList.add(info);
                 }
             }
-            mBomDataCache.setBomInfo(validBomInfoList);
+            //mBomDataCache.setBomInfo(validBomInfoList);
             List<EcuInfo> infoList = new ArrayList<>(map.values());
             mMasterDataCache.setEcuInfo(infoList);
             return infoList;
@@ -214,9 +212,11 @@ public class UpdateMaster {
         long start = SystemClock.elapsedRealtime();
         VehicleDesc vd = mVehicleServiceManager.queryInfo();
 
-        syncBoms(mParamMDA.getBomUrl(), vd.getVin());
+        //syncBoms(mParamMDA.getBomUrl(), vd.getVin());
 
-        List<EcuInfo> infos = refreshEcuInfoList();
+        //List<EcuInfo> infos = refreshEcuInfoList();
+        List<EcuInfo> infos = refreshEcuInfoListWithNewBoms(mParamMDA.getBomUrl(), vd.getVin());
+
         long waitTime = 5000 - (SystemClock.elapsedRealtime() - start);
         if (waitTime > 0) {
             //wait auto end
@@ -299,6 +299,56 @@ public class UpdateMaster {
         return bomData;
     }
 
+    //Add for BomInfo Bug
+    private LinkedHashMap<String, EcuInfo> syncNewBomsEcuInfo(String url, String vin) {
+        String bomData = mActionAPI.syncBom(url, vin);
+        Logger.debug("@UM bomData : " + bomData);
+        JSONObject jObj = JsonHelper.parseObject(bomData);
+        LinkedHashMap<String, EcuInfo> map = new LinkedHashMap<>();
+
+        if (jObj != null) {
+            JSONArray jsonArray = jObj.optJSONArray("data");
+            List<BomInfo> bomInfoList = new ArrayList<>();
+            try {
+                if (jsonArray != null && jsonArray.length() > -1) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        BomInfo info = BomInfo.fromJson(obj);
+                        EcuInfo ecuInfo = mActionSDA.queryInfo(mParamRoute.getSubHost(), info.getName(), info);
+                        String flashHv = info.getFlashConfig().getHv();
+                        if (ecuInfo != null && !flashHv.isEmpty() && flashHv.equals(ecuInfo.hwVer)) {
+                            map.put(info.getName(), ecuInfo);
+                            bomInfoList.add(info);
+                        }
+                    }
+                    mBomDataCache.setBomInfo(bomInfoList);
+                }
+            } catch (Exception e) {
+                Logger.error(e);
+                return map;
+            }
+        }
+        return map;
+    }
+
+    private List<EcuInfo> refreshEcuInfoListWithNewBoms(String url, String vin) {
+        synchronized (UpdateMaster.SYNC_LOCKER) {
+            Logger.debug("Sync ECU INFO With New Boms");
+            List<ParamRoute.Info> ecus = mParamRoute.listEcuInfo();
+            LinkedHashMap<String, EcuInfo> map = syncNewBomsEcuInfo(url, vin);
+            for (ParamRoute.Info info : ecus) {
+                EcuInfo ecuInfo = mActionSDA.queryInfo(ParamRoute.getEcuHost(info), info.ID, null);
+                if (ecuInfo != null) {
+                    map.put(info.ID, ecuInfo);
+                }
+            }
+
+            List<EcuInfo> infoList = new ArrayList<>(map.values());
+            mMasterDataCache.setEcuInfo(infoList);
+            return infoList;
+        }
+    }
+
     public boolean startDownload() {
         synchronized (UpdateMaster.CALL_LOCKER) {
             if (null != mSession) {
@@ -360,7 +410,7 @@ public class UpdateMaster {
         mAnalyze.syncData();
     }
 
-    public boolean triggerSlaveUpgrade(String usid) {
+    public boolean triggerMasterUpgrade(String usid) {
         synchronized (UpdateMaster.CALL_LOCKER) {
             if (mStatus.getUSID().isEmpty()) {
                 Logger.info("Missing usid");
@@ -368,31 +418,10 @@ public class UpdateMaster {
             }
             if (!isInstalling()) {
                 Logger.error("Clear Result");
-                TriggeredRecord.get(mContext).reset();
-                mStatus.setUpgrade(false, true);
+                if (!mCtrl.getDbIsRun())TriggeredRecord.get(mContext).reset();
+                mCtrl.start(mSession);
             }
             return true;
-        }
-    }
-
-    public int triggerMasterUpgrade(String usid) {
-        synchronized (UpdateMaster.CALL_LOCKER) {
-            if (isInstalling()) {
-                if (mStatus.getUpgradeMaster()) {
-                    Logger.info("upgrade Master is running");
-                    return 1;
-                } else {
-                    Logger.info("upgrade Slave is running");
-                    return 0;
-                }
-            }
-            if (mStatus.getUSID().isEmpty()) {
-                Logger.info("Missing usid");
-                return -1;
-            }
-            mStatus.setUpgrade(true, true);
-            mCtrl.start(mSession);
-            return 1;
         }
     }
 

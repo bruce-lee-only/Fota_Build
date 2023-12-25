@@ -10,8 +10,6 @@
 
 package com.carota.core;
 
-import static com.carota.cmh.CmhUtil.GROUP_SCHEDULE;
-
 import android.content.Context;
 import android.os.Bundle;
 
@@ -27,7 +25,6 @@ public class VehicleEvent {
     public static final String EVENT_RUNTIME = "UpgradeRuntime";
     public static final String EVENT_ELECTRIC_RUNTIME = "ElectricUpgradeRuntime";
     public static final String EVENT_POWER_OFF = "PowerOff";
-    public static final String EVENT_POWER_ON = "PowerOn";
 	public static final String EVENT_BEAT = "Beat";
 
     private static final String ACTION_ON = "ON";
@@ -69,11 +66,11 @@ public class VehicleEvent {
 //        }
 //    }
 
-    public boolean setScheduleField(long sec, String tid, String track, int type) {
+    public boolean setScheduleField(long sec, String tid, String track) {
         if (sec >= 0) {
             return mActionCMH.setScheduleField(ReqTag.TAG_SRC_MDA,
                     sec,
-                    type,
+                    ScheduleAttribute.TYPE_NORMAL,
                     tid,
                     track);
         } else {
@@ -103,14 +100,6 @@ public class VehicleEvent {
 
     public boolean setPowerOff() {
         return mActionVSI.fireEvent(EVENT_POWER_OFF,0,null);
-    }
-
-    public boolean cleanStatus(){
-        return  mActionVSI.cleanEvent(EVENT_POWER_OFF,0,null);
-    }
-
-    public boolean setPowerOn() {
-        return mActionVSI.fireEvent(EVENT_POWER_ON,0,null);
     }
 
     public boolean setUpgradeRuntimeEnable(boolean enable) {

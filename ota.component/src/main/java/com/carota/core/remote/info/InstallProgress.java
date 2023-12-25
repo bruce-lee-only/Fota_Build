@@ -26,9 +26,6 @@ public class InstallProgress {
         public int progress;
     }
 
-    public static final String TARGET_SLAVE = "slave";
-    public static final String TARGET_MASTER = "master";
-
     private JSONObject mStatus;
     private JSONArray mDetail;
     private Map<String, Detail> mDetailCache;
@@ -47,10 +44,6 @@ public class InstallProgress {
 
     public int getTotalState() {
         return mStatus.optInt("state");
-    }
-
-    public String getTarget() {
-        return mStatus.optString("target", TARGET_SLAVE);
     }
 
     public int getActiveCount() {

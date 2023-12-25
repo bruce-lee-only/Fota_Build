@@ -3,7 +3,6 @@ package com.carota.mda.deploy.task;
 import com.carota.mda.deploy.DeviceUpdater;
 import com.carota.mda.deploy.db.DeploySdaDb;
 import com.carota.mda.remote.info.SlaveInstallResult;
-import com.carota.mda.telemetry.FotaAnalytics;
 import com.carota.mda.telemetry.FotaState;
 import com.momock.util.Logger;
 
@@ -19,17 +18,23 @@ public abstract class BaseDeployStratege implements DeviceUpdater.IEventListener
 
     public final boolean run() {
         try {
-            mDataFactory.ensureSafety(mTask.name);
             if (DeploySdaDb.getmInstances().isRuning(mTask.name)) {
+                ensureSafety(mTask.name);
                 return waitResult();
             } else {
                 return install();
             }
-
         } catch (Exception e) {
             Logger.error(e);
+            updateResult(false);
         }
         return false;
+    }
+
+    protected void ensureSafety(String name) {
+        if (!mDataFactory.ensureSafety(name)) {
+            throw new SecurityException(String.format("SDA %s Ensure Safety Error", name));
+        }
     }
 
     protected abstract boolean install();

@@ -141,11 +141,13 @@ public class CarOtaWebView extends WebView {
      *                   and then use the assetsName
      *                   name_Language-Country>name_Language>name>defaultHtml
      * @param assetsName will load {@code @assetsName} when not find remote File
+     * @param loadSuccssHtml true :load install success html
+     *                       false : load html is new from Server
      */
-    public final void loadRemoteHtmlFile(String name, String assetsName, Boolean isBackup) {
+    public final void loadRemoteHtmlFile(String name, String assetsName, boolean loadSuccssHtml) {
         try {
             if (!TextUtils.isEmpty(name)) {
-                File file = HtmlHelper.getHtml(this.getContext().getApplicationContext(), name, isBackup);
+                File file = HtmlHelper.getHtml(this.getContext().getApplicationContext(), name, loadSuccssHtml);
                 if (file != null && file.exists()) {
                     loadUrl("file://" + file.getAbsolutePath());
                     return;

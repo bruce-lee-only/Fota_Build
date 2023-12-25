@@ -59,6 +59,10 @@ public abstract class VehicleService extends Service {
     public static final int KEY_PET_MODE = 20;
     public static final int KEY_SENTINEL_MODE = 21;
 
+    public static final int KEY_DCDC_MODE = 22;
+
+    public static final int KEY_OTA_MODE = 23;
+
     public static final int[] KEY_LIST = new int[] {
             KEY_POWER,
             KEY_ENGINE,
@@ -80,7 +84,9 @@ public abstract class VehicleService extends Service {
             KEY_VTOL,
             KEY_BATTERY_LEVEL,
             KEY_PET_MODE,
-            KEY_SENTINEL_MODE
+            KEY_SENTINEL_MODE,
+            KEY_DCDC_MODE,
+            KEY_OTA_MODE
     };
 
 
@@ -168,6 +174,10 @@ public abstract class VehicleService extends Service {
                         return mCdtHandler.getPetMode();
                     case KEY_SENTINEL_MODE:
                         return mCdtHandler.getSentinelMode();
+                    case KEY_DCDC_MODE:
+                        return mCdtHandler.getDcdcMode();
+                    case KEY_OTA_MODE:
+                        return mCdtHandler.getOtaMode();
                 }
             }
             return def;

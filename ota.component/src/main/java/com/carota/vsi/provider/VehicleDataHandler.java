@@ -33,7 +33,7 @@ public class VehicleDataHandler extends SimpleHandler {
     @Override
     public HttpResp post(String path, Map<String, List<String>> params, byte[] body, Object extra) {
         PrivStatusCode code = PrivStatusCode.SRV_UNKNOWN;
-        VehicleStatusInformation.VehicleInfoRsp.Builder builder = com.carota.protobuf.VehicleStatusInformation.VehicleInfoRsp.newBuilder();
+        VehicleStatusInformation.VehicleInfoRsp.Builder builder = VehicleStatusInformation.VehicleInfoRsp.newBuilder();
 
         try {
             code = queryInfo(builder);

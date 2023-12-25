@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.google.protobuf'
 
-initDefaultConfigure(project)
-
 def data_type = [
         js_a    :  '"cs/json-a"',
         js_b    :  '"cs/json-b"',

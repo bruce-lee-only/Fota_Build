@@ -12,7 +12,6 @@ package com.carota.core;
 
 import com.carota.mda.remote.info.IVehicleStatus;
 import com.carota.vehicle.IConditionHandler;
-import com.momock.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,24 +109,30 @@ public class VehicleCondition implements IVehicleStatus {
     public int getHvReadyState() {
         return mStatus.getHvReadyState();
     }
+
     @Override
     public int getVtolState() {
         return mStatus.getVtolState();
     }
 
-	@Override
+    @Override
     public int getPetMode() {
         return mStatus.getPetMode();
-    }	
-	
-	@Override
-    public int isMotor() {
-        return mStatus.isMotor();
-	}
-	
+    }
+
     @Override
     public int getSentinelMode() {
         return mStatus.getSentinelMode();
+    }
+
+    @Override
+    public int getDcdcMode() {
+        return mStatus.getDcdcMode();
+    }
+
+    @Override
+    public int getOtaMode() {
+        return mStatus.getOtaMode();
     }
 
     @Override
@@ -148,10 +153,8 @@ public class VehicleCondition implements IVehicleStatus {
                 target = mStatus.getPowerState();
                 break;
             case ENGINE:
-                target = mStatus.isPowerReady();
-                break;
             case MOTOR:
-                target = mStatus.isMotor();
+                target = mStatus.isPowerReady();
                 break;
             case GEAR:
                 switch (mStatus.getGearState()) {
@@ -218,11 +221,14 @@ public class VehicleCondition implements IVehicleStatus {
             case CHERY_BATTERY:
                 target = mStatus.getBatteryPower();
                 break;
-            case PET:
+            case PET_MODE:
                 target = mStatus.getPetMode();
                 break;
-            case SENTINEL:
-                target = mStatus.getSentinelMode();
+            case DCDC_MODE:
+                target = mStatus.getDcdcMode();
+                break;
+            case OTA_MODE:
+                target = mStatus.getOtaMode();
                 break;
             default:
                 return false;
@@ -241,7 +247,6 @@ public class VehicleCondition implements IVehicleStatus {
         HANDBRAKE,
         CHARGING,
         ASS,
-
         SPEED,
         BATTERY_VOLTAGE,
         BATTERY_POWER,
@@ -255,8 +260,9 @@ public class VehicleCondition implements IVehicleStatus {
         SECURITY,
         HV_READY,
         VTOL,
-        PET,
-        SENTINEL
+        PET_MODE,
+        DCDC_MODE,
+        OTA_MODE
     }
 
     public static List<Precondition> parseFromSession(ISession s) {
@@ -292,22 +298,13 @@ public class VehicleCondition implements IVehicleStatus {
         //Acc_1: 电源处于ACC状态
         //Acc_2: 电源处于ON
         //Acc_3: 电源处于START
-        //Battery>11: 电池大于11V
-        //Battery>12: 电池大于12V
-        //Battery>13: 电池大于13V
-        //BatteryPower>80: 动力电池电池电量大于80% & 奇瑞蓄电池电量
-        //BatteryLevel>80: 蓄电池电量大于80%
-        //CheryBattery>80: chery动力电池电量大于80%
-        //Diagnose_0: OBD未连接
-        //Diagnose_1: OBD已经连接
-        //Mode_0:vehicle factory
-        //Mode_1: vehicle transport
-        //Mode_2: normal
-        //Mode_3: vehicle unrecognized
-        //HvReady_0: off
-        //HvReady_1 : on
-        //Vtol_0 : off
-        //Vtol_1 : on
+        //Battery>11: 蓄电池大于11V
+        //Battery>12: 蓄电池大于12V
+        //Battery>13: 蓄电池大于13V
+        //BatteryPower>80: 动力电池电量大于80%
+        //BatteryLevel>40: 蓄电池电量大于40%
+        //Diagnose_0: 本地诊断停止
+        //RemoteDiagnostic_0: 远程诊断停止
 
         public Precondition(Item id, int shift, String... order) {
             ID = id;
@@ -391,12 +388,14 @@ public class VehicleCondition implements IVehicleStatus {
                         type = Item.BATTERY_VOLTAGE;
                         shift = 3;
                         break;
-                    case "CheryBattery":
+                    case "BatteryPower":
                         type = Item.BATTERY_POWER;
                         break;
-                    case "BatteryPower":
                     case "BatteryLevel":
                         type = Item.BATTERY_LEVEL;
+                        break;
+                    case "CheryBattery":
+                        type = Item.CHERY_BATTERY;
                         break;
                     case "Diagnose":
                         type = Item.DIAGNOSE;
@@ -423,10 +422,13 @@ public class VehicleCondition implements IVehicleStatus {
                         type = Item.VTOL;
                         break;
                     case "PetMode":
-                        type = Item.PET;
+                        type = Item.PET_MODE;
                         break;
-                    case "SentinelMode":
-                        type = Item.SENTINEL;
+                    case "DCDC":
+                        type = Item.DCDC_MODE;
+                        break;
+                    case "OTA":
+                        type = Item.OTA_MODE;
                         break;
                 }
                 if (null != type) {
@@ -434,9 +436,6 @@ public class VehicleCondition implements IVehicleStatus {
                 }
             }
             return null;
-        }
-        public int getValue() {
-            return mValue;
         }
     }
 }

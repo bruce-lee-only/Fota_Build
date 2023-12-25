@@ -17,7 +17,6 @@ import android.text.TextUtils;
 
 import com.carota.build.IConfiguration;
 import com.carota.build.ParamHub;
-import com.carota.build.ParamLocal;
 import com.carota.build.ParamMDA;
 import com.carota.core.data.CoreStatus;
 import com.carota.core.data.DataCache;
@@ -200,19 +199,18 @@ public class UpdateCore {
     }
 
     public boolean isSessionExpired(boolean ignoreExpireConfirmFail) {
-        Logger.debug("update should not run this, verify run this");
         UpdateSession us = mActionMDA.connect(IActionMDA.CONN_ACTION_VERIFY, null);
         return null == us || !(us.isFresh() || ignoreExpireConfirmFail);
     }
 
     public boolean install(IInstallViewHandler view, boolean ignoreExpireConfirmFail) {
         if (null != mSession && view.onInstallStart(mSession)) {
-            if(ignoreExpireConfirmFail && isSessionExpired(true)) {
+            if(isSessionExpired(ignoreExpireConfirmFail)) {
                 view.onInstallStop(mSession, ClientState.UPGRADE_STATE_IDLE);
                 return true;
             }
             return mInsMonitor.triggerUpgrade(false,
-                    mSession, new InstallEventHandler(mCoreStatus, view));
+                    mSession, new InstallEventHandler(mCoreStatus, view),mContext);
         }
         return false;
     }
@@ -220,8 +218,8 @@ public class UpdateCore {
     public boolean resumeInstall(IInstallViewHandler view) {
         if(null != mSession && view.onInstallStart(mSession)) {
             Logger.debug("HuClient Resume Install @ REBOOT");
-//            waitMainCtrlReady("Re-INS");
-            mInsMonitor.triggerUpgrade(true, mSession, new InstallEventHandler(mCoreStatus, view));
+            waitMainCtrlReady("Re-INS");
+            mInsMonitor.triggerUpgrade(true, mSession, new InstallEventHandler(mCoreStatus, view),mContext);
             return true;
         }
         return false;
@@ -255,37 +253,11 @@ public class UpdateCore {
         return isUat;
     }
 
-    /**
-     * @param isUat == true, or == false
-     * @return
-     */
     public boolean setMDAEnvm(boolean isUat) {
         if (mActionMDA.setMasterEnvm(isUat)) {
-            ConfigHelper.setTestModeEnabled(mContext, isUat);
-            if (ConfigHelper.isTestModeEnabled(mContext)){
-                Logger.debug("current envm is uat");
-            }else {
-                Logger.debug("current envm is product");
-            }
             SystemHelper.execScript("pm clear " + mContext.getPackageName());
             SystemHelper.execScript("reboot");
         }
         return false;
-    }
-
-    public int executeRescue() {
-        if(mActionMDA.fireRescue(IActionMDA.EVENT_RESCUE_QUERY, null) == 0) {
-            return 1;
-        }else {
-            return mActionMDA.fireRescue(IActionMDA.EVENT_RESCUE_VERIFY, null);
-        }
-    }
-
-    public boolean eCallEvent(){
-        return mActionMDA.eCallEvent();
-    }
-
-    public boolean updateTimeOut() {
-        return mActionMDA.updateTimeOut();
     }
 }

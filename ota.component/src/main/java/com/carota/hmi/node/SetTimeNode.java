@@ -1,11 +1,12 @@
 package com.carota.hmi.node;
 
-import static com.carota.cmh.CmhUtil.GROUP_SCHEDULE;
-import static com.carota.core.ScheduleAttribute.TYPE_NORMAL;
-import static com.carota.core.ScheduleAttribute.TYPE_SILENCE;
+import android.os.Handler;
 
 import com.carota.CarotaVehicle;
 import com.carota.hmi.EventType;
+import com.carota.hmi.callback.CallBackManager;
+import com.carota.hmi.callback.ICallBack;
+import com.carota.hmi.status.HmiStatus;
 import com.momock.util.Logger;
 
 /**
@@ -14,22 +15,9 @@ import com.momock.util.Logger;
 class SetTimeNode extends BaseNode {
     private final long time;
 
-    private String tid;
-
-    SetTimeNode(StateMachine status, long time, String tid) {
-        super(status);
+    SetTimeNode(HmiStatus hmiStatus, Handler handler, CallBackManager callback, long time) {
+        super(hmiStatus, handler, callback);
         this.time = time;
-        this.tid = tid;
-    }
-
-    @Override
-    void onStart() {
-
-    }
-
-    @Override
-    void onStop(boolean success) {
-
     }
 
     @Override
@@ -40,7 +28,7 @@ class SetTimeNode extends BaseNode {
     @Override
     public boolean execute() {
         try {
-            return CarotaVehicle.setScheduleUpgrade(time, tid, TYPE_NORMAL) && CarotaVehicle.getSchedule().scheduleTime == time;
+            return CarotaVehicle.setScheduleUpgrade(time) && CarotaVehicle.getSchedule().scheduleTime == time;
         } catch (Exception e) {
             Logger.error(e);
         }

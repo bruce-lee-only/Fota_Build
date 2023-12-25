@@ -46,6 +46,9 @@ public interface IVehicleStatus {
     int STATE_VTOL_OFF =  IConditionHandler.STATE_VTOL_OFF;
     int STATE_VTOL_ON = IConditionHandler.STATE_VTOL_ON;
 
+    int STATE_SECURITY_ON = IConditionHandler.STATE_SECURITY_ON;
+    int STATE_SECURITY_OFF = IConditionHandler.STATE_SECURITY_OFF;
+
     int getPowerState();
 
     int getGearState();
@@ -68,39 +71,42 @@ public interface IVehicleStatus {
 
     int getTelDiagnoseState();
 
-    int STATE_VEHICLE_FACTORY = 0;
-    int STATE_VEHICLE_TRANSPORT = 1;
-    int STATE_VEHICLE_NORMAL = 2;
-    int STATE_VEHICLE_UNRECOGNIZED = 3;
-    int STATE_VEHICLE_DYNO = 4;
-    int STATE_VEHICLE_CRASH = 5;
-    int STATE_VEHICLE_FACTORY_PAUSED = 6;
-    int STATE_VEHICLE_TRANSPORT_PAUSED = 7;
+    int STATE_VEHICLE_FACTORY = IConditionHandler.STATE_VEHICLE_FACTORY;
+    int STATE_VEHICLE_TRANSPORT = IConditionHandler.STATE_VEHICLE_TRANSPORT;
+    int STATE_VEHICLE_NORMAL = IConditionHandler.STATE_VEHICLE_NORMAL;
+    int STATE_VEHICLE_UNRECOGNIZED = IConditionHandler.STATE_VEHICLE_UNRECOGNIZED;
+    int STATE_VEHICLE_DYNO = IConditionHandler.STATE_VEHICLE_DYNO;
+    int STATE_VEHICLE_CRASH = IConditionHandler.STATE_VEHICLE_CRASH;
+    int STATE_VEHICLE_FACTORY_PAUSED = IConditionHandler.STATE_VEHICLE_FACTORY_PAUSED;
+    int STATE_VEHICLE_TRANSPORT_PAUSED = IConditionHandler.STATE_VEHICLE_TRANSPORT_PAUSED;
     int getVehicleModeState();
-
-    int STATE_LOCK_OFF = 0;
-    int STATE_LOCK_ON = 1;
+    int STATE_LOCK_OFF = IConditionHandler.STATE_LOCK_OFF;
+    int STATE_LOCK_ON = IConditionHandler.STATE_LOCK_ON;
     int getLockState();
 
-    int STATE_WINDOW_CLOSED = 0;
-    int STATE_WINDOW_OPENED = 1;
+    int STATE_WINDOW_CLOSED = IConditionHandler.STATE_WINDOW_CLOSED;
+    int STATE_WINDOW_OPENED = IConditionHandler.STATE_WINDOW_OPENED;
     int getWindowState();
 
-    int STATE_SECURITY_OFF = 0;
-    int STATE_SECURITY_ON = 1;
     int getSecurityState();
 
-	int getHvReadyState();
+    int getHvReadyState();
 
     int getVtolState();
 
-	int PET_MODE_OFF = 0;
-    int PET_MODE_ON = 1;
+    int PET_MODE_OFF = IConditionHandler.PET_MODE_OFF;
+    int PET_MODE_ON = IConditionHandler.PET_MODE_ON;
     int getPetMode();
-	
-    int isMotor();
 
-	int SENTINEL_MODE_OFF = 0;
-    int SENTINEL_MODE_ON = 1;
+    int SENTINEL_MODE_OFF = IConditionHandler.SENTINEL_MODE_OFF;
+    int SENTINEL_MODE_ON = IConditionHandler.SENTINEL_MODE_ON;
     int getSentinelMode();
+
+    int DCDC_MODE_OFF = IConditionHandler.DCDC_MODE_OFF;
+    int DCDC_MODE_ON = IConditionHandler.DCDC_MODE_ON;
+    int getDcdcMode();
+
+    int OTA_MODE_OFF = IConditionHandler.OTA_MODE_OFF;
+    int OTA_MODE_ON = IConditionHandler.OTA_MODE_ON;
+    int getOtaMode();
 }

@@ -10,6 +10,7 @@
 
 package com.carota.core.monitor;
 
+import android.content.Context;
 import android.os.SystemClock;
 
 import com.carota.core.ClientState;
@@ -18,6 +19,7 @@ import com.carota.core.ITask;
 import com.carota.core.data.UpdateTask;
 import com.carota.core.remote.IActionMDA;
 import com.carota.core.remote.info.InstallProgress;
+import com.carota.html.HtmlHelper;
 import com.momock.util.Logger;
 
 import java.util.Map;
@@ -27,7 +29,7 @@ public class InstallMonitor {
 
     public interface IEvent {
         void onStart(ISession s);
-        void onTrigger(ISession s, String target);
+        void onTrigger(ISession s);
         void onProcess(ISession s, int status, int successCount);
         void onStop(ISession s, boolean cancel, int status);
     }
@@ -36,10 +38,12 @@ public class InstallMonitor {
 
         private ISession mSession;
         private boolean mResume;
+        private final Context mContext;
 
-        private Observer(ISession s, boolean resume) {
+        private Observer(ISession s, boolean resume, Context context) {
             mSession = s;
             mResume = resume;
+            mContext = context;
         }
 
         @Override
@@ -48,6 +52,9 @@ public class InstallMonitor {
             boolean stopped = false;
             try {
                 state = doUpgrade(mResume, mSession);
+                if (state == ClientState.UPGRADE_STATE_SUCCESS) {
+                    HtmlHelper.setSuccessHtml(mContext);
+                }
             } catch (InterruptedException e) {
                 stopped = true;
                 state = ClientState.UPGRADE_STATE_IDLE;
@@ -55,7 +62,6 @@ public class InstallMonitor {
                 // unknown error
                 state = ClientState.UPGRADE_STATE_ERROR;
             } finally {
-                Logger.debug("lipiyan****************state:" + state);
                 mListener.onStop(mSession, stopped, state);
             }
             Logger.debug("InsMoniter END");
@@ -77,13 +83,13 @@ public class InstallMonitor {
         return null != mWorker && mWorker.isAlive();
     }
 
-    public boolean triggerUpgrade(boolean resume, ISession session, IEvent listener) {
+    public boolean triggerUpgrade(boolean resume, ISession session, IEvent listener, Context context) {
         mListener = listener;
         synchronized (this) {
             if (null == mWorker || !mWorker.isAlive()) {
                 Logger.debug("InsMoniter SET worker");
                 mListener.onStart(session);
-                mWorker = new Observer(session, resume);
+                mWorker = new Observer(session, resume,context);
                 mWorker.start();
                 return true;
             }
@@ -106,8 +112,9 @@ public class InstallMonitor {
         String usid = s.getUSID();
         Logger.debug("InsMoniter DO start @ " + resume);
         if(!resume) {
-            mListener.onTrigger(s, InstallProgress.TARGET_SLAVE);
-            if (!mMaster.upgradeEcuInSlave(usid)) {
+            Logger.debug("InsMoniter DO master");
+            mListener.onTrigger(s);
+            if (!mMaster.upgradeEcuInMaster(usid)) {
                 return ClientState.UPGRADE_STATE_ERROR;
             }
         }
@@ -140,21 +147,10 @@ public class InstallMonitor {
                 // if upgrade process is finished
                 if(ClientState.UPGRADE_STATE_UPGRADE != state
                         && ClientState.UPGRADE_STATE_ROLLBACK != state) {
-
-                    if(progress.getTarget().equals(InstallProgress.TARGET_SLAVE)
-                            && ClientState.UPGRADE_STATE_SUCCESS == state) {
-                        
-                        Logger.debug("InsMoniter DO master");
-                        mListener.onTrigger(s, InstallProgress.TARGET_MASTER);
-                        if(!mMaster.upgradeEcuInMaster(usid)) {
-                            break;
-                        }
-                    } else {
-                        mListener.onProcess(s, state, successCount);
-                        Thread.sleep(3 * 1000);
-                        Logger.debug("InsMoniter DO stop @ " + state);
-                        return state;
-                    }
+                    mListener.onProcess(s, state, successCount);
+                    Thread.sleep(3 * 1000);
+                    Logger.debug("InsMoniter DO stop @ " + state);
+                    return state;
                 } else {
                     mListener.onProcess(s, state, successCount);
                 }

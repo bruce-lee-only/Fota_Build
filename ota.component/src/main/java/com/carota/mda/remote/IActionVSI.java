@@ -22,6 +22,4 @@ public interface IActionVSI extends IActionCondition{
     boolean fireEvent(String action, long delaySec, Bundle extra);
     boolean removeEvent(String action);
 	SystemAttribute setSystemAttribute(List<SystemAttribute.Configure> cfg);
-
-    boolean cleanEvent(String action, long delaySec, Bundle extra);
 }

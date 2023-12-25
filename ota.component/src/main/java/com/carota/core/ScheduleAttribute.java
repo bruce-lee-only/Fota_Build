@@ -17,8 +17,6 @@ public class ScheduleAttribute {
     public static final int TYPE_FACTORY = 2;
     public static final int TYPE_TEAM = 3;
 
-    public static final int TYPE_SILENCE = 5;
-
     public long scheduleTime = -1;
     public long scheduleType = TYPE_CANCEL;
     public String scheduleTid = "UNKNOWN";

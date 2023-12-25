@@ -206,7 +206,6 @@ public class TaskManager implements ITaskManager {
     @Override
     public long freeStorageSpace(List<String> keepIds) {
         long downloadedSize = 0;
-
         if (keepIds == null || keepIds.isEmpty()) {
             mTasks.clear();
         } else {
@@ -218,22 +217,12 @@ public class TaskManager implements ITaskManager {
                 }
             }
         }
-
         String[] fileList = mFileManager.getDmAllFilesName();
         if (null != fileList) {
             for (String f : fileList) {
                 // match all file like key, key.a, key.b
                 String key = f.replaceAll("[.][^.]*$", "");
-                List<String> ids = new ArrayList<>();
-                if (keepIds != null) {
-                    for (String id: keepIds) {
-                        if (id.contains(key)) {
-                            ids.add(key);
-                        }
-                    }
-                    Logger.debug("%s[free] : id %s", TAG, keepIds.toString());
-                }
-                if (ids.contains(key)) {
+                if (null != keepIds && keepIds.contains(key)) {
                     downloadedSize += mFileManager.findFileLength(f);
                     Logger.debug("%s[free] : keep %s", TAG, key);
                 } else if (mTasks.containsKey(key)) {

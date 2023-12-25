@@ -23,6 +23,7 @@ public class DeployRollbackStrategy extends BaseDeployStratege {
             Logger.debug("SDA %s Skip rollback ", mTask.name);
             return false;
         }
+        ensureSafety(mTask.name);
         Logger.debug("SDA %s Start rollback ",mTask.name);
         mDataFactory.getmResult().updateEcuRollbacking(mTask.name);
         DeploySdaDb.getmInstances().saveTaskRollbackStart(mTask.name);

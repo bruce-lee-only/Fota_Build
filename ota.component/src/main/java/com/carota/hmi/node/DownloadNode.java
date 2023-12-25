@@ -1,12 +1,15 @@
 package com.carota.hmi.node;
 
-import android.annotation.SuppressLint;
+import android.os.Handler;
 
 import com.carota.CarotaClient;
 import com.carota.core.IDownloadCallback;
 import com.carota.core.ISession;
 import com.carota.hmi.EventType;
-import com.carota.hmi.action.DownLoadAction;
+import com.carota.hmi.callback.CallBackManager;
+import com.carota.hmi.callback.ICall;
+import com.carota.hmi.callback.IDownloadCall;
+import com.carota.hmi.status.HmiStatus;
 import com.momock.util.Logger;
 
 
@@ -17,18 +20,8 @@ class DownloadNode extends BaseNode {
     private boolean isSuccess;
     private boolean needWait;
 
-    DownloadNode(StateMachine status) {
-        super(status);
-    }
-
-    @Override
-    void onStart() {
-        mCallBack.down().onStart();
-    }
-
-    @Override
-    void onStop(boolean success) {
-        mCallBack.down().onStop(success, mStatus.getSession(),new DownLoadAction(mStatus, success,isAutoRunNextNode(),mHandler));
+    DownloadNode(HmiStatus hmiStatus, Handler handler, CallBackManager callback) {
+        super(hmiStatus, handler, callback);
     }
 
     @Override
@@ -40,20 +33,20 @@ class DownloadNode extends BaseNode {
     protected boolean execute() {
         isSuccess = false;
         needWait = true;
+        IDownloadCall call = (IDownloadCall) mCallBack.getICall(getType());
         try {
             boolean download = CarotaClient.startDownload(new IDownloadCallback() {
                 @Override
                 public void onProcess(ISession s) {
                     mStatus.setSession(s);
                     if (!mStatus.isFactory())
-                        mHandler.post(() -> mCallBack.down().onDownloading(s, getPro(s), getSpeed(s)));
+                        mHandler.post(() -> call.onDownloading(mStatus.getUpgradeType(), getType(), mStatus));
                 }
 
                 @Override
                 public void onFinished(ISession s, boolean success) {
                     if (!mStatus.isFactory())
-                        mHandler.post(() -> mCallBack.down().onDownloading(s, getPro(s), getSpeed(s)));
-                    isSuccess = success;
+                        mHandler.post(() -> call.onDownloading(mStatus.getUpgradeType(), getType(), mStatus));                    isSuccess = success;
                     needWait = false;
                 }
             });
@@ -69,40 +62,6 @@ class DownloadNode extends BaseNode {
             Logger.error(e);
         }
         return isSuccess;
-    }
-
-    /**
-     * 下载进度扩展方法
-     */
-    private int getPro(ISession session) {
-        int totalProgress = 0;
-        int count = session.getTaskCount();
-        if (count == 0) return 0;
-        for (int i = 0; i < count; i++) {
-            totalProgress += session.getTask(i).getDownloadProgress();
-        }
-        return totalProgress / session.getTaskCount();
-    }
-
-    /**
-     * 下载速度扩展方法
-     */
-    @SuppressLint("DefaultLocale")
-    private String getSpeed(ISession session) {
-        int count = session.getTaskCount();
-        long speed = 0;
-        if (count > 0) {
-            for (int i = 0; i < count; i++) {
-                speed += session.getTask(i).getDownloadSpeed();
-            }
-        }
-        long kbs = speed >> 10;
-
-        if (kbs >= 1024) {
-            return String.format("%.1f MB/S", ((float) kbs) / 1024);
-        } else {
-            return String.format("%d KB/S", kbs);
-        }
     }
 
 }

@@ -18,6 +18,7 @@ import com.carota.build.IConfiguration;
 import com.carota.build.ParamDM;
 import com.carota.build.ParamHub;
 import com.carota.build.ParamMDA;
+import com.carota.build.ParamRSM;
 import com.carota.build.ParamRoute;
 import com.carota.dm.file.ftp.FtpFileManager;
 import com.carota.mda.deploy.DeviceUpdater;
@@ -115,6 +116,7 @@ public class OfflineDeploy {
                     return true;
                 } else {
                     String dmHost = addFileToDm(fm, m.name, clearDm, secure);
+                    Logger.info("[OFFLINE] Dm Host is %s", host);
                     if (!TextUtils.isEmpty(dmHost)) {
                         return install(m, works, dmHost, fm);
                     }
@@ -200,7 +202,7 @@ public class OfflineDeploy {
             } else {
                 mServiceHolder.addFileSync(mContext, fm.target, null);
             }
-            return host;
+            return configuration.get(ParamRSM.class).getHost();
         }
         Logger.error("[OFFLINE] Dm Manager Error %s", dmManager);
         return null;

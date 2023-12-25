@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class UpgradeHandler extends SimpleHandler {
 
-    private UpdateMaster mMaster;
+    private final UpdateMaster mMaster;
 
     public UpgradeHandler(UpdateMaster master) {
         mMaster = master;
@@ -36,43 +36,12 @@ public class UpgradeHandler extends SimpleHandler {
         try {
             MasterDownloadAgent.UpgradeReq req = MasterDownloadAgent.UpgradeReq.parseFrom(body);
             String usid = req.getUsid();
-            switch (req.getStep()) {
-                case SLAVE:
-                    code = triggerSlave(usid, builder);
-                    break;
-                case MASTER:
-                    code = triggerMaster(usid, builder);
-                    break;
-                case UI:
-                    code = triggerUI(usid, builder);
-                    break;
+            if (mMaster.triggerMasterUpgrade(usid)) {
+                code = PrivStatusCode.OK;
             }
         } catch (Exception e) {
             Logger.error(e);
         }
         return HttpResp.newInstance(code, builder.build().toByteArray());
-    }
-
-    private PrivStatusCode triggerSlave(String usid, Telemetry.EmptyRsp.Builder rsp) {
-        if(mMaster.triggerSlaveUpgrade(usid)) {
-            return PrivStatusCode.OK;
-        } else {
-            return PrivStatusCode.SRV_ACT_UNKNOWN;
-        }
-    }
-
-    private PrivStatusCode triggerMaster(String usid, Telemetry.EmptyRsp.Builder rsp) {
-        int ret = mMaster.triggerMasterUpgrade(usid);
-        if(ret > 0) {
-            return PrivStatusCode.OK;
-        } else if(0 == ret){
-            return PrivStatusCode.REQ_SEQ_TRIGGER;
-        } else {
-            return PrivStatusCode.SRV_ACT_UNKNOWN;
-        }
-    }
-
-    private PrivStatusCode triggerUI(String usid, Telemetry.EmptyRsp.Builder rsp) {
-        return PrivStatusCode.OK;
     }
 }

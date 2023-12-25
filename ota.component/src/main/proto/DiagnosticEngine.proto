@@ -127,6 +127,7 @@ message DiagnosticApplyReq {
   DoCAN docan = 6;
   Flash flash = 7;
   string tag = 8;
+  string name = 9;
 }
 
 message DiagnosticApplyRsp {

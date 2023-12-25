@@ -38,7 +38,6 @@ public class ResultHandler extends SimpleHandler {
         try {
             DeployResult result = mMaster.getResult();
             rsp.setUsid(result.getUsid())
-                    .setStep(getStep())
                     .setStatus(getStatus(result.getmStatus()));
             for (Map.Entry<String, DeployEcuResult> next : result.getmEcuResultMap().entrySet()) {
                 DeployEcuResult ecuResult = next.getValue();
@@ -46,10 +45,6 @@ public class ResultHandler extends SimpleHandler {
                         .setName(ecuResult.getName())
                         .setProgress(ecuResult.getPro())
                         .setStatus(getStatus(ecuResult.getStatus())));
-            }
-
-            if (rsp.getStep() == MasterDownloadAgent.UpgradeStep.SLAVE) {
-                rsp.setStatus(MasterDownloadAgent.UpgradeResultRsp.Status.SUCCESS);
             }
         } catch (Exception e) {
             Logger.error(e);
@@ -71,17 +66,6 @@ public class ResultHandler extends SimpleHandler {
                 return MasterDownloadAgent.UpgradeResultRsp.Status.ROLLBACK;
             default:
                 return MasterDownloadAgent.UpgradeResultRsp.Status.IDLE;
-        }
-    }
-
-    private MasterDownloadAgent.UpgradeStep getStep() {
-        MasterStatus status = mMaster.getStatus();
-        if(status.getUpgradeMaster()) {
-            return MasterDownloadAgent.UpgradeStep.MASTER;
-        } else if(status.getUpgradeSlave()) {
-            return MasterDownloadAgent.UpgradeStep.SLAVE;
-        } else {
-            return MasterDownloadAgent.UpgradeStep.SLAVE;
         }
     }
 }

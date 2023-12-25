@@ -37,7 +37,6 @@ public class DownloadManagerService extends RouterService {
         server.setRequestHandler(mModuleName, "/pg", new ProgressHandler(mContext, mTaskManagerFactory));
         server.setRequestHandler(mModuleName, "/file", new FileHandler(mContext, mTaskManagerFactory));
         server.setRequestHandler(mModuleName, "/cmd", new CommandHandler(mContext, mTaskManagerFactory));
-        server.setRequestHandler(mModuleName, "/digest", new DigestHandler(mContext, mTaskManagerFactory));
     }
 
     @Override

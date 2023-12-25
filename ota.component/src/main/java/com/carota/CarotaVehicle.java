@@ -10,8 +10,6 @@
 
 package com.carota;
 
-import static com.carota.core.VehicleEvent.EVENT_POWER_OFF;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 
@@ -25,7 +23,6 @@ import com.carota.core.VehicleEvent;
 import com.carota.core.remote.IActionMDA;
 import com.carota.mda.remote.info.IVehicleStatus;
 import com.carota.core.SystemAttribute;
-import com.carota.mda.remote.info.VehicleDesc;
 import com.carota.util.ConfigHelper;
 import com.carota.vsi.VehicleServiceManager;
 import com.momock.util.Logger;
@@ -46,21 +43,23 @@ public class CarotaVehicle {
         mEventMgr = VehicleEvent.get(context);
     }
 
-    //todo: mode by lipiyan add "public" for rescue
-    public static synchronized void init(Context context) {
+    static synchronized void init(Context context) {
         if (null == sVehicle) {
             sVehicle = new CarotaVehicle(context);
         }
     }
 
-    public static IVehicleDetail queryVehicleDetail() {
+    /**
+     *
+     * @param flag
+     *         ALL = 0;
+     *         VEHICLE = 1;
+     *         VERSION = 2;
+     * @return
+     */
+    public static IVehicleDetail queryVehicleDetail(int flag) {
         CarotaClient.waitMainCtrlReady("G-QY");
-        return sVehicle.mActionMDA.queryVehicleDetail(0);
-    }
-
-    public static IVehicleDetail queryVehicleVin() {
-        CarotaClient.waitMainCtrlReady("G-QY");
-        return sVehicle.mActionMDA.queryVehicleDetail(1);
+        return sVehicle.mActionMDA.queryVehicleDetail(flag);
     }
 
     public static VehicleCondition queryVehicleCondition() {
@@ -68,19 +67,14 @@ public class CarotaVehicle {
         return null == status ? null : new VehicleCondition(status);
     }
 
-    public static boolean setScheduleUpgrade(long sec, String id, int type) {
+    public static boolean setScheduleUpgrade(long sec) {
         ISession session = CarotaClient.getClientSession();
-        String tid = id;
+        String tid = "" + System.currentTimeMillis();
         if (session != null) {
-            tid = session.getScheduleID() + "_" + session.getUSID();
+            tid = session.getScheduleID();
         }
         String track = "0";
-        return sVehicle.mEventMgr.setScheduleField(sec, tid, track, type);
-    }
-
-    public static boolean setScheduleUpgradeWithoutSession(long sec, String id, int type) {
-        String track = "0";
-        return sVehicle.mEventMgr.setScheduleField(sec, id, track, type);
+        return sVehicle.mEventMgr.setScheduleField(sec, tid, track);
     }
 
     public static boolean setScheduleIdle() {
@@ -118,54 +112,6 @@ public class CarotaVehicle {
 
     public static boolean setVehiclePowerOff() {
         return sVehicle.mEventMgr.setPowerOff();
-    }
-
-    /**
-     * 远程上电操作
-     * author: lipiyan
-     * time: 2023-02-07
-     * @return
-     */
-    public static boolean setVehiclePowerOn() {
-        return sVehicle.mEventMgr.setPowerOn();
-    }
-
-    /**
-     * 通知tbox预约升级清理状态
-     * @return
-     */
-    public static boolean cleanStatus(){
-        return sVehicle.mEventMgr.cleanStatus();
-    }
-
-    /**
-     * 上高压操作
-     * author: lipiyan
-     * time: 2023-06-15
-     * @return
-     */
-    public static boolean setVehicleHVoltageOn() {
-        return sVehicle.mEventMgr.setElectricRuntimeEnable(true);
-    }
-
-    /**
-     * 上高压操作
-     * author: lipiyan
-     * time: 2023-06-15
-     * @return
-     */
-    public static boolean setVehicleHVoltageOff() {
-        return sVehicle.mEventMgr.setElectricRuntimeEnable(false);
-    }
-
-    /**
-     * 查询vin码fromVsi
-     * author: lipiyan
-     * time: 2023-07-25
-     * @return
-     */
-    public static VehicleDesc queryVinFromVsi(){
-        return sVehicle.mServMgr.queryInfo();
     }
 
     public static SystemAttribute setSystemAttribute(List<SystemAttribute.Configure> cfg) {

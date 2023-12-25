@@ -121,7 +121,7 @@ public class PrivReqHelper {
             if (request.url().encodedPath().equals("/connect")) {
                 chainB=chain.withReadTimeout(15, TimeUnit.MINUTES);
             } else {
-                chainB=chain.withReadTimeout(5, TimeUnit.MINUTES);
+                chainB=chain.withReadTimeout(3, TimeUnit.MINUTES);
             }
             return chainB.proceed(chain.request());
         }

@@ -128,4 +128,14 @@ public class StatusSnapshot implements IConditionHandler {
     public int getSentinelMode() {
         return mData.get(VehicleService.KEY_SENTINEL_MODE);
     }
+
+    @Override
+    public int getDcdcMode() {
+        return mData.get(VehicleService.KEY_DCDC_MODE);
+    }
+
+    @Override
+    public int getOtaMode() {
+        return mData.get(VehicleService.KEY_OTA_MODE);
+    }
 }

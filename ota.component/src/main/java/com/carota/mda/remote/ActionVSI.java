@@ -181,35 +181,6 @@ public class ActionVSI implements IActionVSI {
     }
 
     @Override
-    public boolean cleanEvent(String action, long delaySec, Bundle extra) {
-        final String CALL_TAG = LogUtil.TAG_RPC_VSI + "[FIRE] ";
-        Logger.info(CALL_TAG + action + " " + delaySec);
-        VehicleStatusInformation.EventReq.Builder req = VehicleStatusInformation.EventReq.newBuilder()
-                .setTag(ReqTag.TAG_SRC_MDA)
-                .setAction(VehicleStatusInformation.EventReq.Action.FIRE)
-                .setDelay(delaySec);
-        if (extra != null) {
-            req.addData(extra.getString("action", ""));
-            if (extra.getBoolean("dtc", false)) req.addData("dtc");
-        }
-
-        if (!TextUtils.isEmpty(action) && delaySec >= 0) {
-            switch (action) {
-                case VehicleEvent.EVENT_POWER_OFF:
-                    req.setEvent(VehicleStatusInformation.EventReq.Event.ACC_OFF);
-                    break;
-                default:
-                    return false;
-            }
-            PrivReqHelper.Response resp = PrivReqHelper.doPost("http://" + "ota_tbox_vsi" + "/event", req.build().toByteArray());
-            Logger.info(CALL_TAG + "cleanEvent RSP : %1d", resp.getStatusCode());
-
-            return PrivStatusCode.OK.equals(resp.getStatusCode());
-        }
-        return false;
-    }
-
-    @Override
     public boolean fireEvent(String action, long delaySec, Bundle extra) {
         final String CALL_TAG = LogUtil.TAG_RPC_VSI + "[FIRE] ";
         Logger.info(CALL_TAG + action + " " + delaySec);
@@ -226,9 +197,6 @@ public class ActionVSI implements IActionVSI {
             switch (action) {
                 case VehicleEvent.EVENT_POWER_OFF:
                     req.setEvent(VehicleStatusInformation.EventReq.Event.ACC_OFF);
-                    break;
-                case VehicleEvent.EVENT_POWER_ON:
-                    req.setEvent(VehicleStatusInformation.EventReq.Event.ACC_ON);
                     break;
                 case VehicleEvent.EVENT_SCHEDULE:
                     req.setEvent(VehicleStatusInformation.EventReq.Event.SCHEDULE);
@@ -353,22 +321,25 @@ public class ActionVSI implements IActionVSI {
             return convert(mRaw.getVtol());
         }
 
-
-		@Override
-        public int isMotor() {
-            return convert(mRaw.getMotor());
-        }
-		
-		@Override
+        @Override
         public int getPetMode() {
             return convert(mRaw.getPetMode());
         }
-		
-		@Override
+
+        @Override
         public int getSentinelMode() {
             return convert(mRaw.getSentinelMode());
         }
 
+        @Override
+        public int getDcdcMode() {
+            return convert(mRaw.getDcdcMode());
+        }
+
+        @Override
+        public int getOtaMode() {
+            return convert(mRaw.getOtaMode());
+        }
         private int convert(Internal.EnumLite e) {
             // WARN: Here is a trick to convert PB enum to IConditionHandler value
             return e.getNumber() - 1;
@@ -383,7 +354,6 @@ public class ActionVSI implements IActionVSI {
                     + "; Speed = " + mRaw.getSpeed()
                     + "; BatteryVoltage = " + mRaw.getBatteryVoltage()
                     + "; BatteryPower = " + mRaw.getBatteryPower()
-                    + "; BatterLevel = " + mRaw.getBatteryLevel()
                     + "; Handbrake = " + mRaw.getHandbrake()
                     + "; PowerReady = " + mRaw.getPowerReady()
                     + "; Diagnose = " + mRaw.getDiagnose()
@@ -394,7 +364,9 @@ public class ActionVSI implements IActionVSI {
                     + "; Security = " + mRaw.getSecurity()
                     + "; HvReady =" + mRaw.getHvReady()
                     + "; Vtol =" + mRaw.getVtol()
-                    + "; BatteryLevel =" + mRaw.getBatteryLevel();
+                    + "; BatteryLevel =" + mRaw.getBatteryLevel()
+                    + "; Dcdc =" + mRaw.getDcdcMode()
+                    + "; OtaMode =" + mRaw.getOtaMode();
         }
     }
 }

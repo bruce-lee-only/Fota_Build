@@ -28,8 +28,6 @@ public class CoreStatus extends ClientState implements ICoreStatus {
     private static final String KEY_TASK_FINISH = "TASK_FINISH";
     private static final String KEY_TASK_TOTAL = "TASK_TOTAL";
 
-    private static final String KEY_IS_RESCUE = "IS_RESCUE";
-
     private SharedPreferences mSP;
     private int mUpgradeState;
     private int mDownloadState;
@@ -63,19 +61,8 @@ public class CoreStatus extends ClientState implements ICoreStatus {
         return mSP.getBoolean(KEY_UPGRADE, false);
     }
 
-    @Override
     public void setUpgradeTriggered(boolean run) {
         mSP.edit().putBoolean(KEY_UPGRADE, run).commit();
-    }
-
-    @Override
-    public void setIsRescue(boolean isRescue) {
-        mSP.edit().putBoolean(KEY_IS_RESCUE, isRescue).commit();
-    }
-
-    @Override
-    public boolean getIsRescue(){
-        return mSP.getBoolean(KEY_IS_RESCUE, false);
     }
 
     @Override

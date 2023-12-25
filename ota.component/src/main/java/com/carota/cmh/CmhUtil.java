@@ -37,7 +37,6 @@ public class CmhUtil {
     public static final int GROUP_TELEMETRY = 2;
     public static final int GROUP_ENG = 3;
     public static final int GROUP_EVENT = 4;
-    public static final int GROUP_SILENT = 5;
     public static final int GROUP_ERROR_WAKE_UP = 101;
 
     public static final int WEU_CONDITION_NOT_MET = 1;

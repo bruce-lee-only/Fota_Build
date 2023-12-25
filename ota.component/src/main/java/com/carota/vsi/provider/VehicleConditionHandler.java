@@ -45,6 +45,7 @@ public class VehicleConditionHandler extends SimpleHandler {
 
     private PrivStatusCode queryStatus(VehicleStatusInformation.VehicleConditionRsp.Builder rsp) throws Exception {
         IConditionHandler cdt = mService.queryCondition();
+        if(cdt == null ) return PrivStatusCode.REQ_TARGET_UNKNOWN;
         rsp.setBatteryPower(cdt.getBatteryPower())
                 .setSpeed(cdt.getSpeed())
                 .setBatteryVoltage(cdt.getBatteryVoltage())
@@ -130,23 +131,35 @@ public class VehicleConditionHandler extends SimpleHandler {
             rsp.setTelDiagnose(VehicleStatusInformation.VehicleConditionRsp.TelDiagnose.TEL_DIAGNOSE_NOT_READ);
         }
 
-        int vehicleMode = cdt.getVehicleModeState();
-        if (IConditionHandler.STATE_VEHICLE_FACTORY == vehicleMode) {
-            rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.FACTORY);
-        } else if (IConditionHandler.STATE_VEHICLE_TRANSPORT == vehicleMode) {
-            rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.TRANSPORT);
-        } else if (IConditionHandler.STATE_VEHICLE_NORMAL == vehicleMode) {
-            rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.NORMAL);
-        } else if (IConditionHandler.STATE_VEHICLE_UNRECOGNIZED == vehicleMode) {
-            rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.VEHICLE_UNRECOGNIZED);
-        } else if (IConditionHandler.STATE_VEHICLE_DYNO == vehicleMode) {
-            rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.DYNO);
-        } else if (IConditionHandler.STATE_VEHICLE_CRASH == vehicleMode) {
-            rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.CRASH);
-        } else if (IConditionHandler.STATE_VEHICLE_FACTORY_PAUSED == vehicleMode) {
-            rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.FACTORY_PAUSED);
-        } else if (IConditionHandler.STATE_VEHICLE_TRANSPORT_PAUSED == vehicleMode) {
-            rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.TRANSPORT_PAUSED);
+        Logger.info("model :" + cdt.getVehicleModeState());
+        switch (cdt.getVehicleModeState()) {
+            case IConditionHandler.STATE_VEHICLE_FACTORY:
+                rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.FACTORY);
+                break;
+            case IConditionHandler.STATE_VEHICLE_TRANSPORT:
+                rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.TRANSPORT);
+                break;
+            case IConditionHandler.STATE_VEHICLE_NORMAL:
+                rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.NORMAL);
+                break;
+            case IConditionHandler.STATE_VEHICLE_UNRECOGNIZED:
+                rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.VEHICLE_UNRECOGNIZED);
+                break;
+            case IConditionHandler.STATE_VEHICLE_DYNO:
+                rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.DYNO);
+                break;
+            case IConditionHandler.STATE_VEHICLE_CRASH:
+                rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.CRASH);
+                break;
+            case IConditionHandler.STATE_VEHICLE_FACTORY_PAUSED:
+                rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.FACTORY_PAUSED);
+                break;
+            case IConditionHandler.STATE_VEHICLE_TRANSPORT_PAUSED:
+                rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.TRANSPORT_PAUSED);
+                break;
+            default:
+                rsp.setVehicleMode(VehicleStatusInformation.VehicleConditionRsp.VehicleMode.VEHICLE_UNKNOWN);
+                break;
         }
 
         int lockState = cdt.getLockState();
@@ -170,6 +183,77 @@ public class VehicleConditionHandler extends SimpleHandler {
             rsp.setSecurity(VehicleStatusInformation.VehicleConditionRsp.Security.SECURITY_OFF);
         }
 
+        switch (cdt.getHvReadyState()) {
+            case IConditionHandler.STATE_HV_READY_OFF:
+                rsp.setHvReady(VehicleStatusInformation.VehicleConditionRsp.HvReady.HV_READY_OFF);
+                break;
+            case IConditionHandler.STATE_HV_READY_ON:
+                rsp.setHvReady(VehicleStatusInformation.VehicleConditionRsp.HvReady.HV_READY_ON);
+                break;
+            default:
+                rsp.setHvReady(VehicleStatusInformation.VehicleConditionRsp.HvReady.HV_READY_UNKNOWN);
+                break;
+
+        }
+        switch (cdt.getVtolState()) {
+            case IConditionHandler.STATE_VTOL_OFF:
+                rsp.setVtol(VehicleStatusInformation.VehicleConditionRsp.Vtol.VTOL_OFF);
+                break;
+            case IConditionHandler.STATE_VTOL_ON:
+                rsp.setVtol(VehicleStatusInformation.VehicleConditionRsp.Vtol.VTOL_ON);
+                break;
+            default:
+                rsp.setVtol(VehicleStatusInformation.VehicleConditionRsp.Vtol.VTOL_UNKNOWN);
+                break;
+        }
+
+        switch (cdt.getPetMode()) {
+            case IConditionHandler.PET_MODE_OFF:
+                rsp.setPetMode(VehicleStatusInformation.VehicleConditionRsp.PetMode.PET_MODE_OFF);
+                break;
+            case IConditionHandler.PET_MODE_ON:
+                rsp.setPetMode(VehicleStatusInformation.VehicleConditionRsp.PetMode.PET_MODE_ON);
+                break;
+            default:
+                rsp.setPetMode(VehicleStatusInformation.VehicleConditionRsp.PetMode.PET_MODE_UNKNOWN);
+                break;
+        }
+
+        switch (cdt.getSentinelMode()) {
+            case IConditionHandler.SENTINEL_MODE_OFF:
+                rsp.setSentinelMode(VehicleStatusInformation.VehicleConditionRsp.SentinelMode.SENTINEL_MODE_OFF);
+                break;
+            case IConditionHandler.SENTINEL_MODE_ON:
+                rsp.setSentinelMode(VehicleStatusInformation.VehicleConditionRsp.SentinelMode.SENTINEL_MODE_ON);
+                break;
+            default:
+                rsp.setSentinelMode(VehicleStatusInformation.VehicleConditionRsp.SentinelMode.SENTINEL_MODE_UNKNOWN);
+                break;
+        }
+
+        switch (cdt.getDcdcMode()) {
+            case IConditionHandler.DCDC_MODE_OFF:
+                rsp.setDcdcMode(VehicleStatusInformation.VehicleConditionRsp.DcdcMode.DCDC_MODE_OFF);
+                break;
+            case IConditionHandler.DCDC_MODE_ON:
+                rsp.setDcdcMode(VehicleStatusInformation.VehicleConditionRsp.DcdcMode.DCDC_MODE_ON);
+                break;
+            default:
+                rsp.setDcdcMode(VehicleStatusInformation.VehicleConditionRsp.DcdcMode.DCDC_MODE_UNKNOWN);
+                break;
+        }
+
+        switch (cdt.getOtaMode()) {
+            case IConditionHandler.OTA_MODE_OFF:
+                rsp.setOtaMode(VehicleStatusInformation.VehicleConditionRsp.OtaMode.OTA_MODE_OFF);
+                break;
+            case IConditionHandler.OTA_MODE_ON:
+                rsp.setOtaMode(VehicleStatusInformation.VehicleConditionRsp.OtaMode.OTA_MODE_ON);
+                break;
+            default:
+                rsp.setOtaMode(VehicleStatusInformation.VehicleConditionRsp.OtaMode.OTA_MODE_UNKNOWN);
+                break;
+        }
         return PrivStatusCode.OK;
     }
 }

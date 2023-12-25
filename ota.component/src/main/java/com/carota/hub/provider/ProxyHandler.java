@@ -65,6 +65,9 @@ public class ProxyHandler implements IHttpHandler {
 						return new HttpResp.ProxyResp(pr.getStatusCode(), pr.getContentType(), pr.getHeader(), pr.getBody(), pr.getLength());
 					}
 				}
+				Logger.error("The Proxy Http Error @ %1s",path);
+			} else {
+				Logger.error("The Host %1s Not Find Register In Proxy @ %2s",host,path);
 			}
 		} catch (Exception e) {
 			Logger.error(e);

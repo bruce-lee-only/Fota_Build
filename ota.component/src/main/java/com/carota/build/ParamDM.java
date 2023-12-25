@@ -109,7 +109,7 @@ public class ParamDM extends ConfigParser {
     private Info mInfo;
 
     public ParamDM() {
-        super("dms");
+        super("dm");
         mExtra = new ArrayList<>();
     }
 

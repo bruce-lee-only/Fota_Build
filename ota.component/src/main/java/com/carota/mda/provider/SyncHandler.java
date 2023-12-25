@@ -30,9 +30,6 @@ public class SyncHandler extends SimpleHandler {
     public static final int FLAG_DOWNLOADING = 0x00000001;
     public static final int FLAG_INSTALLING = 0x00000002;
     public static final int FLAG_DOWNLOADED = 0x00000100;
-    public static final int FLAG_UPGRADE_SLAVE = 0x00000200;
-    public static final int FLAG_UPGRADE_MASTER = 0x00000400;
-    public static final int FLAG_UPGRADE_UI = 0x00000800;
 
     private final UpdateMaster mMaster;
     private final Context mContext;
@@ -59,13 +56,6 @@ public class SyncHandler extends SimpleHandler {
             }
             if (st.getPackage()) {
                 status |= FLAG_DOWNLOADED;
-            }
-            if (st.getUpgradeSlave()) {
-                status |= FLAG_UPGRADE_SLAVE;
-            }
-            if (st.getUpgradeMaster()) {
-                status |= FLAG_UPGRADE_MASTER;
-                status |= FLAG_UPGRADE_UI;
             }
             builder.setState(status);
             builder.setAction(ConfigHelper.isTestModeEnabled(mContext)

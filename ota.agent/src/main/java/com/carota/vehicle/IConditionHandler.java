@@ -38,7 +38,7 @@ public interface IConditionHandler {
 
     int getBatteryPower();    // 0 - 100 %
 
-    int getBatteryLevel(); // 0 - 100 % storage battery energy
+    int getBatteryLevel();   //0 - 100%
 
     int STATE_HANDBRAKE_OFF = 0;
     int STATE_HANDBRAKE_ON = 1;
@@ -89,6 +89,7 @@ public interface IConditionHandler {
     int STATE_VTOL_OFF = 0;
     int STATE_VTOL_ON = 1;
     int getVtolState();
+
     int PET_MODE_OFF = 0;
     int PET_MODE_ON = 1;
     int getPetMode();
@@ -96,4 +97,12 @@ public interface IConditionHandler {
     int SENTINEL_MODE_OFF = 0;
     int SENTINEL_MODE_ON = 1;
     int getSentinelMode();
+
+    int DCDC_MODE_OFF = 0;
+    int DCDC_MODE_ON = 1;
+    int getDcdcMode();
+
+    int OTA_MODE_OFF = 0;
+    int OTA_MODE_ON = 1;
+    int getOtaMode();
 }

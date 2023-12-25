@@ -48,7 +48,7 @@ public class DownloadHandler extends SimpleHandler {
                     code = downloadQuery(builder);
                     break;
             }
-        } catch (InvalidProtocolBufferException e) {
+        } catch (Exception e) {
             Logger.error(e);
         }
         return HttpResp.newInstance(code, builder.build().toByteArray());

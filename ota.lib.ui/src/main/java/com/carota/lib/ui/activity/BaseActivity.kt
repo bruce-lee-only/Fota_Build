@@ -10,7 +10,6 @@ import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
-import com.carota.lib.ui.BR
 
 
 abstract class BaseActivity<VB:ViewDataBinding, VM:BaseActivityViewModel<VB>>(

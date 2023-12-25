@@ -33,6 +33,7 @@ public class DeployUpgradeStrategy extends BaseDeployStratege  {
             Logger.debug("SDA %s Skip Upgrade ", mTask.name);
             return false;
         }
+        ensureSafety(mTask.name);
         Logger.debug("SDA %s Start upgrade ",mTask.name);
         mDataFactory.getmResult().updateEcuUpgrading(mTask.name);
         DeploySdaDb.getmInstances().saveTaskStart(mTask.name);

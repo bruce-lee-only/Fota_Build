@@ -115,6 +115,16 @@ public class VehicleConditionCache {
         public int getSentinelMode() {
             return mCache.get(VehicleService.KEY_SENTINEL_MODE, IConditionHandler.STATE_UNKNOWN);
         }
+
+        @Override
+        public int getDcdcMode() {
+            return mCache.get(VehicleService.KEY_DCDC_MODE, IConditionHandler.STATE_UNKNOWN);
+        }
+
+        @Override
+        public int getOtaMode() {
+            return mCache.get(VehicleService.KEY_OTA_MODE, IConditionHandler.STATE_UNKNOWN);
+        }
     };
 
     public IConditionHandler getHandler() {

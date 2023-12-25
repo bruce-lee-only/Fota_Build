@@ -44,6 +44,7 @@ public class UpdateCampaign {
     public static final String PROP_PKI_TYPE = "pki_type";
     public static final String PROP_LOG_TYPE = "log_type";
     public static final String PROP_LOG_PATH = "log_path";
+    public static final String PROP_DISPLAY_INFO = "displayInfo";
 
     //上报日志类型,-1为不上传日志，1为车端日志打开，4为错误上传,5为完成上传
     public static final int UPLOAD_LOG_NONE = -1;
@@ -261,5 +262,15 @@ public class UpdateCampaign {
             }
         }
         return map;
+    }
+
+    public String getDisplayInfoUrl() {
+        String url = "";
+        String info = mRawData.optString(PROP_DISPLAY_INFO,"");
+        String fileUrl = mRawData.optString(PROP_URL_FILE, "");
+        if (!info.isEmpty()&&!fileUrl.isEmpty()) {
+            url = fileUrl.replace("{id}", info);
+        }
+        return url;
     }
 }

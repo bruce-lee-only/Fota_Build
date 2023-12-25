@@ -24,11 +24,4 @@ public interface ICoreStatus {
     int getFinishCount();
 
     int getTotalCount();
-
-    boolean getIsRescue();
-
-    void setIsRescue(boolean isRescue);
-
-    void setUpgradeTriggered(boolean run);
-
 }

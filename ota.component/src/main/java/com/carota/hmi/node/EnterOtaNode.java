@@ -1,25 +1,18 @@
 package com.carota.hmi.node;
 
+import android.os.Handler;
+
 import com.carota.CarotaVehicle;
 import com.carota.hmi.EventType;
-import com.carota.hmi.action.EnterOtaAction;
+import com.carota.hmi.callback.CallBackManager;
+import com.carota.hmi.status.HmiStatus;
 
 /**
  * enter ota
  */
 class EnterOtaNode extends BaseNode {
-    EnterOtaNode(StateMachine status) {
-        super(status);
-    }
-
-    @Override
-    void onStart() {
-        mCallBack.enterOta().onStart();
-    }
-
-    @Override
-    void onStop(boolean success) {
-        mCallBack.enterOta().onStop(success, new EnterOtaAction(success,isAutoRunNextNode(),mHandler));
+    EnterOtaNode(HmiStatus hmiStatus, Handler handler, CallBackManager callback) {
+        super(hmiStatus, handler, callback);
     }
 
     @Override
@@ -31,10 +24,8 @@ class EnterOtaNode extends BaseNode {
     protected boolean execute() {
         if (!CarotaVehicle.setUpgradeRuntimeEnable(true, false)) {
             sleep(3000);
-            mStatus.saveInOta(false);
             return false;
         }
-        mStatus.saveInOta(true);
         sleep(3000);
         return true;
     }

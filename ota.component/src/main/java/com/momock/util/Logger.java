@@ -164,7 +164,7 @@ public class Logger {
     }
 
     private static String getCurrentProcessName(Context context) {
-        int pid = android.os.Process.myPid();
+        int pid = Process.myPid();
         String processName = "";
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if(null != manager) {
