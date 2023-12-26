@@ -27,9 +27,16 @@ public class LogUtil {
     public final static String TAG_RPC_SOTA = "ActionSOTA";
     public final static String TAG_RPC_CMH = "ActionCMH";
 
+    public static boolean INITIALIZED = false;
+
     public static void initLogger(Context context) {
-        Logger.open(context, "carota", 20, Logger.LEVEL_DEBUG);
-        Logger.info("CAROTA CORE VER %s", BuildConfig.VERSION_NAME);
+        if (!INITIALIZED){
+            Logger.open(context, "carota", 20, Logger.LEVEL_DEBUG);
+            Logger.info("CAROTA CORE VER %s", BuildConfig.VERSION_NAME);
+            INITIALIZED = true;
+        }else {
+            Logger.warn("Logger has already be initialized");
+        }
     }
 
 }
