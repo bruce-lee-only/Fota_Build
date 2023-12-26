@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion build_versions.compile_sdk
+
+    defaultConfig {
+        applicationId "com.carota.component"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 100
+        versionName "01.00"
+    }
+
+    buildTypes {
+        release {
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility "1.8"
+        targetCompatibility "1.8"
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation deps.constraint_layout
+    implementation project(':ota.component')
+    implementation deps.app_compat
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.preference:preference:1.1.1'
+}

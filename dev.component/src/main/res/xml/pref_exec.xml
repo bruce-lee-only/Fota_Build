@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="exec_a"
+        android:title="@string/unit_btn_exec_case_a" />
+    <Preference
+        android:key="exec_b"
+        android:title="@string/unit_btn_exec_case_b" />
+    <Preference
+        android:key="exec_c"
+        android:title="@string/unit_btn_exec_case_c" />
+    <Preference
+        android:key="exec_d"
+        android:title="@string/unit_btn_exec_case_d" />
+    <Preference
+        android:key="exec_e"
+        android:title="@string/unit_btn_exec_case_e" />
+</PreferenceScreen>

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 
+initDefaultConfigure(project)
 android {
     compileSdkVersion build_versions.target_sdk
 

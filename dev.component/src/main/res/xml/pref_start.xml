@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:fragment="com.carota.dev.core.CorePreferenceFragment"
+        android:key="debug_dm"
+        android:title="@string/start_btn_dl" />
+    <Preference
+        android:fragment="com.carota.util.svr.HttpPreferenceFragment"
+        android:key="debug_http"
+        android:title="@string/start_btn_http" />
+    <Preference
+        android:fragment="com.carota.dev.mda.MasterPreferenceFragment"
+        android:key="debug_master"
+        android:title="@string/start_btn_master" />
+    <Preference
+        android:fragment="com.carota.util.exec.ExecPreferenceFragment"
+        android:key="debug_unit"
+        android:title="@string/start_btn_unit" />
+    <Preference
+        android:fragment="com.carota.dev.dm.DownloadPreferenceFragment"
+        android:key="debug_download"
+        android:title="@string/start_btn_dlv2" />
+    <Preference
+        android:fragment="com.carota.dev.sda.SlavePreferenceFragment"
+        android:key="debug_slave"
+        android:title="@string/start_btn_slave" />
+    <Preference
+        android:fragment="com.carota.usb.rsm.StoragePreferenceFragment"
+        android:key="debug_storage"
+        android:title="@string/start_btn_storage" />
+    <Preference
+        android:fragment="com.carota.util.jdb.JdbPreferenceFragment"
+        android:key="debug_jdb"
+        android:title="@string/start_btn_jdb" />
+    <Preference
+        android:fragment="com.carota.dev.sync.SyncPreferenceFragment"
+        android:key="debug_sync"
+        android:title="@string/start_btn_sync" />
+</PreferenceScreen>

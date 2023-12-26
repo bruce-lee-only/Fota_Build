@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<carota>
+    <!--HU ID in server-->
+    <id>hu</id>
+    <!--HU Service port-->
+    <port>20003</port>
+    <!--HU Service Host name-->
+    <name>ota_hu</name>
+
+
+    <node id="dm">
+        <name>ota_dm_ivi</name>
+        <retry>0</retry>
+    </node>
+
+    <node
+        id="hub"
+        type="rpc">
+        <name>ota_proxy</name>
+        <addr>127.0.0.1</addr>
+        <port>20003</port>
+    </node>
+
+    <node id="mda">
+        <name>ota_mda</name>
+        <mda>ivi</mda>
+        <ui>ivi</ui>
+        <dm name="dm_ivi"/>
+        <vsi>vsi_ivi</vsi>
+        <!--Check Update address-->
+        <conn>http://api.carota.ai/v0/vconnect</conn>
+        <!--<conn>http://180.169.140.133:30134/api/vconnect</conn>-->
+        <!--Report Event address-->
+        <event>http://api.carota.ai/v0/data</event>
+        <!--LOG Send back address-->
+        <log>http://api.carota.ai/v0/data</log>
+        <!--Local Master DA car type, this is used for generate VIN in HU side, MUST be 11 or longer-->
+        <model>5YJSA1E4OFF115358</model>
+    </node>
+
+    <node id="analytics">
+        <!-- sync interval : sec-->
+        <interval>3600</interval>
+        <dir>/cache/carota</dir>
+        <!--EventLogInfo Event address-->
+        <event>http://api.carota.ai/v0/data</event>
+        <custom>http://192.168.95.40:8899/v0/data/vin</custom>
+        <!--LOG Send back address-->
+        <log>http://api.carota.ai/v0/data</log>
+    </node>
+
+    <!--OTA SYSTEM ROUTE-->
+    <node id="route">
+        <!--ecu host-->
+        <can name="dvr">ota_sub</can>
+        <eth name="dvr">ota_dvr</eth>
+
+        <eth name="ivi">ota_ivi</eth>
+        <eth name="tap">ota_tap</eth>
+
+        <can name="vcu">ota_sub</can>
+        <can name="tbox">ota_sub</can>
+
+        <veth name="dm_ivi">ota_dm_ivi</veth>
+        <veth name="dm_tbox">ota_dm_tbox</veth>
+
+        <vcan name="vsi_tbox">ota_sys</vcan>
+        <vcan name="vsi_ivi">ota_vsi_ivi</vcan>
+    </node>
+
+    <node id="ras" type="dvr">
+        <name>ota_dvr</name>
+        <pkg>com.carota.agent.dvr</pkg>
+        <timeout>300</timeout> <!-- Sec -->
+    </node>
+
+    <!--<node id="ras" type="tap">-->
+        <!--<name>ota_tap</name>-->
+        <!--<pkg>com.carota.agent.tap</pkg>-->
+        <!--<timeout>300</timeout> &lt;!&ndash; Sec &ndash;&gt;-->
+    <!--</node>-->
+
+    <node id="rsm">
+        <name>ota_rsm_ivi</name>
+    </node>
+</carota>

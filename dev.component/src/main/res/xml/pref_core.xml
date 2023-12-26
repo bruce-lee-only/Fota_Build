@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        android:key="start_download"
+        android:title="@string/btn_dlV2_start" />
+    <Preference
+        android:key="stop_download"
+        android:title="@string/btn_dlV2_stop"
+        android:enabled="false"/>
+    <Preference
+        android:key="start_check"
+        android:title="@string/btn_check_start"/>
+    <SeekBarPreference
+        android:key="download_progress"
+        android:defaultValue="0"/>
+</PreferenceScreen>

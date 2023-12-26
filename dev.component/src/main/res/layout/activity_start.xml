@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <fragment
+        android:id="@+id/fg_start"
+        android:name="com.carota.dev.StartPreferenceFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--    <Button
+            android:id="@+id/btn_start_dl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickDownload"
+            android:text="@string/start_btn_dl"/>
+
+        <Button
+            android:id="@+id/btn_start_http"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickHttp"
+            android:text="@string/start_btn_http"/>
+
+        <Button
+            android:id="@+id/btn_start_master"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickMaster"
+            android:text="@string/start_btn_master"/>
+
+        <Button
+            android:id="@+id/btn_start_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickUnit"
+            android:text="@string/start_btn_unit"/>
+
+        <Button
+            android:id="@+id/btn_start_dlv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickDownloadV2"
+            android:text="@string/start_btn_dlv2"/>
+
+        <Button
+            android:id="@+id/btn_start_slave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickSlave"
+            android:text="@string/start_btn_slave"/>
+
+        <Button
+            android:id="@+id/btn_start_storage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickStorage"
+            android:text="@string/start_btn_storage"/>
+
+        <Button
+            android:id="@+id/btn_start_jdb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickJdb"
+            android:text="@string/start_btn_jdb"/>
+
+        <Button
+            android:id="@+id/btn_start_sync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickSync"
+            android:text="@string/start_btn_sync"/>-->
+</LinearLayout>

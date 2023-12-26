@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="req_dl_01">
+        <!--Task ID-->
+        <item>0d1b24327f55fae05afdf3b16a854b2a</item>
+        <!--Download URL-->
+        <item>http://api.reachthings.com/files/d/0d1b24327f55fae05afdf3b16a854b2a</item>
+        <!--File MD5-->
+        <item>0d1b24327f55fae05afdf3b16a854b2a</item>
+        <!--Task Desc-->
+        <item>task req 01</item>
+    </string-array>
+</resources>

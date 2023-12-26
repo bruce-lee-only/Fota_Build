@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">dev.dm</string>
+    <string name="start_btn_dl">Debug DM</string>
+    <string name="start_btn_http">Debug HTTP SERVER</string>
+    <string name="start_btn_master">Debug Master DA</string>
+    <string name="start_btn_unit">Debug Unit</string>
+    <string name="start_btn_dlv2">Debug Download</string>
+    <string name="start_btn_slave">Debug Slave DA</string>
+    <string name="start_btn_storage">Debug Storage</string>
+    <string name="start_btn_jdb">Debug JsonDB</string>
+    <string name="start_btn_sync">Debug SYNC</string>
+
+    <string name="http_resp_body_ok">{"status":"ok"}</string>
+    <string name="http_req_post_data">{"post":"data", "long":1000, "save":true}</string>
+
+    <string name="master_btn_skt_conn">CHECK(SOCKET)</string>
+    <string name="master_btn_rpc_conn">CHECK(HTTP)</string>
+    <string name="master_btn_test_rpc">TEST RPC Connection</string>
+
+    <string name="unit_btn_exec_case_a">Ecec Case A</string>
+    <string name="unit_btn_exec_case_b">Ecec Case B</string>
+    <string name="unit_btn_exec_case_c">Ecec Case C</string>
+    <string name="unit_btn_exec_case_d">Ecec Case D</string>
+    <string name="unit_btn_exec_case_e">Ecec Case E</string>
+
+    <string name="btn_dlV2_start">Start DownLoad</string>
+    <string name="btn_dlV2_stop">Stop Download</string>
+    <string name="btn_check_start">Start Check</string>
+
+    <string name="slave_btn_upgrade">Upgrade</string>
+    <string name="slave_btn_event">Event</string>
+
+    <string name="storage_btn_add">Add File</string>
+    <string name="storage_btn_download">Download File</string>
+
+    <string name="sync_btn_file">SYNC FILE</string>
+    <string name="sync_btn_upload">SYNC UPLOAD FILE</string>
+    <string name="sync_btn_log">SYNC APP LOG</string>
+    <string name="sync_btn_analytics">SYNC ANALYTICS LOG</string>
+    <string name="sync_btn_event_tracking">SYNC EVENT TRACKING LOG</string>
+
+    <string name="jdb_btn_cache_insert">Cache Insert</string>
+    <string name="jdb_btn_cache_list">Cache List</string>
+    <string name="jdb_btn_data_insert">Data Insert</string>
+    <string name="jdb_btn_data_list">Data List</string>
+
+    <string name="download_start_server">start server</string>
+    <string name="download_start_download">download test</string>
+    <string name="download_get_percent">get percent</string>
+    <string name="download_stop_download">stop download</string>
+    <string name="download_clear_package">clear package</string>
+    <string name="download_get_file">get File</string>
+    <string name="download_sync_log">sync upload log file</string>
+    <string name="download_del_log">del upload log file</string>
+    <string name="download_resp_log">response log json array</string>
+
+    <string name="http_get">get</string>
+    <string name="http_post">post</string>
+    <string name="http_download">download</string>
+    <string name="http_interrupt">interrupt</string>
+
+</resources>

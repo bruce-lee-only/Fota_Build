@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="cache_insert"
+        android:title="@string/jdb_btn_cache_insert" />
+    <Preference
+        android:key="cache_list"
+        android:title="@string/jdb_btn_cache_list" />
+    <Preference
+        android:key="data_insert"
+        android:title="@string/jdb_btn_data_insert" />
+    <Preference
+        android:key="data_list"
+        android:title="@string/jdb_btn_data_list" />
+</PreferenceScreen>

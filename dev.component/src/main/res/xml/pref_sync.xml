@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="sync_file"
+        android:title="@string/sync_btn_file" />
+    <Preference
+        android:key="upload_file"
+        android:title="@string/sync_btn_upload"/>
+    <Preference
+        android:key="sync_log"
+        android:title="@string/sync_btn_log"/>
+    <Preference
+        android:key="sync_analytics"
+        android:title="@string/sync_btn_analytics"/>
+    <Preference
+        android:key="sync_event_tracking"
+        android:title="@string/sync_btn_event_tracking"/>
+</PreferenceScreen>
