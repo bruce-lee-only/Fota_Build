@@ -71,7 +71,7 @@ def deps = [
         proto_datastore             : "androidx.datastore:datastore:1.0.0",
 
         //gson
-        gson                        : 'com.google.code.gson:gson:2.8.6',
+        gson                        : 'com.google.code.gson:gson:2.8.9',
         guava                       : 'com.google.guava:guava:31.0.1-android',
 
         //skin-support
