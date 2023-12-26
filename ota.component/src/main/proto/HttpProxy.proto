@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package carota.proxy;
+
+import "Telemetry.proto";
+
+option java_package = "com.carota.protobuf";
+
+message HeaderReq {
+    string key = 1;
+    string valStr = 2;
+}
+
+/*
+* Path : http://ota_net_proxy/http_proxy
+* Feture :
+*   1. Help other devices connect to the network
+*/
+message HttpProxyReq {
+    enum Method {
+        GET = 0;
+        POST = 1;
+    }
+    string url = 1;
+    Method method = 2;
+    bytes body = 3;
+    repeated HeaderReq header = 4;
+}

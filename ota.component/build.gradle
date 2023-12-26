@@ -1,0 +1,85 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.google.protobuf'
+
+initDefaultConfigure(project)
+def data_type = [
+        js_a    :  '"cs/json-a"',
+        js_b    :  '"cs/json-b"',
+        pb_a    :  '"cs/pb-a"',
+        txt     :  '"cs/text"',
+]
+
+android {
+
+    compileSdkVersion build_versions.target_sdk
+
+    defaultConfig {
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode build_versions.ver_code
+        versionName genVersionName(projectDir.path)
+
+        buildConfigField 'String', 'DATA_TYPE_JSA', data_type.js_a
+        buildConfigField 'String', 'DATA_TYPE_JSB', data_type.js_b
+        buildConfigField 'String', 'DATA_TYPE_PBA', data_type.pb_a
+
+        buildConfigField 'String', 'TRANSFER', data_type.js_a
+        buildConfigField 'String', 'SALT', '"cK9vk17EwSC62def"'
+    }
+
+    buildTypes {
+        release {
+            versionNameSuffix '-r'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+        }
+
+        sdk.initWith(release)
+        sdk {
+            versionNameSuffix '-rs'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        lite.initWith(release)
+        lite {
+            versionNameSuffix '-rl'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules-lite.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility "1.8"
+        targetCompatibility "1.8"
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = deps.protoc
+    }
+    plugins {
+        javalite {
+            artifact = deps.protoc_gen
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.plugins {
+                javalite {}
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation deps.okhttp
+    implementation project(':ota.agent')
+    api deps.proto_java
+    implementation deps.protoc
+    implementation deps.ftp
+}

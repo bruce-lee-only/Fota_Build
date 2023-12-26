@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package carota.server;
+
+option java_package = "com.carota.protobuf";
+
+message Flash {
+  string data = 1;
+}

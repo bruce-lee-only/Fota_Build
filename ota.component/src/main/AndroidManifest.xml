@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.carota.component">
+
+    <!--Basic-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--CAROTA Framework-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW"/>
+    <!--Android Upgrade-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.REBOOT"/>
+    <uses-permission android:name="android.permission.RECOVERY"/>
+    <uses-permission android:name="android.permission.ACCESS_CACHE_FILESYSTEM"/>
+
+    <application
+        android:usesCleartextTraffic="true" >
+        <!-- WARN: DO NOT CHANGE ENABLED VALUE -->
+        <receiver
+            android:name="com.carota.ModeReceiver"
+            android:enabled="false"
+            android:exported="true"/>
+        <service
+            android:name="com.carota.DaemonService"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="ota.intent.action.DAEMON" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.carota.MainService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ota.intent.action.CORE"/>
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>

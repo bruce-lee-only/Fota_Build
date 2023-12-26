@@ -1,0 +1,239 @@
+syntax = "proto3";
+
+package carota.da;
+
+import "Telemetry.proto";
+
+option java_package = "com.carota.protobuf";
+
+/*
+* Path : /info
+* Feture :
+*   1. Collect device info
+*/
+message InfoReq {
+    enum BusType {
+        UNKNOWN = 0;
+        CAN = 1;
+        ETHERNET = 2;
+        FLEXRAY = 3;
+        LIN = 4;
+    }
+    enum EncodeType {
+        ASCII = 0;
+        BCD = 1;
+    }
+    message DataSet {
+        string key = 1;
+        int32 val_int = 2;
+        string val_str = 3;
+        EncodeType response = 4;
+    }
+    message DoIP {
+        string ip = 1;
+        string external_logical_addr = 2;
+        string internal_logical_addr = 3;
+        repeated string func_logical_addr = 4;
+        string ecu_logical_addr = 5;
+    }
+    message DoCAN {
+        string req_id = 1;
+        string resp_id = 2;
+        repeated string func_id = 3;
+    }
+    string name = 1;
+    string tag = 2;
+    BusType bus_type = 3;
+    repeated DataSet dids = 4;
+    repeated DataSet props = 5;
+    DoIP doip = 6;
+    DoCAN docan = 7;
+}
+
+message InfoRsp {
+    string name = 1;
+    string software = 2;
+    string hardware = 3;
+    string sn = 4;
+    string da = 5;
+    string ua = 6;
+    string extra = 7;
+    string pki = 8;
+    repeated carota.telemetry.CallTrace trace = 9;
+}
+
+/*
+* Path : /install
+* Feture :
+*   1. Active install package
+*/
+message InstallReq {
+    enum BusType {
+        UNKNOWN = 0;
+        CAN = 1;
+        ETHERNET = 2;
+        FLEXRAY = 3;
+        LIN = 4;
+    }
+    enum FirmwareType {
+        FIRMWARE_UNKNOWN = 0;
+        BIN = 1;
+        HEX = 2;
+        S19 = 3;
+    }
+    enum EraseType {
+        ERASE_UNKNOWN = 0;
+        FULL = 1;
+        SECTOR = 2;
+    }
+    enum ChecksumType {
+        CHECKSUM_UNKNOWN = 0;
+        WITH_ADDRESS = 1;
+        WITHOUT_ADDRESS = 2;
+    }
+    message Prop {
+        string key = 1;
+        string value = 2;
+    }
+    message Flash {
+        string flash_seq = 1;
+        FirmwareType firmware_type = 2;
+        EraseType erase_type = 3;
+        ChecksumType checksum_type = 4;
+        string app_address = 5;
+        string app_size = 6;
+        string driver_address = 7;
+        string driver_size = 8;
+        string cal_address = 9;
+        string cal_size = 10;
+        string mask = 11;
+        int32 hvo = 12;
+        string hv = 13;
+        string target_path = 14;
+        string sa_type = 15;
+        int32 data_format = 16;
+        int32 file_format = 17;
+        string file_integrity_check = 18;
+        repeated Prop props = 19;
+    }
+    message DoIP {
+        string ip = 1;
+        string external_logical_addr = 2;
+        string internal_logical_addr = 3;
+        repeated string func_logical_addr = 4;
+        string ecu_logical_addr = 5;
+    }
+    message DoCAN {
+        string req_id = 1;
+        string resp_id = 2;
+        repeated string func_id = 3;
+    }
+    message ApplyInfo {
+        BusType bus_type = 1;
+        Flash flash = 2;
+        DoIP doip = 3;
+        DoCAN docan = 4;
+    }
+    message Payload {
+        string id = 1;
+        string file = 2;
+        string ver = 3;
+        string sign = 6;
+        reserved 4,5;
+    }
+    int32 domain = 1;
+    string name = 2;
+    string host = 3;
+    repeated Payload dst = 4;
+    repeated Payload src = 5;
+    string tag = 6;
+    ApplyInfo apply_info = 7;
+}
+
+/*
+* Path : /result
+* Feture :
+*   1. Query last install result
+*/
+message ResultReq {
+    repeated string name = 1;
+    string tag = 2;
+}
+
+message ResultRsp {
+    enum Status {
+        IDLE = 0;
+        UPGRADE = 1;
+        ROLLBACK = 2;
+        SUCCESS = 3;
+        FAILURE = 4;
+        ERROR = 5;
+    }
+    enum Step {
+        TRANSPORT = 0;
+        VERIFY = 1;
+        DEPLOY = 2;
+        INTERRUPT = 3;
+        REBOOT = 4;
+    }
+    message Task {
+        string name = 1;
+        int32 domain = 2;
+        Status status = 3;
+        Step step = 4;
+        int32 progress = 5;
+        int32 error = 6;
+    }
+    repeated Task tasks = 1;
+    repeated carota.telemetry.CallTrace trace = 2;
+}
+
+/*
+* Path : /event
+* Feture :
+*   1. Fetch event list
+*   2. Delete event via ID
+*/
+message EventReq {
+    enum Action {
+        FETCH = 0;
+        DELETE = 1;
+    }
+    Action action = 1;
+    string type = 2;
+    int32 size = 3;
+    repeated string ids = 4;
+    string tag = 5;
+}
+
+message EventRsp {
+    message Event {
+        string id = 1;
+        string data = 2;
+    }
+    repeated Event events = 1;
+    repeated carota.telemetry.CallTrace trace = 2;
+}
+
+/*
+* Path : /log
+* Feture :
+*   1. Fetch log list
+*   2. Delete log via ID
+*/
+message LogReq {
+    enum Action {
+        LIST = 0;
+        DELETE= 1;
+    }
+    Action action = 1;
+    string name = 2;
+    int32 size = 3;
+    string tag = 4;
+    string extra_path = 5;
+}
+
+message LogRsp {
+    repeated string files = 1;
+    repeated carota.telemetry.CallTrace trace = 2;
+}

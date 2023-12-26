@@ -1,0 +1,259 @@
+syntax = "proto3";
+
+package carota.ctrl;
+
+import "Telemetry.proto";
+
+option java_package = "com.carota.protobuf";
+
+/*
+* Path : /prepare
+* Feature :
+*   1. check package if be ready
+*/
+message PackagePrepareReq {
+  string md5 = 1;
+  string tag = 2;
+}
+
+message PackagePrepareRsp {
+  int32 is_exist = 1;
+  repeated carota.telemetry.CallTrace trace = 2;
+}
+
+enum BusType {
+  UNKNOWN = 0;
+  CAN = 1;
+  ETHERNET = 2;
+  FLEXRAY = 3;
+  LIN = 4;
+}
+
+message DoIP {
+  string ip = 1;
+  int64 external_logical_addr = 2;
+  int64 internal_logical_addr = 3;
+  repeated int64 func_logical_addr = 4;
+  int64 ecu_logical_addr = 5;
+}
+
+message DoCAN {
+  int64 req_id = 1;
+  int64 resp_id = 2;
+  repeated int64 func_id = 3;
+}
+
+/*
+* Path : /dquery
+* Feature :
+*   1. query info by diagnostic ID
+*/
+message DiagnosticInfoReq {
+  enum DataType {
+    ASCII = 0;
+    BCD = 1;
+  }
+  BusType bus_type = 1;
+  int32 did = 2;
+  DataType data_type = 3;
+  DoIP doip = 4;
+  DoCAN docan = 5;
+  string tag = 6;
+}
+
+message DiagnosticInfoRsp {
+  int32 did = 1;
+  int32 val_int = 2;
+  string val_str = 3;
+  repeated carota.telemetry.CallTrace trace = 4;
+}
+
+/*
+* Path : /apply
+* Feature :
+*   1. apply package to update ecu
+*/
+message DiagnosticApplyReq {
+  enum Action {
+    APPLY = 0;
+    QUERY = 1;
+  }
+  enum FirmwareType {
+    FIRMWARE_UNKNOWN = 0;
+    BIN = 1;
+    HEX = 2;
+    S19 = 3;
+  }
+  enum EraseType {
+    ERASE_UNKNOWN = 0;
+    FULL = 1;
+    SECTOR = 2;
+  }
+  enum ChecksumType {
+    CHECKSUM_UNKNOWN = 0;
+    WITH_ADDRESS = 1;
+    WITHOUT_ADDRESS = 2;
+  }
+  message Prop {
+    string key = 1;
+    string value = 2;
+  }
+  message Flash {
+    string flash_seq = 1;
+    FirmwareType firmware_type = 2;
+    EraseType erase_type = 3;
+    ChecksumType checksum_type = 4;
+    int64 app_address = 5;
+    int64 app_size = 6;
+    int64 driver_address = 7;
+    int64 driver_size = 8;
+    int64 cal_address = 9;
+    int64 cal_size = 10;
+    int64 mask = 11;
+    int32 hvo = 12;
+    string hv = 13;
+    string target_path = 14;
+    string sa_type = 15;
+    int32 data_format = 16;
+    int32 file_format = 17;
+    string file_integrity_check = 18;
+    repeated Prop props = 19;
+  }
+  Action action = 1;
+  int32 channel = 2;
+  BusType bus_type = 3;
+  string file = 4;
+  DoIP doip = 5;
+  DoCAN docan = 6;
+  Flash flash = 7;
+  string tag = 8;
+  string name = 9;
+}
+
+message DiagnosticApplyRsp {
+  enum Status {
+    IDLE = 0;
+    APPLYING = 1;
+    SUCCESS = 2;
+    FAILURE = 3;
+    ERROR = 4;
+  }
+  enum Step {
+    TRANSPORT = 0;
+    VERIFY = 1;
+    DEPLOY = 2;
+    INTERRUPT = 3;
+    REBOOT = 4;
+  }
+  int32 channel = 1;
+  Status status = 2;
+  Step step = 3;
+  int32 error = 4;
+  repeated carota.telemetry.CallTrace trace = 5;
+}
+
+/*
+* Path : /periodic
+* Feature :
+*   1. get periodic message
+*/
+message PeriodicMessageReq {
+  enum Action {
+    REGISTER = 0;
+    DELETE = 1;
+    LIST = 3;
+  }
+  enum DataType {
+    ASCII = 0;
+    BCD = 1;
+  }
+  message Filter {
+    int64 feature_id = 1;
+    DataType data_type = 2;
+  }
+  Action action = 1;
+  int32 channel = 2;
+  string filter_id = 3;
+  repeated Filter filter = 4;
+  string tag = 5;
+}
+
+message PeriodicMessageRsp {
+  message PeriodicMessage {
+    string name = 1;
+    int32 val_int = 2;
+    string val_str = 3;
+  }
+  int32 channel = 1;
+  repeated PeriodicMessage vehicle_condition = 2;
+  repeated carota.telemetry.CallTrace trace = 3;
+}
+
+/*
+* Path : /ctrl
+* Feature :
+*   1. set vehicle's status
+*/
+message VehicleReadyReq {
+  enum Action {
+    SET = 0;
+    GET = 1;
+  }
+  enum Event {
+    OTA = 0;
+    READY = 1;
+  }
+  Action action = 1;
+  Event event = 2;
+  int32 is_on = 3;
+  string tag = 4;
+}
+
+message VehicleReadyRsp {
+  enum Event {
+    OTA = 0;
+    READY = 1;
+  }
+  Event event = 1;
+  int32 is_on = 2;
+  repeated carota.telemetry.CallTrace trace = 3;
+}
+
+/*
+* Path : /guard
+* Feature :
+*   1. query guard status
+*/
+message GuardStatusReq {
+  int32 channel = 1;
+  string tag = 2;
+}
+
+message GuardStatusRsp {
+  int32 channel = 1;
+  int32 is_on = 2;
+  int32 is_opened = 3;
+  repeated carota.telemetry.CallTrace trace = 4;
+}
+
+/*
+* Path : /logs
+* Feture :
+*   1. Fetch log list
+*   2. Delete log via ID
+*/
+message LogReq {
+  enum Action {
+    LIST = 0;
+    DELETE= 1;
+  }
+  Action action = 1;
+  string name = 2;
+  int32 size = 3;
+  string tag = 4;
+}
+
+message LogRsp {
+  repeated string files = 1;
+  repeated carota.telemetry.CallTrace trace = 2;
+}
