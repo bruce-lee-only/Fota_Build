@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id("com.google.dagger.hilt.android")
 }
 
 initDefaultConfigure(project)
@@ -18,6 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    def verCode= new File(project.projectDir, '/VERSION').text.trim()
     flavorDimensions "plan", "channel"
     productFlavors {
         fat {
@@ -33,11 +36,13 @@ android {
         debug {
             versionNameSuffix 'd'
             minifyEnabled false
+            buildConfigField "String", "EXIT_VERSION_CODE", "\"${verCode}\""
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
             versionNameSuffix 'r'
             minifyEnabled false
+            buildConfigField "String", "EXIT_VERSION_CODE", "\"${verCode}\""
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -66,6 +71,16 @@ dependencies {
     implementation 'com.github.mjdev:libaums:0.7.4'
     implementation 'androidx.webkit:webkit:1.4.0'
 
-    implementation project(":ota.lib.ui")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
+    implementation project(":ota.lib.ui")
+    implementation project(":ota.lib.ue")
+    implementation project(":ota.lib.common")
+
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
