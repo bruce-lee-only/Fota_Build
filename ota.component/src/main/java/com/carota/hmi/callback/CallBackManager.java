@@ -55,7 +55,6 @@ public class CallBackManager {
 
     public void onInitEnd() {
         mCallBack.onInitEnd();
-
     }
 
     public ICallBack.IFactory factory() {
