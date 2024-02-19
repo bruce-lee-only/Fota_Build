@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--  allow to show a window  -->
+    <uses-permission  android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application>
         <activity
             android:name=".activity.mainactivity.MainActivity"

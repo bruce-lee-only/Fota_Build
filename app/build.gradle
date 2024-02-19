@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.carota.fota_build"
+        applicationId "aa.com.carota.fota_build"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -75,6 +75,8 @@ dependencies {
     implementation("io.insert-koin:koin-core:$koin")
     implementation("io.insert-koin:koin-android:$koin")
     implementation("io.insert-koin:koin-android-compat:$koin")
+
+    implementation                  'io.github.jeremyliao:live-event-bus-x:1.8.0'
 
     implementation project(":ota.lib.ui")
     implementation project(":ota.lib.ue")

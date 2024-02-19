@@ -4,19 +4,19 @@ import com.carota.hmi.callback.ICall
 import com.carota.hmi.callback.ICallBack
 import com.carota.hmi.callback.IExitOtaCall
 import com.carota.lib.status.ocean.OceanSdkData
-import com.carota.lib.status.river.sdk.InitPump
+import com.carota.lib.status.river.sdk.RiverInit
 import com.momock.util.Logger
 
 class CarotaSdkListener: ICallBack {
     override fun onInitStart() {
         Logger.info("carota sdk init started")
-        InitPump.INSTANCE.initStep.value = OceanSdkData.INIT_STEP_START
+        RiverInit.INSTANCE.initStep.value = OceanSdkData.SDK_INIT_STEP_START
     }
 
     override fun onInitEnd() {
         Logger.info("carota sdk init end")
-        InitPump.INSTANCE.let {
-            it.initStep.value       = OceanSdkData.INIT_STEP_FINISH
+        RiverInit.INSTANCE.let {
+            it.initStep.value       = OceanSdkData.SDK_INIT_STEP_FINISH
             it.isUpdateRun.value    = CarotaSdkHelper.carotaSdkIsUpgradeTriggered()
             //todo: update is running, resume must be true
             it.isResume.value       = it.isUpdateRun.value
@@ -38,7 +38,7 @@ class CarotaSdkListener: ICallBack {
     }
 
     override fun check(): ICall {
-        TODO("Not yet implemented")
+        return CarotaSdkListenerHandler().mICheck
     }
 
     override fun download(): ICall {

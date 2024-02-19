@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.atomic.AtomicBoolean
 
-class LiveDataUtil<T>: MediatorLiveData<T>() {
+open class LiveDataUtil<T>: MediatorLiveData<T>() {
 
     //todo: 消息通知锁
     private val messageLock: AtomicBoolean = AtomicBoolean(true)
@@ -37,10 +37,6 @@ class LiveDataUtil<T>: MediatorLiveData<T>() {
 
     fun stopObserver(){
         stopObserver = true
-    }
-
-    fun startObserver(){
-        stopObserver = false
     }
 
     open inner class WrapperObserver(

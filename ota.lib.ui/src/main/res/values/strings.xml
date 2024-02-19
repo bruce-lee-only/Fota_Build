@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Fota_Build</string>
+    <string name="image_content_description"> </string>
+    <string name="confirm"                  >Confirm</string>
+
+
+    <!--  dialog_attention.xml  -->
+    <string name="dialog_attention_rollback_exit_ota_fail"        >Upgrade not completed. Failed to exit upgrade mode.</string>
+    <string name="dialog_attention_rollback_power_off_fail"       >Upgrade not complete. Power-off failed</string>
+    <string name="dialog_attention_upgraded_power_off_fail"       >Upgrade succeeded. Power-off failed.</string>
+    <string name="dialog_attention_upgraded_exit_ota_fail"        >Upgrade succeeded. Failed to exit upgrade mode.</string>
+    <!--  dialog_attention.xml  -->
 </resources>

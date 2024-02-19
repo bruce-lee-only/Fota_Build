@@ -1,7 +1,6 @@
 package com.carota.lib.ui.activity.mainactivity
 
 import android.app.Application
-import android.content.Context
 import com.carota.lib.ui.activity.BaseActivityViewModel
 import com.carota.lib.ui.databinding.ActivityMainBinding
 
@@ -9,13 +8,8 @@ class MainActivityViewModel(application: Application) : BaseActivityViewModel<Ac
     application
 ) {
 
-    override fun bindData(binding: ActivityMainBinding, context: Context) {
-        this.binding = binding
-        this.context = context
-    }
-
     override fun onStop() {
-
+        this.context
     }
 
     override fun onStart() {

@@ -6,7 +6,7 @@ import com.carota.lib.status.ocean.OceanSdkData
  * this class use for setting value
  * attention: we should not use this class to get ocean value
  */
-class InitPump{
+class RiverInit{
 
     /**
      * 初始化carota sdk 是否结束
@@ -26,15 +26,15 @@ class InitPump{
     /**
      * Init结果
      */
-    val initResult by lazy { OceanSdkData.INSTANCE.initResult }
+    val initResult by lazy { OceanSdkData.INSTANCE.sdkInitResult }
 
     /**
      * 升级是否正在进行
      */
-    val isUpdateRun by lazy { OceanSdkData.INSTANCE.isUpdateRun }
+    val isUpdateRun by lazy { OceanSdkData.INSTANCE.sdkIsUpdateRun }
 
     companion object{
-        val INSTANCE by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED){ InitPump() }
+        val INSTANCE by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED){ RiverInit() }
     }
 
 }

@@ -74,8 +74,6 @@ public class CarOtaWebView extends WebView {
         webSettings.setSaveFormData(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setPluginState(WebSettings.PluginState.ON);
-        webSettings.setAppCachePath(context.getCacheDir().getAbsolutePath());
-        webSettings.setAppCacheEnabled(true);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         setLayerType(View.LAYER_TYPE_HARDWARE, null);
 

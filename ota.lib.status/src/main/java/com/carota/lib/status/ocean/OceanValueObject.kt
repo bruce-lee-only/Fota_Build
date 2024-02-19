@@ -1,5 +1,6 @@
 package com.carota.lib.status.ocean
 
+import com.carota.lib.common.uitls.LaunchUtil
 import com.carota.lib.common.uitls.LiveDataUtil
 import com.carota.lib.common.uitls.Logger
 import kotlin.properties.Delegates
@@ -7,17 +8,28 @@ import kotlin.properties.Delegates
 class OceanValueObject<T>(
     //todo: default value
     default:T,
+    //todo: if we should post value first, then store to db
+    private val isPostEarly: Boolean = false,
+    //todo: save value to database
+    private val save2Db: (T) -> Unit,
     //todo: callback for get memory value
-    private val getValue:() -> T) {
+    private val getValue:(OceanValueObject<T>) -> T) {
 
     //todo: use value data from memory, judge by yourself witch function you should use
     var value: T by Delegates.observable(default){_, _, newValue ->
         //todo: post value to all observer
         liveDataMap.forEach { (className, liveData) ->
             Logger.info("Ocean object post value to $className value:$newValue")
-            //todo: post value to observer, observer maybe should not use the post value, but rather, use getValue or valueDb to get get value
             callBackMap[className]?.let { it(className) }
-            liveData.postValue(newValue)
+
+            //todo: post value to observer, observer maybe should not use the post value, but rather, use getValue or valueDb to get value
+            isPostEarly.takeIf { it } ?.run {
+                liveData.postValue(newValue)
+                LaunchUtil.instance.launch { save2Db(newValue) }
+            }?: run {
+                save2Db(newValue)
+                liveData.postValue(newValue)
+            }
         }
     }
 
@@ -25,16 +37,19 @@ class OceanValueObject<T>(
 
     private var callBackMap: MutableMap<String, ((String) ->Unit)> = mutableMapOf()
 
-    //todo: use this function to get value from db...
-    fun value(): T {
-        return getValue()
+    /**
+     * use this function to get value from db or memory,
+     * @return T: return value decided by callback
+     */
+    fun dbValue(): T {
+        return getValue(this)
     }
 
     /**
      * insert observer to map
      */
     fun injectObserver(key: String, observer: LiveDataUtil<T>, callBack:(className: String) -> Unit){
-        Logger.needDel("ocean received observer key:$key")
+        Logger.drop("ocean received observer key:$key")
         callBackMap[key] = callBack
         liveDataMap[key] = observer
     }
@@ -42,7 +57,9 @@ class OceanValueObject<T>(
     /**
      * remove observer from map
      */
-    fun dropObserver(key: String){
+    fun dropObserver(key: String, block:() ->Unit){
         liveDataMap.remove(key)
+        block()
     }
+
 }

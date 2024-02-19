@@ -5,7 +5,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.databinding.ViewDataBinding
 
-fun showToast(
+fun showDialog(
     context: Context,
     layoutId: Int,
     view: View? = null,

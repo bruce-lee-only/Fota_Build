@@ -7,4 +7,20 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--    100% alpha   -->
+    <color name="color_black_100"       >#FF000000</color>
+    <!--    75% alpha   -->
+    <color name="color_black_75"        >#BF000000</color>
+    <!--    50% alpha   -->
+    <color name="color_black_50"        >#80000000</color>
+    <!--    30% alpha   -->
+    <color name="color_black_30"        >#4D000000</color>
+    <!--    20% alpha   -->
+    <color name="color_black_20"        >#33000000</color>
+    <!--    10% alpha   -->
+    <color name="color_black_10"        >#1A000000</color>
+    <!--    5% alpha   -->
+    <color name="color_black_5"         >#0D000000</color>
+
 </resources>

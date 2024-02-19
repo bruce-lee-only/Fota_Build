@@ -3,16 +3,20 @@ package com.carota.lib.sdk
 import android.content.Context
 import com.carota.CarotaClient
 import com.carota.hmi.CarOtaHmi
+import com.carota.hmi.UpgradeType
 
 internal val carotaSdkHelper by lazy { CarotaSdkHelper() }
 class CarotaSdkHelper {
 
-    private var context: Context? = null
+    private var appContext: Context? = null
 
     companion object{
         private const val TIMEOUT: Long = 5 * 60 * 1000
 
         fun carotaSdkInit(context: Context, timeOut: Long = TIMEOUT) = carotaSdkHelper.carotaSdkInit(context, timeOut)
+
+        //todo: normal check
+        fun carotaSdkNormalCheck() = carotaSdkHelper.carotaSdkCheck()
 
         fun carotaSdkIsUpgradeTriggered(): Boolean = carotaSdkHelper.carotaSdkIsUpgradeTriggered()
     }
@@ -23,8 +27,12 @@ class CarotaSdkHelper {
      * @param timeOut Long
      */
     fun carotaSdkInit(context: Context, timeOut: Long){
-        this.context = context
+        this.appContext = context
         CarOtaHmi.init(context, CarotaSdkListener(), timeOut)
+    }
+
+    fun carotaSdkCheck(type: UpgradeType = UpgradeType.DEFULT){
+        CarOtaHmi.check(type, CarotaSdkListener().check())
     }
 
     /**

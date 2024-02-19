@@ -1,6 +1,7 @@
 package com.carota.lib.ui.activity
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -14,28 +15,26 @@ import androidx.lifecycle.ViewModelProvider
 
 abstract class BaseActivity<VB:ViewDataBinding, VM:BaseActivityViewModel<VB>>(
     private val inflate: (LayoutInflater) -> VB,
-    private val viewModelClass: Class<VM>?
+    private val viewModelClass: Class<VM>
 ): AppCompatActivity() {
-
-    lateinit var binding: VB
 
     private val viewModel by lazy {
         val viewModelProvider = ViewModelProvider(this)
-        viewModelClass?.let { viewModelProvider[it] }
+        viewModelClass.let { viewModelProvider[it] }
     }
+
+    val binding by lazy { inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = inflate(layoutInflater)
-        initActivity(viewModel)
-        viewModel?.bindData(binding, this)
+        viewModel.bindData(binding)
         registerLifeCycle()
         setNavigationBarStatusBarTranslucent(this)
         setContentView(binding.root)
     }
 
     private fun registerLifeCycle(){
-        viewModel?.let { lifecycle.addObserver(it.lifeCycleObserver) }
+        lifecycle.addObserver(viewModel.lifeCycleObserver)
     }
 
     /**
@@ -56,5 +55,4 @@ abstract class BaseActivity<VB:ViewDataBinding, VM:BaseActivityViewModel<VB>>(
         window.statusBarColor = Color.TRANSPARENT
     }
 
-    abstract fun initActivity(viewModel: VM?)
 }
