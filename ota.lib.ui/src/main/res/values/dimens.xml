@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  1dp = 1.5px  -->
+
+    <dimen name="dp_size_7_10px"        >7dp</dimen>
+    <!--  36px  -->
+    <dimen name="dp_size_24_36px"        >24dp</dimen>
+    <!--  42px  -->
+    <dimen name="dp_size_28_42px"        >28dp</dimen>
+    <dimen name="dp_size_37_55px"        >37dp</dimen>
+    <!--  72px  -->
+    <dimen name="dp_size_48_72px"        >48dp</dimen>
+    <!--  80px  -->
+    <dimen name="dp_size_53_80px"        >53dp</dimen>
+    <!--  108px  -->
+    <dimen name="dp_size_72_108px"        >72dp</dimen>
+    <!--  400px  -->
+    <dimen name="dp_size_267_400px"       >267dp</dimen>
+    <dimen name="dp_size_408_612px"       >408dp</dimen>
+    <dimen name="dp_size_533_800px"       >533dp</dimen>
+    <dimen name="dp_size_653_980px"       >653dp</dimen>
+    <!--  1280px  -->
+    <dimen name="dp_size_853_1280px"       >853dp</dimen>
+    <dimen name="dp_size_960_1440px"       >960dp</dimen>
+    <dimen name="dp_size_1707_2560px"       >1707dp</dimen>
+
+
+
+
+    <!--  dialog_1280*800 background  -->
+    <dimen name="dialog_width_2560"     >@dimen/dp_size_1707_2560px</dimen>
+    <dimen name="dialog_height_800"     >@dimen/dp_size_533_800px</dimen>
+
+    <!--  dialog_2560*1440 background  -->
+    <dimen name="dialog_width_1280"     >@dimen/dp_size_853_1280px</dimen>
+    <dimen name="dialog_height_1440"     >@dimen/dp_size_960_1440px</dimen>
+
+
+    <!--  text size  -->
+    <dimen name="text_size_36"          >@dimen/dp_size_24_36px</dimen>
+    <dimen name="text_size_40"          >@dimen/dp_size_28_42px</dimen>
+    <dimen name="text_size_42"          >@dimen/dp_size_28_42px</dimen>
+    <dimen name="text_size_72"          >@dimen/dp_size_48_72px</dimen>
+
+    <!--  button size  -->
+    <dimen name="button_height_108"     >@dimen/dp_size_72_108px</dimen>
+    <dimen name="button_width_400"      >@dimen/dp_size_267_400px</dimen>
+
+</resources>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<carota>
+    <!--  带pki  -->
+    <psrv>https://{replace}:8082</psrv>
+    <tsrv>https://{replace}:8082</tsrv>
+
+    <!--HU Service port-->
+    <port>51020</port>
+    <!--预约等事件，用于接收tbox发送数据-->
+    <evt>ota_event</evt>
+
+    <!--Download Manager Service-->
+    <node
+        enabled="true"
+        id="dms">
+        <name>ota_icc_dm</name>
+        <addr>192.168.55.31</addr>
+        <port>60005</port>
+        <dir>/ota/package</dir>
+        <retry>10</retry>
+        <reserve>4194304</reserve>
+        <maxspace>20971520</maxspace>
+        <account>carota</account>
+    </node>
+
+    <!--不启用hub，所有对外网络全部转到dm hub-->
+    <node
+        enabled="false"
+        id="hub"
+        type="rpc">
+        <name>ota_proxy</name>
+        <addr>192.168.55.8</addr>
+        <port>51020</port>
+    </node>
+
+    <!--Master Download Agent Service-->
+    <node
+        enabled="false"
+        id="mda">
+        <name>ota_master</name>
+        <addr>192.168.55.8</addr>
+        <port>51020</port>
+        <timeout>900</timeout>
+        <dm name="dm_icc" />
+    </node>
+
+    <node
+        enabled="false"
+        id="rmda">
+        <name>ota_remotetest</name>
+        <addr>192.168.55.8</addr>
+        <port>51020</port>
+        <timeout>3600</timeout>
+        <dm name="dm_icc" />
+    </node>
+
+    <!--用于配置查询车况信息，会转到route中实际的信息-->
+    <node id="vsm">
+        <!--用于预约等事件的注册，tbox vsi模块的域名-->
+        <event>vsi_event</event>
+        <!--vin码信息获取-->
+        <info>vsi_info</info>
+        <!--前置条件信息获取，这里访问Tboxvsi-->
+        <condition>vsi_condition</condition>
+        <!--进退ota模式等电源管理-->
+        <power>vsi_power</power>
+    </node>
+
+    <!--用于接收车况信息请求，并返回车况信息-->
+    <node
+        enabled="false"
+        id="vsi">
+        <name>ota_vcc_vsi</name>
+        <addr>192.168.225.8</addr>
+        <port>51020</port>
+    </node>
+
+
+    <node id="analytics">
+        <!-- sync interval : sec-->
+        <interval>3600</interval>
+        <dir>/cache/carota</dir>
+        <!--EventLogInfo Event address-->
+        <event>/v0/data</event>
+        <emevent>/v0/data</emevent>
+        <custom>/v0/data/vin</custom>
+        <emcustom>/v0/data/vin</emcustom>
+        <!--LOG Send back address-->
+        <log>/v0/clientlog</log>
+        <emlog>/v0/clientlog</emlog>
+        <ev>v2</ev>
+        <event_v2>/v2/data</event_v2>
+        <dir>/data_fota/carota</dir>
+    </node>
+
+    <node id="route">
+        <!--指向vcc-->
+        <vcan name="vsi_event">ota_vcc_vsi</vcan>
+        <!--指向vcc vsi-->
+        <vcan name="vsi_info">ota_vcc_vsi</vcan>
+        <!--指向vcc vsi-->
+        <vcan name="vsi_condition">ota_vcc_vsi</vcan>
+        <!--指向vcc电源管理模块-->
+        <vcan name="vsi_power">ota_vcc_vsi</vcan>
+        <!--指向tbox的cmh模块-->
+        <vcan name="ota_cmh">ota_cmh_tbox</vcan>
+        <!--指向tbox vsi-->
+        <vcan name="ota_tbox">ota_vsi_tbox</vcan>
+        <!--指向icc智能件下载指向icc-->
+        <veth name="dm_icc">ota_icc_dm</veth>
+
+        <eth name="tbox">ota_tbox</eth>
+    </node>
+
+    <node id="rsm">
+        <name>ota_rsm_ivi</name>
+    </node>
+
+    <!--sccu slaveDa-->
+    <node
+        id="ras"
+        type="icc">
+        <name>ota_icc</name>
+        <pkg>com.carota.chery.v5</pkg>
+        <ftp-ip>192.168.1.8</ftp-ip>
+        <ftp-support>false</ftp-support>
+        <ftp-name>cowin</ftp-name>
+        <ftp-passwords>123456</ftp-passwords>
+        <ftp-port>20004</ftp-port>
+        <timeout>3600</timeout> <!-- Sec -->
+        <retry>1</retry>
+    </node>
+
+    <node
+        id="ras"
+        type="icm">
+        <name>ota_icm</name>
+        <pkg>com.carota.chery.v5</pkg>
+        <timeout>900</timeout> <!-- Sec -->
+        <retry>3</retry>
+    </node>
+
+    <node
+        id="ras"
+        type="rccp">
+        <name>ota_rccp</name>
+        <pkg>com.carota.chery.v5</pkg>
+        <timeout>600</timeout> <!-- Sec -->
+        <retry>3</retry>
+    </node>
+
+    <node
+        id="ras"
+        type="ihu">
+        <name>ota_ihu</name>
+        <pkg>com.carota.chery.v5</pkg>
+        <timeout>480</timeout> <!-- Sec -->
+        <retry>3</retry>
+    </node>
+
+    <node
+        enabled="true"
+        id="cmh">
+        <name>ota_cmh</name>
+    </node>
+
+    <node id="disclaimer">
+        <!-- sync interval : sec-->
+        <url>/v3/schedule/disclaimer</url>
+        <retry>3</retry>
+    </node>
+
+    <node id="sota">
+        <apps>/v0/sota/apps</apps>
+        <data>/v0/sota/data</data>
+        <retry>3</retry>
+    </node>
+
+</carota>
