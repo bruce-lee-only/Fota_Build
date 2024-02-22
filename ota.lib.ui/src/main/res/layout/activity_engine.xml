@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="main_activity_view"
+            type="com.carota.lib.ui.activity.mainactivity.MainActivity" />
+
+        <variable
+            name="main_activity_viewModel"
+            type="com.carota.lib.ui.activity.mainactivity.MainActivityViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_shadow"
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/ic_bg"
+        tools:context=".ui.activity.MainActivity">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
