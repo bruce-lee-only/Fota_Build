@@ -2,6 +2,7 @@ package com.carota.lib.status.shared
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.carota.lib.status.shared.SharedManager.Statical.DEF_SCHEDULE_TIME
 import com.carota.lib.status.shared.SharedManager.Statical.DEF_VEHICLE_MODE
 
 class SharedApp {
@@ -35,6 +36,14 @@ class SharedApp {
         get()       = shared.getString(SharedManager.TAG_VEHICLE_MODE, DEF_VEHICLE_MODE) ?: DEF_VEHICLE_MODE
         set(value)  = with(shared.edit()){
             this.putString(SharedManager.TAG_VEHICLE_MODE, value)
+            this.apply()
+            field = value
+        }
+
+    var scheduleTime: Long  = DEF_SCHEDULE_TIME
+        get()       = shared.getLong(SharedManager.TAG_SCHEDULE_TIME, DEF_SCHEDULE_TIME)
+        set(value)  = with(shared.edit()){
+            this.putLong(SharedManager.TAG_VEHICLE_MODE, value)
             this.apply()
             field = value
         }

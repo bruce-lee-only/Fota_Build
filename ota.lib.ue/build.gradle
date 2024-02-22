@@ -52,4 +52,6 @@ dependencies {
     implementation      project(":ota.lib.status")
     implementation      project(":ota.lib.sdk")
     implementation      project(":ota.lib.ui")
+    implementation      project(":ota.lib.slave")
+    implementation      project(":ota.component")
 }

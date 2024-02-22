@@ -10,13 +10,13 @@ import com.momock.util.Logger
 class CarotaSdkListener: ICallBack {
     override fun onInitStart() {
         Logger.info("carota sdk init started")
-        RiverInit.INSTANCE.initStep.value = OceanSdkData.SDK_INIT_STEP_START
+        RiverInit.INSTANCE.initStep.value = OceanSdkData.SDK_STEP_START
     }
 
     override fun onInitEnd() {
         Logger.info("carota sdk init end")
         RiverInit.INSTANCE.let {
-            it.initStep.value       = OceanSdkData.SDK_INIT_STEP_FINISH
+            it.initStep.value       = OceanSdkData.SDK_STEP_FINISH
             it.isUpdateRun.value    = CarotaSdkHelper.carotaSdkIsUpgradeTriggered()
             //todo: update is running, resume must be true
             it.isResume.value       = it.isUpdateRun.value
@@ -42,7 +42,7 @@ class CarotaSdkListener: ICallBack {
     }
 
     override fun download(): ICall {
-        TODO("Not yet implemented")
+        return CarotaSdkListenerHandler().mIDownload
     }
 
     override fun enterOta(): ICall {

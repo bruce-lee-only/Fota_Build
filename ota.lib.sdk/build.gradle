@@ -41,4 +41,5 @@ dependencies {
 
     implementation      project(":ota.component")
     implementation      project(":ota.lib.status")
+    implementation      project(":ota.lib.common")
 }

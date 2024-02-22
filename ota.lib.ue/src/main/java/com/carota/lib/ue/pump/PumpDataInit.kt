@@ -1,10 +1,9 @@
-package com.carota.lib.status.pump
+package com.carota.lib.ue.pump
 
 import com.carota.lib.status.ocean.OceanSdkData
 
-class PumpDataCheck {
-
-    val checkCareIsFinish: PumpValueObject<Boolean> = PumpValueObject(
+data class PumpDataInit(private val className: String = PumpDataInit::class.simpleName ?: "") {
+    val initCareIsFinish: PumpValueObject<Boolean> = PumpValueObject(
         false,
         { className, valueObj -> OceanSdkData.INSTANCE.sdkIsInitFinish.injectObserver(className, valueObj.property!!.liveData, valueObj::changeBack)},
         { className, valueObj ->  OceanSdkData.INSTANCE.sdkIsInitFinish.dropObserver(className, valueObj::dropBack)},

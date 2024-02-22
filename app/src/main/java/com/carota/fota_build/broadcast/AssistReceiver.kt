@@ -50,10 +50,10 @@ class AssistReceiver : BroadcastReceiver() {
 
         when(intent.action){
             DEBUG_MODE_BROADCAST_ACTION     -> {
-                EventBus.globalEvent.post(BUS_EVENT_BROADCAST_DISPLAY_ENGINE)
+                EventBus.methodEvent.post(BUS_EVENT_BROADCAST_DISPLAY_ENGINE)
             }
             ENGINE_MODE_BROADCAST_ACTION    -> {
-                EventBus.globalEvent.post(BUS_EVENT_BROADCAST_DISPLAY_DEBUG)
+                EventBus.methodEvent.post(BUS_EVENT_BROADCAST_DISPLAY_DEBUG)
             }
             else    -> {
                 Logger.error("Broadcast Receiver receive unknown Action")

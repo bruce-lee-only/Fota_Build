@@ -3,8 +3,6 @@ package com.carota.lib.common.uitls
 import android.content.Context
 import com.carota.util.LogUtil
 import com.momock.util.Logger
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class Logger {
     companion object{
@@ -22,9 +20,6 @@ class Logger {
 
         fun error(e: Throwable) { Logger.error(e) }
 
-        fun drop(msg: String?, vararg args: Any?) {
-            Logger.error("Temporary message: $msg", args)
-            CoroutineScope(Dispatchers.IO)
-        }
+        fun drop(msg: String?, vararg args: Any?) { Logger.error("Temporary message: $msg", args) }
     }
 }

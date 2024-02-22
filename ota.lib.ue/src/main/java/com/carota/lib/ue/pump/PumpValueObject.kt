@@ -1,4 +1,4 @@
-package com.carota.lib.status.pump
+package com.carota.lib.ue.pump
 
 import com.carota.lib.common.uitls.LiveDataUtil
 import com.carota.lib.common.uitls.Logger
@@ -79,10 +79,8 @@ class PumpValueObject<T>(
                 property = ObserverProperty(className, liveData)
             }
         } ?: run {
-            Logger.drop("property is null, init it")
-            Logger.drop("property className: $className")
+            Logger.info("create new Observer Property by class: $className")
             property = ObserverProperty(className, liveData)
-            Logger.drop("property className1: ${property!!.className}")
         }
 
         bindCallback?.let { it(className, this) }

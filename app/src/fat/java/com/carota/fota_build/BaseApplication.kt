@@ -1,27 +1,20 @@
 package com.carota.fota_build
 
-import GlobalBusEvent
 import android.app.Application
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.Observer
 import com.carota.fota_build.broadcast.AssistReceiver
 import com.carota.lib.common.uitls.EventBus
 import com.carota.lib.common.uitls.Logger
 import com.carota.lib.status.db.AppDatabase
 import com.carota.lib.status.shared.SharedManager
-import com.carota.lib.ue.NodeCheck
 import com.carota.lib.ue.UEHandler
 import com.jeremyliao.liveeventbus.LiveEventBus
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 abstract class BaseApplication:
     Application(),
-    Observer<String>,
-    IApplication,
-    KoinComponent {
+    IApplication{
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate() {
@@ -46,32 +39,24 @@ abstract class BaseApplication:
         AppDatabase.setDatabase(this)
 
         //todo: init liveEventBus
-        LiveEventBus.config().autoClear(true).lifecycleObserverAlwaysActive(true).enableLogger(true)
-        //todo: watch global event
-        EventBus.globalEvent.observeForever(this)
+        analysisEventBus()
 
+        //todo: init broadcast
         AssistReceiver.register(this)
 
         //todo: 初始化carota
         initSdk()
     }
 
-    override fun onChanged(value: String) {
-        Logger.info("Base application received global event: $value")
-        if (onGlobalEventChange(value)) return
-        when(value){
-            GlobalBusEvent.EVENT_DISPLAY_DEBUG_ACTIVITY     -> {}
-            GlobalBusEvent.EVENT_DISPLAY_ENGINE_ACTIVITY    -> {}
-            GlobalBusEvent.EVENT_INIT_NODE_DONE             -> {
-                val nodeCheck: NodeCheck by inject()
-                nodeCheck.run()
-            }
-        }
-    }
-
     override fun injectContext2Module(context: Context){
         //todo: inject child context to module
         UEHandler.injectApplicationContext(context)
+    }
+
+    private fun analysisEventBus(){
+        LiveEventBus.config().autoClear(true).lifecycleObserverAlwaysActive(true).enableLogger(true)
+        EventBus.globalEvent.observeForever(GlobalEventHandler(this))
+        EventBus.methodEvent.observeForever(MethodEventHandler(this))
     }
 
     /**
@@ -80,6 +65,4 @@ abstract class BaseApplication:
     abstract override fun minorVersion(): String
 
     abstract fun injectContext2Module()
-
-    abstract fun onGlobalEventChange(event: String): Boolean
 }
