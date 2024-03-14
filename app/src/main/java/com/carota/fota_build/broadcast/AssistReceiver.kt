@@ -29,8 +29,8 @@ class AssistReceiver : BroadcastReceiver() {
             //todo: display engine activity -> am broadcast -a com.carota.chery.engine.action
             engineIntent.addAction(ENGINE_MODE_BROADCAST_ACTION)
 
-            context.registerReceiver(AssistReceiver(), debugIntent, Context.RECEIVER_NOT_EXPORTED)
-            context.registerReceiver(AssistReceiver(), engineIntent, Context.RECEIVER_NOT_EXPORTED)
+            context.registerReceiver(AssistReceiver(), debugIntent)
+            context.registerReceiver(AssistReceiver(), engineIntent)
         }
     }
 
@@ -49,10 +49,10 @@ class AssistReceiver : BroadcastReceiver() {
         Logger.info("Broadcast Receiver Broadcast Action:" + intent.action)
 
         when(intent.action){
-            DEBUG_MODE_BROADCAST_ACTION     -> {
+            ENGINE_MODE_BROADCAST_ACTION    -> {
                 EventBus.methodEvent.post(BUS_EVENT_BROADCAST_DISPLAY_ENGINE)
             }
-            ENGINE_MODE_BROADCAST_ACTION    -> {
+            DEBUG_MODE_BROADCAST_ACTION    -> {
                 EventBus.methodEvent.post(BUS_EVENT_BROADCAST_DISPLAY_DEBUG)
             }
             else    -> {

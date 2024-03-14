@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.carota.lib.executor.ui.activity.mainActivity.MainActivity"/>
+        <import type="com.carota.lib.executor.ui.activity.mainActivity.MainActivityViewModel"/>
+
+        <variable
+            name="main_activity_view"
+            type="MainActivity" />
+
+        <variable
+            name="main_activity_viewModel"
+            type="MainActivityViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/icon_main_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".ui.activity.MainActivity">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/px_size_60"
+            android:layout_marginTop="@dimen/px_size_170"
+            android:layout_marginEnd="@dimen/px_size_160"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <ImageView
+                style="@style/base_imageview"
+                android:id="@+id/iv_audio"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@mipmap/ic_audio_details"
+                android:contentDescription="@string/image_content_description"/>
+            <TextView
+                android:id="@+id/tv_audio"
+                style="@style/text_single_line"
+                android:layout_marginStart="@dimen/px_size_18"
+                android:text="@string/audio"
+                android:textColor="@color/color_black_100"
+                app:layout_constraintStart_toEndOf="@id/iv_audio"
+                android:onClick="@{view->main_activity_view.onPlaySoundClicked()}"/>
+            <ImageView
+                style="@style/base_imageview"
+                android:id="@+id/iv_version_list"
+                android:layout_marginStart="@dimen/px_size_72"
+                android:background="@mipmap/ic_version_list"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_audio"
+                android:contentDescription="@string/image_content_description"/>
+            <TextView
+                android:id="@+id/tv_version_list"
+                style="@style/text_single_line"
+                android:text="@string/version_list"
+                android:layout_marginStart="@dimen/px_size_29"
+                android:textColor="@color/color_black_100"
+                app:layout_constraintStart_toEndOf="@id/iv_version_list"
+                android:onClick="@{View->main_activity_view.onReleaseNoteClick()}" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_new_version"
+            style="@style/text_2240_width_70_size_single_line"
+            android:layout_marginTop="@dimen/px_size_560"
+            android:text="@string/new_mission_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{view->main_activity_view.onHideViewClicked()}"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/text_1680_width_32_size_single_line"
+            android:layout_marginTop="@dimen/px_size_45"
+            android:text="@string/update_required_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_new_version"/>
+
+        <TextView
+            android:id="@+id/tv_detail_part"
+            style="@style/text_1680_width_32_size_single_line"
+            android:layout_marginTop="@dimen/px_size_101"
+            android:visibility="gone"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_new_version" />
+
+        <TextView
+            android:id="@+id/tv_detail_show"
+            style="@style/text_single_line"
+            android:layout_marginTop="@dimen/px_size_18"
+            android:textColor="@color/color_blue_100"
+            android:visibility="gone"
+            android:text="@string/update_detail"
+            android:textSize="@dimen/px_size_32"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_part"
+            android:onClick="@{View->main_activity_view.onDetailClicked()}"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/px_size_222"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <Button
+                android:id="@+id/bt_upgrade_now"
+                style="@style/confirm_button_500x108"
+                android:text="@string/update_immediately"
+                android:onClick="@{view->main_activity_view.onUpgradeClicked()}" />
+            <Button
+                android:id="@+id/bt_schedule"
+                style="@style/confirm_button_500x108"
+                android:layout_marginStart="@dimen/px_size_70"
+                android:onClick="@{view->main_activity_view.onScheduleClicked()}"
+                android:text="@string/update_schedule"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

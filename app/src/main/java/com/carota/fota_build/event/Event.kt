@@ -1,7 +1,7 @@
 package com.carota.fota_build.event
 
 import com.carota.fota_build.broadcast.AssistReceiver
-import com.carota.lib.ue.INode
+import com.carota.lib.executor.ue.node.INode
 
 class Event {
     companion object BusEvent{
@@ -23,5 +23,7 @@ class Event {
         const val BUS_EVENT_SHOW_RED_POINT          = INode.BUS_EVENT_SHOW_RED_POINT
 
         const val BUS_EVENT_HIDE_RED_POINT          = INode.BUS_EVENT_HIDE_RED_POINT
+
+        const val BUS_EVENT_NOTIFY_CHECK_CLICKED    = INode.BUS_EVENT_NOTIFY_CHECK_CLICKED
     }
 }

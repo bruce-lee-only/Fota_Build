@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.Observer
 import com.carota.lib.common.uitls.Logger
+import com.carota.lib.executor.ui.activity.debugActivity.DebugActivity
+import com.carota.lib.executor.ui.activity.engineActivity.EngineActivity
 import com.carota.lib.slave.SlaveHelper
-import com.carota.lib.ui.activity.debugActivity.DebugActivity
-import com.carota.lib.ui.activity.engineActivity.EngineActivity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

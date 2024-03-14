@@ -1,0 +1,360 @@
+<resources>
+    <string name="app_name">系统升级</string>
+    <string name="image_content_description">description</string>
+
+    <string name="progress_unit"            >%</string>
+    <string name="progress_unit_data"       >%d%</string>
+    <string name="colon"                    >:</string>
+    <string name="dun"                      >、</string>
+    <string name="dou"                      >，</string>
+    <string name="brackets_left"            >(</string>
+    <string name="brackets_right"           >)</string>
+    <string name="letter_S"                 >S</string>
+    <string name="month"                    >月</string>
+    <string name="day"                      >日</string>
+    <string name="hour"                     >时</string>
+    <string name="minute"                   >分</string>
+    <string name="second"                   >秒</string>
+    <string name="hour_long"                >小时</string>
+    <string name="minute_long"              >分钟</string>
+    <string name="agree"                    >同意</string>
+    <string name="agree_count"              >同意(%ds)</string>
+    <string name="disagree"                 >不同意</string>
+    <string name="cancel_count"             >取消(%ds)</string>
+    <string name="cancel"                   >取消</string>
+    <string name="confirm"                  >确定</string>
+    <string name="confirm_count"            >确定(%ds)</string>
+    <string name="confirm_count_big"        >确定(%ds)</string>
+    <string name="details"                  >详情···</string>
+    <string name="ignore"                   >忽略(%ds)</string>
+    <string name="update_immediately"       >立即升级</string>
+    <string name="update_immediately_count" >立即升级(%ds)</string>
+    <string name="update_schedule"          >预约升级</string>
+    <string name="update_schedule_cancel"   >取消预约</string>
+    <string name="disclaimer_title"         >免责申明条款</string>
+    <string name="details_title"            >版本详情</string>
+    <string name="know"                     >我知道了</string>
+    <string name="disclaimer_rescue_btn_count"    >同意(%ds)</string>
+    <string name="disclaimer_rescue_btn"    >同意</string>
+    <string name="disclaimer_rescue_title"  >远程救援任务说明</string>
+
+    <string name="debug_notify"             >新任务弹框</string>
+    <string name="debug_update_now"         >即将升级提醒</string>
+    <string name="debug_precondition_ing"   >校验前置条件中···</string>
+    <string name="debug_precondition_suc"   >校验前置条件成功</string>
+    <string name="debug_low_storage_battery">蓄电池电量不足</string>
+    <string name="debug_low_power_battery"  >动力电池电量不足</string>
+    <string name="debug_enter_ota_fail"     >进OTA失败</string>
+    <string name="debug_rollback_suc"       >回滚成功</string>
+    <string name="debug_verify_power_off"   >有效性校验-下电</string>
+    <string name="debug_pre_power_off"      >前置校验-下电</string>
+    <string name="debug_downloading"        >下载中</string>
+    <string name="debug_factory"            >工厂模式弹框</string>
+    <string name="debug_exit_ota_fail"      >升级前退OTA失败</string>
+    <string name="debug_cover"              >cover弹框</string>
+    <string name="debug_schedule_silent"    >静默升级弹框</string>
+    <string name="debug_power_on_fail"      >上电失败</string>
+    <string name="debug_power_off_fail"     >下电失败</string>
+    <string name="debug_guard"              >守护弹框</string>
+    <string name="debug_details"            >详情弹框</string>
+    <string name="debug_schedule_fire"      >预约时间到弹框</string>
+    <string name="debug_schedule_fire_fail" >预约时间到,条件不满足</string>
+    <string name="debug_icc_update"         >ICC主机升级</string>
+    <string name="debug_cancel"             >退出Debug模式</string>
+    <string name="debug_title"              >测试界面(点我关闭)</string>
+    <string name="debug_disclaimer"         >免责申明</string>
+    <string name="debug_install"            >install弹框</string>
+    <string name="debug_schedule"           >设置预约时间</string>
+    <string name="debug_install_result"     >升级结果弹框</string>
+    <string name="debug_cancel_schedule"    >取消预约弹框</string>
+    <string name="debug_schedule_suc"       >预约成功弹框</string>
+    <string name="debug_test"               >临时测试</string>
+    <string name="debug_cancel_sch_fail"    >取消预约失败</string>
+    <string name="debug_cancel_sch_suc"     >取消预约成功</string>
+    <string name="debug_update_suc"         >升级成功</string>
+    <string name="debug_update_suc_power"   >升级成功下电失败</string>
+    <string name="debug_task_verify"        >有效性失败</string>
+    <string name="debug_rescue_fail"        >救援升级失败</string>
+    <string name="debug_rescue"             >远程救援</string>
+    <string name="debug_exit_ota_fail_update_suc"        >升级成功退ota失败</string>
+    <string name="debug_exit_ota_fail_update_roll"       >回滚成功退ota失败</string>
+    <string name="debug_exit_ota_fail_update_fail"       >回滚失败退ota失败</string>
+    <string name="debug_power_off_fail_update_suc"       >升级成功下电失败</string>
+    <string name="debug_power_off_fail_update_roll"      >回滚成功下电失败</string>
+    <string name="debug_power_off_fail_update_fail"      >回滚失败下电失败</string>
+    <string name="debug_audio"              >音频播放</string>
+    <string name="debug_install_fail"       >回滚失败</string>
+    <string name="debug_install_suc_power_notify"       >升级成功下电提醒</string>
+    <string name="debug_roll_suc_power_notify"          >回滚成功下电提醒</string>
+    <string name="debug_roll_fail_power_notify"         >回滚失败下电提醒</string>
+    <string name="debug_fail_power_off"                 >进入升级前下电失败 </string>
+    <string name="debug_versions"                       >大版本信息 </string>
+
+    <string name="engine_del_pkg"           >删除本地下载包</string>
+    <string name="engine_test_server"       >测试服务器</string>
+    <string name="engine_check_precondition">检测前置条件</string>
+    <string name="engine_title"             >工程模式(点我关闭)</string>
+    <string name="engine_normal_check"      >常规任务检查</string>
+    <string name="engine_rescue_check"      >救援任务检查</string>
+    <string name="engine_clean_data"        >清除数据</string>
+    <string name="engine_open_adb"          >打开ADB</string>
+    <string name="engine_close_adb"         >关闭ADB</string>
+    <string name="engine_enter_ota"         >进入OTA模式</string>
+    <string name="engine_close_ota"         >退出OTA模式</string>
+    <string name="engine_download"          >等待下载更新</string>
+    <string name="engine_ui_follow"         >主题跟随</string>
+    <string name="engine_ui_turn"           >主题切换</string>
+    <string name="engine_kill_app"          >停止FOTA</string>
+    <string name="engine_verify_task"       >校验任务有效性</string>
+    <string name="engine_schedule"          >设置预约时间</string>
+    <string name="engine_cancel_schedule"   >取消预约</string>
+    <string name="engine_take_log"          >收集日志</string>
+    <string name="engine_icc_version"       >主机版本</string>
+    <string name="engine_icc_error_code"    >主机ErrorCode</string>
+    <string name="engine_choose_uat"        >国内UAT</string>
+    <string name="engine_choose_product"    >国内生产</string>
+    <string name="engine_ecall"             >ECall事件</string>
+    <string name="engine_end_ota"           >强退OTA升级</string>
+    <string name="engine_del_file_ret"      >数据删除成功，主机将在3秒后重启</string>
+    <string name="engine_insert_usb"        >请插入优盘</string>
+    <string name="engine_copy_wait"         >检测到插入优盘, 正在拷贝请等待</string>
+    <string name="engine_copy_progress"     >拷贝进度：</string>
+    <string name="engine_copy_name"         >拷贝成功,压缩包名字：</string>
+    <string name="engine_copy_fail"         >拷贝失败</string>
+    <string name="engine_logs_fail"         >日志收集失败</string>
+    <string name="engine_task_checking"     >任务检测中，请稍后使用！</string>
+    <string name="engine_wait_download"     >等待下载更新</string>
+    <string name="engine_download_soon"     >常规任务检测成功，即将进行任务下载...</string>
+    <string name="engine_check_fail"        >检测任务失败！</string>
+    <string name="engine_wait_init"         >请等待系统初始化完成后再使用</string>
+    <string name="engine_downloading"       >下载更新中...</string>
+    <string name="engine_download_suc"      >下载成功</string>
+    <string name="engine_download_fail"     >下载失败</string>
+    <string name="engine_pre_fail"          >前置条件校验失败</string>
+    <string name="engine_pre_suc"           >前置条件校验成功</string>
+    <string name="engine_close_count"       >校验结果3秒后自动关闭</string>
+    <string name="engine_enter_ota_suc"     >进入OTA成功</string>
+    <string name="engine_enter_ota_fail"    >进入OTA失败</string>
+    <string name="engine_exit_ota_suc"      >退出OTA成功</string>
+    <string name="engine_exit_ota_fail"     >退出OTA失败</string>
+    <string name="engine_task_verify_suc"   >任务有效性校验成功</string>
+    <string name="engine_task_verify_fail"  >任务有效性校验失败</string>
+    <string name="engine_del_file_fail"     >文件删除失败，请查看是否无操作权限</string>
+    <string name="engine_del_file_count"    >删除成功，删除文件数量：</string>
+    <string name="engine_file_not_exist"    >下载文件不存在，无法删除！！</string>
+    <string name="engine_dir_not_exist"     >下载目录不存在，无法删除！！</string>
+    <string name="engine_service_conn_suc"  >连接服务器正常</string>
+    <string name="engine_service_conn_fail" >无法连接服务器</string>
+    <string name="engine_intl_uat"          >国外测试</string>
+    <string name="engine_intl_product"      >国外生产</string>
+    <string name="engine_test_local_port"   >测试apk端口</string>
+
+    <string name="fail_power_on"            >上电失败</string>
+    <string name="fail_factory_power"       >产线升级限制的下载时长已到达，中断下载</string>
+    <string name="fail_enter_ota"           >进入升级模式失败</string>
+    <string name="fail_task_verify"         >任务有效性校验失败</string>
+    <string name="fail_exit_ota"            >退OTA模式失败</string>
+    <string name="storage_battery_warn"     >蓄电池电量不足导致无法升级，请下次再升级</string>
+    <string name="power_battery_warn"       >动力电池电量不足导致无法升级，请下次再升级</string>
+    <string name="vehicle_state_power_off"  >车辆处于off状态</string>
+    <string name="update_time"              >本次更新预计需要</string>
+    <string name="check_precondition"       >检测升级前置条件</string>
+    <string name="vehicle_entry_upgrade"    >车辆即将进入升级模式</string>
+    <string name="no_mission_title"         >当前系统已是最新版本</string>
+    <string name="schedule_suc"             >预约成功</string>
+    <string name="update_remind"            >车辆即将进入ON挡升级···</string>
+    <string name="schedule_silent"          >车辆正在初始化中，请勿操作车辆！</string>
+    <string name="vehicle_recheck"          >车辆升级检查中···</string>
+    <string name="power_off_fail"           >下电失败</string>
+    <string name="enter_ota_fail"           >退OTA模式失败，请重启车辆</string>
+
+    <!--toast_exit_ota_fail.xml start-->
+    <string name="exit_ota_fail_before_update"  >升级模式退出失败</string>
+    <string name="exit_ota_fail_update_suc"     >升级完成，升级模式退出失败</string>
+    <string name="exit_ota_fail_update_roll"    >升级失败，升级模式退出失败</string>
+    <string name="exit_ota_fail_update_fail"    >升级失败，升级模式退出失败，车辆存在问题</string>
+    <!--toast_exit_ota_fail.xml end-->
+
+    <string name="install_fail_sale_help">请联系您当地的服务站。</string>
+    <string name="sale_help_phone">请联系您当地的服务站\n电话：400-002-2000</string>
+
+    <!--toast_power_off_fail.xml start-->
+    <string name="power_off_fail_update_suc"     >升级成功，下电失败\n请重启车辆</string>
+    <string name="power_off_fail_update_roll"    >升级失败，下电失败</string>
+    <string name="power_off_fail_update_fail"    >升级失败，下电失败，车辆存在问题</string>
+    <string name="roll_back_fail_power_off_notify">升级失败，车辆正在下电</string>
+    <string name="roll_back_suc_power_off_notify">升级失败，车辆正在下电</string>
+    <!--toast_power_off_fail.xml end-->
+
+    <!--toast_install_fail.xml start-->
+    <string name="install_fail_content"          >升级失败，车辆存在问题</string>
+    <!--toast_install_fail.xml end-->
+
+    <!--toast_rollback_suc.xml start-->
+    <string name="rollback_suc_content"          >升级失败</string>
+    <string name="rollback_suc_sale_help"        >车辆已恢复升级前状态，请联系您当地的服务站。</string>
+    <!--toast_rollback_suc.xml end-->
+
+    <!--toast_audio.xml start-->
+    <string name="audio_title"                   >音频说明</string>
+    <!--toast_audio.xml end-->
+
+    <!--toast_schedule_fire.xml start-->
+    <string name="schedule_fire_title"      >您预约的系统升级时间已到</string>
+    <string name="schedule_fire_info"       >倒计时20秒后将自动开始系统升级！</string>
+    <string name="schedule_fire_warn_line1" >本次升级在此过程中您的车辆将无法使用，请勿在等红绿灯或其他危险区域进行升级！</string>
+    <string name="update_schedule_again"    >再次预约</string>
+    <!--toast_schedule_fire.xml start-->
+
+    <!--toast_precondition.xml start-->
+    <string name="precondition_engine_stop" >引擎处于停止状态</string>
+    <string name="precondition_speed"       >车速为0</string>
+    <string name="precondition_pet_close"   >童宠模式关闭</string>
+    <string name="precondition_Sentinel_close"   >哨兵模式关闭</string>
+    <string name="precondition_Vtol_close"  >未放电</string>
+    <string name="precondition_hand_break"  >手刹处于拉起状态</string>
+    <string name="precondition_gear"        >挡位处于P挡</string>
+    <string name="precondition_power"       >电源处于ON</string>
+    <string name="precondition_battery"     >电压大于%sV</string>
+    <string name="precondition_power_battery"   >动力电池大于%s</string>
+    <string name="precondition_storage_battery" >蓄电池大于%s</string>
+    <string name="precondition_diagnose"    >OBD未占用</string>
+    <string name="precondition_tel_diagnose">远程诊断未开启</string>
+    <string name="precondition_lock"        >四门关闭</string>
+    <string name="precondition_window"      >天窗关闭</string>
+    <string name="precondition_security"    >设防关闭</string>
+    <string name="precondition_motor"       >处于Ready状态</string>
+    <string name="precondition_charging"    >非充电状态</string>
+    <string name="precondition_fail"        >不满足升级条件，无法升级</string>
+    <string name="precondition_suc"         >升级条件满足，开始升级</string>
+    <string name="precondition_checking"    >请根据下述要求调整车辆状态</string>
+    <string name="precondition_cancel_count">取消(%ds)</string>
+    <!--toast_precondition.xml end-->
+
+    <!--dialog_schedule.xml start-->
+    <string name="schedule_loading"             >预约中···</string>
+    <string name="schedule_title"               >预约时间设置</string>
+    <string name="schedule_fail"                >预约失败，请重新预约</string>
+    <string name="schedule_btn_resume_schedule" >重新预约</string>
+    <string name="schedule_suc_title"           >预约成功</string>
+    <string name="schedule_charge"              >预约充电</string>
+    <string name="schedule_trip"                >预约出行</string>
+    <string name="schedule_suc_content"         >您预约 %s月%s日 %s:%s 升级</string>
+    <string name="schedule_time_clash"          >当前时间已被其他应用预约  %1$s-%2$s (%3$s)</string>
+    <!--dialog_schedule.xml end-->
+
+    <!--toast_downloading.xml start-->
+    <string name="downloading"              >下载中···</string>
+    <string name="size_and_speed"           >共%fGB %dKB/s</string>
+    <string name="download_progress"        >%d%</string>
+    <string name="time_needed"              >预计%d小时2%d分钟%d秒下载完成</string>
+    <!--toast_downloading.xml start-->
+
+    <!--toast_notify_update.xml start-->
+    <string name="toast_notify_upgrade"     >车辆升级</string>
+    <string name="toast_notify_info"        >发现新版本，是否立即查看</string>
+    <string name="toast_notify_check"       >查看</string>
+    <!--toast_notify_update.xml end-->
+
+    <!--toast_factory.xml start-->
+    <string name="factory_title"            >下载中···</string>
+    <string name="factory_down_pro1"         >共%sGB</string>
+    <string name="factory_down_pro2"         >共%sMB</string>
+    <string name="factory_down_pro3"         >共%sKB</string>
+    <string name="factory_down_speed"        >   0KB/s</string>
+    <string name="factory_rest_time"        >预计%d小时%d分钟%d秒下载完成</string>
+    <!--toast_factory.xml end-->
+
+    <!--dialog_exit_mode.xml start-->
+    <string name="ota_tv_info">升级失败，升级模式退出失败</string>
+    <!--dialog_exit_mode.xml end-->
+
+    <!--activity_main.xml start-->
+    <string name="version_list"             >历史版本</string>
+    <string name="audio"                    >音频说明</string>
+    <string name="new_mission_title"        >发现新版本</string>
+    <string name="original_title"           >当前系统已是最新版本</string>
+    <string name="update_required_time"     >预计升级时间：</string>
+    <string name="schedule_time"            >已经开启预约升级：</string>
+    <string name="current_version"          >当前系统版本</string>
+    <string name="update_part_detail"       > </string>
+    <string name="update_detail"            >详情></string>
+    <!--dialog_schedule.xml start-->
+
+    <!--toast_install_result.xml start-->
+    <string name="update_suc_ota_fail"          >升级完成，升级模式退出失败</string>
+    <string name="update_suc_power_fail"        >升级成功，下电失败</string>
+    <string name="update_fail_rollback_suc"     >升级失败</string>
+    <!--toast_install_result.xml end-->
+
+
+    <!--toast_install.xml start-->
+    <string name="install_tv_title"         >系统更新中···</string>
+    <string name="install_tv_pro"           >%d</string>
+    <string name="install_tv_rest_time"     >剩余</string>
+    <string name="install_tv_warn_line1"    >升级中车辆无法充电，请保持车辆为上电启动状态，请保持车辆驻车在安全地带，\n升级中请勿在车辆OBD口连接设备，升级中电子设备被禁用，请勿做任何操作</string>
+    <!--toast_install.xml end-->
+
+    <!--toast_schedule_fire_fail.xml start-->
+    <string name="schedule_fire_fail_schedule"  >预约时间已到，车况不满足升级条件</string>
+    <string name="schedule_fire_fail_factory"   >产线升级，车况不满足升级条件</string>
+    <string name="schedule_fire_fail"       >车辆需在</string>
+    <string name="schedule_fire_fail_power" >OFF挡</string>
+    <string name="schedule_fire_fail_def"   >设防状态</string>
+    <string name="schedule_fire_fail_not_power_on">车辆需在非ON挡</string>
+    <string name="schedule_fire_fail_charge">未充放电状态</string>
+    <!--toast_schedule_fire_fail.xml end-->
+
+    <!--toast_cancel_schedule.xml start-->
+    <string name="cancel_schedule_content"          >是否取消当前预约？</string>
+    <string name="schedule_canceling"               >取消预约中···</string>
+    <string name="schedule_cancel_retry"            >取消预约失败，是否重新尝试？</string>
+    <string name="schedule_cancel_fail_retry"       >取消预约失败，请重试</string>
+    <!--toast_cancel_schedule.xml end-->
+
+    <!--toast_normal_suc.xml start-->
+    <string name="install_suc"              >升级成功，请体验新版本吧</string>
+    <string name="cancel_sch_suc"           >取消预约成功</string>
+    <string name="cancel_sch_suc_power_off" >升级成功，车辆正在下电</string>
+    <!--toast_normal_suc.xml start-->
+
+    <!--toast_rescue_update.xml start-->
+    <string name="rescue_tittle"            >远程救援任务升级进度</string>
+    <!--toast_rescue_update.xml start-->
+
+    <!--toast_rescue_update.xml start-->
+    <string name="rescue_download_pro"      >下载进度%d%%</string>
+    <string name="rescue_download_ing"      >下载中···</string>
+    <string name="rescue_download_suc"      >下载完成</string>
+    <string name="rescue_download_fail"     >下载失败</string>
+    <string name="rescue_verify_ecu_ing"    >校验ECU</string>
+    <string name="rescue_verify_ecu_suc"    >校验ECU成功</string>
+    <string name="rescue_verify_ecu_fail"   >校验失败</string>
+    <string name="rescue_verify_prc"        >前置条件校验</string>
+    <string name="rescue_verify_prc_suc"    >前置条件校验成功</string>
+    <string name="rescue_verify_prc_fail"   >前置条件校验失败</string>
+    <string name="rescue_verify_task_suc"   >有效性校验成功</string>
+    <string name="rescue_verify_task_fail"  >有效性校验失败</string>
+    <string name="rescue_update_suc"        >升级完成</string>
+    <string name="rescue_update_fail"       >升级失败</string>
+    <string name="rescue_update_ing"        >升级中···</string>
+    <string name="rescue_update_pro"        >升级进度%d%%</string>
+    <!--toast_rescue_update.xml start-->
+
+    <!--toast_versions.xml start-->
+    <string name="versions_title"           >版本说明</string>
+    <string name="versions_more"            >更多</string>
+    <!--toast_versions.xml end-->
+
+    <!--toast_fail_need_power_off.xml start-->
+    <string name="need_power_off_pre"           >升级前置条件检测失败，车辆正在下电</string>
+    <string name="need_power_off_verify"        >升级任务无效，车辆正在下电</string>
+    <!--toast_fail_need_power_off.xml end-->
+
+    <!--  dialog_attention.xml  -->
+    <string name="dialog_attention_rollback_exit_ota_fail"        >升级未完成，升级模式退出失败</string>
+    <string name="dialog_attention_rollback_power_off_fail"       >升级未完成，下电失败</string>
+    <string name="dialog_attention_upgraded_power_off_fail"       >升级成功，下电失败</string>
+    <string name="dialog_attention_upgraded_exit_ota_fail"        >升级完成，升级模式退出失败</string>
+    <!--  dialog_attention.xml  -->
+</resources>

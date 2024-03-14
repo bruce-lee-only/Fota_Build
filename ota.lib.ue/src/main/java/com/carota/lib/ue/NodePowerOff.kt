@@ -2,8 +2,8 @@ package com.carota.lib.ue
 
 import com.carota.lib.common.uitls.LaunchUtil
 import com.carota.lib.common.uitls.Logger
-import com.carota.lib.ui.toast.care.DialogAttentionCare
-import com.carota.lib.ui.toast.attention.DialogAttention
+import com.carota.lib.dispatcher.dialog.care.DialogAttentionCare
+import com.carota.lib.dispatcher.dialog.attention.DialogAttention
 import kotlinx.coroutines.delay
 import org.koin.core.component.inject
 

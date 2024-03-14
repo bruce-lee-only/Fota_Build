@@ -4,7 +4,7 @@ android {
     compileSdkVersion build_versions.compile_sdk
 
     defaultConfig {
-        applicationId "com.carota.component"
+//        applicationId "com.carota.component"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
         versionCode 100

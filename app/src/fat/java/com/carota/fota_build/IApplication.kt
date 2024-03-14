@@ -3,13 +3,16 @@ package com.carota.fota_build
 import android.content.Context
 
 interface IApplication {
-
     /**
      * create minor version for you app, usual, use this for create version for carota QA
      * @return String
      */
     fun minorVersion(): String
 
+    /**
+     * inject app context to modules
+     * @param context Context
+     */
     fun injectContext2Module(context: Context)
 
     /**

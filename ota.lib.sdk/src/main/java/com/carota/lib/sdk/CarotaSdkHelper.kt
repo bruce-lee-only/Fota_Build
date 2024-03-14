@@ -3,7 +3,9 @@ package com.carota.lib.sdk
 import android.content.Context
 import com.carota.CarotaClient
 import com.carota.hmi.CarOtaHmi
-import com.carota.hmi.UpgradeType
+import com.carota.hmi.CarOtaHmi.Policy
+import com.carota.hmi.type.HmiTaskType
+import com.carota.hmi.type.UpgradeType
 import com.carota.lib.common.uitls.Logger
 import com.carota.lib.status.ocean.OceanSdkData
 import com.carota.lib.status.river.sdk.RiverSelfUpgrade
@@ -22,7 +24,7 @@ class CarotaSdkHelper {
     companion object{
         private const val TIMEOUT: Long = 5 * 60 * 1000
 
-        fun carotaSdkInit(context: Context, timeOut: Long = TIMEOUT) = carotaSdkHelper.carotaSdkInit(context, timeOut)
+        fun carotaSdkInit(context: Context, policy:HashMap<UpgradeType, Policy>, timeOut: Long = TIMEOUT) = carotaSdkHelper.carotaSdkInit(context, policy,timeOut)
 
         //todo: normal task check
         fun carotaSdkNormalCheck() = carotaSdkHelper.carotaSdkCheck()
@@ -37,17 +39,55 @@ class CarotaSdkHelper {
     }
 
     /**
+     * normal upgrade
+     */
+    private val defaultPolicy: Policy get() =  Policy().apply {
+        this.addHmiTask(HmiTaskType.wait_user_run_next)
+        this.addHmiTask(HmiTaskType.check)
+        this.addHmiTask(HmiTaskType.wait_user_run_next)
+        this.addHmiTask(HmiTaskType.download)
+        this.addHmiTask(HmiTaskType.wait_user_run_next)
+        this.addHmiTask(HmiTaskType.condition)
+        this.addHmiTask(HmiTaskType.wait_user_run_next)
+        this.addHmiTask(HmiTaskType.enter_ota)
+        this.addHmiTask(HmiTaskType.wait_user_run_next)
+        this.addHmiTask(HmiTaskType.task_timeout_verify)
+        this.addHmiTask(HmiTaskType.wait_user_run_next)
+        this.addHmiTask(HmiTaskType.install)
+        this.addHmiTask(HmiTaskType.wait_user_run_next)
+        this.addHmiTask(HmiTaskType.exit_ota)
+    }
+
+    /**
+     * factory upgrade
+     */
+    private val factoryPolicy: Policy get() =  Policy().apply {
+        this.addHmiTask(HmiTaskType.check)
+        this.addHmiTask(HmiTaskType.download)
+        this.addHmiTask(HmiTaskType.condition)
+        this.addHmiTask(HmiTaskType.enter_ota)
+        this.addHmiTask(HmiTaskType.task_timeout_verify)
+        this.addHmiTask(HmiTaskType.install)
+        this.addHmiTask(HmiTaskType.exit_ota)
+    }
+
+    /**
      * 初始化sdk, 调用hmi的init操作
      * @param context Context
+     * @param policy HashMap<UpgradeType, Policy>
      * @param timeOut Long
      */
-    fun carotaSdkInit(context: Context, timeOut: Long){
+    fun carotaSdkInit(context: Context, policy:HashMap<UpgradeType, Policy>,timeOut: Long){
         this.appContext = context
-        CarOtaHmi.init(context, CarotaSdkListener(), timeOut)
+        val policyBuilder = CarOtaHmi.CarOtaHmiPolicyBuilder(context, timeOut, carotaSdkListener)
+        policy.forEach{ (key, value) ->
+            policyBuilder.setPolicy(key, value)
+        }
+        policyBuilder.build().start()
     }
 
     fun carotaSdkCheck(type: UpgradeType = UpgradeType.DEFULT){
-        CarOtaHmi.check(type, CarotaSdkListener().check())
+//        CarOtaHmi.check(type, CarotaSdkListener().check())
     }
 
     /**
@@ -147,6 +187,6 @@ class CarotaSdkHelper {
      */
     fun carotaDownload(type: UpgradeType = UpgradeType.DEFULT){
         Logger.drop("download type: $type")
-        CarOtaHmi.download(type, CarotaSdkListenerHandler().mIDownload)
+//        CarOtaHmi.download(type, CarotaSdkListenerHandler().mIDownload)
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--  allow to show a window  -->
+    <uses-permission  android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application>
+        <activity
+            android:name=".ui.activity.mainActivity.MainActivity"
+            android:exported="true"
+            android:theme="@style/CheryAppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.activity.debugActivity.DebugActivity"
+            android:exported="true"
+            android:enabled="true"
+            android:launchMode="singleInstance"
+            android:theme="@style/CheryAppTheme">
+        </activity>
+
+    </application>
+</manifest>

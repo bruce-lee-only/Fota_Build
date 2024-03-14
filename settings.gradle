@@ -14,8 +14,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Fota_Build"
 include ':app'
-include ':ota.lib.ui'
-include ':ota.lib.ue'
+include ':ota.lib.executor'
 include ':ota.lib.sdk'
 include ':ota.lib.status'
 include ':ota.lib.common'

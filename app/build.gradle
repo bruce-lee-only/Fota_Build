@@ -78,11 +78,11 @@ dependencies {
 
     implementation                  'io.github.jeremyliao:live-event-bus-x:1.8.0'
 
-    implementation project(":ota.lib.ui")
-    implementation project(":ota.lib.ue")
+    implementation project(':ota.lib.executor')
     implementation project(":ota.lib.common")
     implementation project(":ota.lib.sdk")
     implementation project(":ota.lib.slave")
+    implementation project(":ota.component")
 
 }
 

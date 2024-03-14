@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--  1dp = 1.5px  -->
+
+    <dimen name="dp_size_7_10px"        >7dp</dimen>
+    <!--  36px  -->
+    <dimen name="dp_size_24_36px"        >24dp</dimen>
+    <!--  42px  -->
+    <dimen name="dp_size_28_42px"        >28dp</dimen>
+    <dimen name="dp_size_37_55px"        >37dp</dimen>
+    <!--  72px  -->
+    <dimen name="dp_size_48_72px"        >48dp</dimen>
+    <!--  80px  -->
+    <dimen name="dp_size_53_80px"        >53dp</dimen>
+    <!--  108px  -->
+    <dimen name="dp_size_72_108px"        >72dp</dimen>
+    <!--  400px  -->
+    <dimen name="dp_size_267_400px"       >267dp</dimen>
+    <dimen name="dp_size_408_612px"       >408dp</dimen>
+    <dimen name="dp_size_533_800px"       >533dp</dimen>
+    <dimen name="dp_size_653_980px"       >653dp</dimen>
+    <!--  1280px  -->
+    <dimen name="dp_size_853_1280px"       >853dp</dimen>
+    <dimen name="dp_size_960_1440px"       >960dp</dimen>
+    <dimen name="dp_size_1707_2560px"      >1707dp</dimen>
+
+    <dimen name="px_size_5" tools:ignore="PxUsage"      >5px</dimen>
+    <dimen name="px_size_8" tools:ignore="PxUsage"      >8px</dimen>
+    <dimen name="px_size_9" tools:ignore="PxUsage"      >9px</dimen>
+    <dimen name="px_size_10" tools:ignore="PxUsage"     >10px</dimen>
+    <dimen name="px_size_17" tools:ignore="PxUsage"     >17px</dimen>
+    <dimen name="px_size_18" tools:ignore="PxUsage"     >18px</dimen>
+    <dimen name="px_size_22" tools:ignore="PxUsage"     >22px</dimen>
+    <dimen name="px_size_29" tools:ignore="PxUsage"     >29px</dimen>
+    <dimen name="px_size_30" tools:ignore="PxUsage"     >30px</dimen>
+    <dimen name="px_size_32" tools:ignore="PxUsage"     >32px</dimen>
+    <dimen name="px_size_35" tools:ignore="PxUsage"     >35px</dimen>
+    <dimen name="px_size_36" tools:ignore="PxUsage"     >36px</dimen>
+    <dimen name="px_size_40" tools:ignore="PxUsage"     >40px</dimen>
+    <dimen name="px_size_42" tools:ignore="PxUsage"     >42px</dimen>
+    <dimen name="px_size_45" tools:ignore="PxUsage"     >45px</dimen>
+    <dimen name="px_size_48" tools:ignore="PxUsage"     >48px</dimen>
+    <dimen name="px_size_50" tools:ignore="PxUsage"     >50px</dimen>
+    <dimen name="px_size_53" tools:ignore="PxUsage"     >53px</dimen>
+    <dimen name="px_size_55" tools:ignore="PxUsage"     >55px</dimen>
+    <dimen name="px_size_60" tools:ignore="PxUsage"     >60px</dimen>
+    <dimen name="px_size_70" tools:ignore="PxUsage"     >70px</dimen>
+    <dimen name="px_size_72" tools:ignore="PxUsage"     >72px</dimen>
+    <dimen name="px_size_80" tools:ignore="PxUsage"     >80px</dimen>
+    <dimen name="px_size_96" tools:ignore="PxUsage"     >96px</dimen>
+    <dimen name="px_size_101" tools:ignore="PxUsage"    >101px</dimen>
+    <dimen name="px_size_108" tools:ignore="PxUsage"    >108px</dimen>
+    <dimen name="px_size_160" tools:ignore="PxUsage"    >160px</dimen>
+    <dimen name="px_size_170" tools:ignore="PxUsage"    >170px</dimen>
+    <dimen name="px_size_180" tools:ignore="PxUsage"    >180px</dimen>
+    <dimen name="px_size_215" tools:ignore="PxUsage"    >215px</dimen>
+    <dimen name="px_size_222" tools:ignore="PxUsage"    >222px</dimen>
+    <dimen name="px_size_240" tools:ignore="PxUsage"    >240px</dimen>
+    <dimen name="px_size_400" tools:ignore="PxUsage"    >400px</dimen>
+    <dimen name="px_size_500" tools:ignore="PxUsage"    >500px</dimen>
+    <dimen name="px_size_560" tools:ignore="PxUsage"    >560px</dimen>
+    <dimen name="px_size_590" tools:ignore="PxUsage"    >590px</dimen>
+    <dimen name="px_size_1200" tools:ignore="PxUsage"   >1200px</dimen>
+    <dimen name="px_size_1330" tools:ignore="PxUsage"   >1330px</dimen>
+    <dimen name="px_size_1680" tools:ignore="PxUsage"   >1680px</dimen>
+    <dimen name="px_size_2240" tools:ignore="PxUsage"   >2240px</dimen>
+
+
+
+
+    <!--  dialog_1280*800 background  -->
+    <dimen name="dialog_width_2560"     >@dimen/dp_size_1707_2560px</dimen>
+    <dimen name="dialog_height_800"     >@dimen/dp_size_533_800px</dimen>
+
+    <!--  dialog_2560*1440 background  -->
+    <dimen name="dialog_width_1280"     >@dimen/dp_size_853_1280px</dimen>
+    <dimen name="dialog_height_1440"     >@dimen/dp_size_960_1440px</dimen>
+
+    <!--  dialog_1200*108 background  -->
+    <dimen name="dialog_width_1200"     >@dimen/px_size_1200</dimen>
+    <dimen name="dialog_height_180"     >@dimen/px_size_180</dimen>
+
+
+    <!--  text size  -->
+    <dimen name="text_size_32"          >@dimen/px_size_32</dimen>
+    <dimen name="text_size_36"          >@dimen/px_size_36</dimen>
+    <dimen name="text_size_40"          >@dimen/px_size_40</dimen>
+    <dimen name="text_size_42"          >@dimen/px_size_42</dimen>
+    <dimen name="text_size_48"          >@dimen/px_size_48</dimen>
+    <dimen name="text_size_70"          >@dimen/px_size_70</dimen>
+    <dimen name="text_size_72"          >@dimen/px_size_72</dimen>
+
+    <!--  button size  -->
+    <dimen name="button_width_500"      >@dimen/px_size_500</dimen>
+    <dimen name="button_width_400"      >@dimen/px_size_400</dimen>
+    <dimen name="button_height_108"     >@dimen/px_size_108</dimen>
+
+    <dimen name="button_width_240"      >@dimen/px_size_240</dimen>
+    <dimen name="button_height_96"      >@dimen/px_size_96</dimen>
+
+
+</resources>

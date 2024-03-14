@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="dialog_attention_view"
+            type="com.carota.lib.executor.ui.dialog.attention.DialogAttention" />
+
+        <variable
+            name="dialog_attention_viewModel"
+            type="com.carota.lib.executor.ui.dialog.attention.DialogAttentionViewModel" />
+
+        <variable
+            name="dialog_attention_care"
+            type="com.carota.lib.executor.ui.dialog.care.DialogAttentionCare" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/dialog_2560x1440_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/icon_dialog_pg_shadow">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/dialog_1280x800_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                style="@style/base_dialog_linearlayout"
+                android:layout_height="@dimen/dp_size_408_612px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseCompoundDrawables">
+                <ImageView
+                    style="@style/attention_imageview"
+                    android:background="@mipmap/icon_attention_heavy"
+                    android:contentDescription="@string/image_content_description" />
+
+                <TextView
+                    style="@style/text_980_width_40_size"
+                    android:layout_marginTop="@dimen/dp_size_37_55px"
+                    app:dialog_attention_care="@{dialog_attention_care}"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_confirm"
+                style="@style/confirm_button_400x108"
+                android:layout_marginBottom="@dimen/dp_size_53_80px"
+                android:text="@string/confirm"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:onClick="@{view->dialog_attention_view.onConfirmClicked()}"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

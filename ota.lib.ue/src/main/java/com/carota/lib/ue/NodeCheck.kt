@@ -18,16 +18,14 @@ class NodeCheck: NodeBase() {
 
         liveData.observeForever{
             Logger.info("sdk check finished, result: ${checkPumper.checkResult}")
-            var ready = true
-            if (checkPumper.checkResult){
+            val ready: Boolean = if (checkPumper.checkResult){
                 if (checkPumper.isSilentUpgrade) {
-                    if (checkPumper.isScheduleEventPass){
-                        ready = false
-                        Logger.error("silent schedule event check fail, send bury event")
-                        //fixme: need add bury event
-                    }
-                }
-            }else ready = false
+                    val pass = checkPumper.isScheduleEventPass
+                    //fixme: need add bury event
+                    if (!pass) Logger.error("silent schedule event check fail, send bury event")
+                    pass
+                }else true
+            }else false
             printNodeFinish(checkPumper.toString())
             if (ready) EventBus.globalEvent.post(INode.BUS_EVENT_CHECK_NODE_DONE)
         }

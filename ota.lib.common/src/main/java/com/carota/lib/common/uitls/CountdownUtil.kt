@@ -1,6 +1,7 @@
 package com.carota.lib.common.uitls
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
@@ -10,8 +11,8 @@ class CountdownUtil {
          * run a callback after countdown
          * @param second unit: second
          */
-        fun countdown(second: Int, block: () -> Unit){
-            LaunchUtil.instance.launch {
+        fun countdown(second: Int, block: () -> Unit): Job{
+            return LaunchUtil.instance.launch {
                 delay(second * 1000L)
                 block()
             }

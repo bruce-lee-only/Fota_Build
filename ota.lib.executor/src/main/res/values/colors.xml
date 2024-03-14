@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!--  color without trans to dark or light  -->
+    <color name="color_debug_divider"           >#FF8C8D8D</color>
+    <color name="color_debug_button_pressed"    >#FF054D6D</color>
+    <color name="color_debug_button_enable"     >#FF1375A0</color>
+    <color name="color_debug_button_disable"    >#FF3B5966</color>
+    <!--  color without trans to dark or light  -->
+
+
+    <!--  ****** color without trans to dark or light ******  -->
+    <!--    100% alpha   -->
+    <color name="color_black_100"       >#FF000000</color>
+    <!--    75% alpha   -->
+    <color name="color_black_75"        >#BF000000</color>
+    <!--    50% alpha   -->
+    <color name="color_black_50"        >#80000000</color>
+    <!--    30% alpha   -->
+    <color name="color_black_30"        >#4D000000</color>
+    <!--    20% alpha   -->
+    <color name="color_black_20"        >#33000000</color>
+    <!--    10% alpha   -->
+    <color name="color_black_10"        >#1A000000</color>
+    <!--    5% alpha   -->
+    <color name="color_black_5"         >#0D000000</color>
+    <!--    100% alpha      -->
+    <color name="color_blue_100"        >#FF0497FF</color>
+    <!--  ****** color without trans to dark or light ******  -->
+
+</resources>

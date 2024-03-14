@@ -5,9 +5,9 @@ def buildTimeWeek = BUILD_TIME.format("yyww", TimeZone.getTimeZone("UTC+08:00"))
 println "BUILD TIME : ${buildTimeWeek} [${buildTimeMinutes}]"
 
 def build_ver = [
-        compile_sdk    : 33,
+        compile_sdk    : 29,
         min_sdk        : 24,
-        target_sdk     : 33,
+        target_sdk     : 29,
         build_tool_version:"29.0.3",
         ver_code       : buildTimeMinutes,
         build_time     : "${buildTimeWeek}"
@@ -50,7 +50,7 @@ def deps = [
         ktx_coroutines_android      : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${dep_ver.coroutines}",
 
         // 3th
-        okhttp                      : "com.squareup.okhttp3:okhttp:4.9.3",
+        okhttp                      : "com.squareup.okhttp3:okhttp:3.11.0",
         mockwebserver               : "com.squareup.okhttp3:mockwebserver:3.9.1",
         hamcrest                    : "org.hamcrest:hamcrest-library:1.3",
 

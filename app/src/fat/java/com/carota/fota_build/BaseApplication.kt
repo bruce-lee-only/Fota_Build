@@ -7,9 +7,9 @@ import androidx.annotation.RequiresApi
 import com.carota.fota_build.broadcast.AssistReceiver
 import com.carota.lib.common.uitls.EventBus
 import com.carota.lib.common.uitls.Logger
+import com.carota.lib.executor.ExecutorHandler
 import com.carota.lib.status.db.AppDatabase
 import com.carota.lib.status.shared.SharedManager
-import com.carota.lib.ue.UEHandler
 import com.jeremyliao.liveeventbus.LiveEventBus
 
 abstract class BaseApplication:
@@ -50,7 +50,7 @@ abstract class BaseApplication:
 
     override fun injectContext2Module(context: Context){
         //todo: inject child context to module
-        UEHandler.injectApplicationContext(context)
+        ExecutorHandler.injectApplicationContext(context)
     }
 
     private fun analysisEventBus(){
