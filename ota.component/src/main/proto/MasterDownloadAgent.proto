@@ -1,0 +1,305 @@
+syntax = "proto3";
+
+package carota.ctrl;
+
+import "Telemetry.proto";
+
+option java_package = "com.carota.protobuf";
+
+/*
+* Path : /connect
+* Feature :
+*   1. Check update from server
+*   2. Sync session from controller
+*   3. Verify session is valid
+*/
+message ConnReq {
+    enum Action {
+        CHECK = 0;
+        SYNC = 1;
+        VERIFY = 2;
+        FACTORY = 3;
+    }
+    Action action = 1;
+    string tag = 2;
+    string lang = 3;
+}
+
+message ConnRsp {
+    enum Mode {
+        BY_USER = 0;
+        AUTO_DOWNLOAD = 1;
+        AUTO_INSTALL = 2;
+        BY_USER_LIMIT = 3;
+        AUTO_INSTALL_SCHEDULE = 4;
+        AUTO_UPDATE_FACTORY = 5;//auto-update-factory
+        BY_RESCUE = 6;//by_rescue
+    }
+    message UpgradeInfo {
+        string name = 1;
+        string src_ver = 2;
+        string dst_ver = 3;
+        int64 size = 4;
+        string rn = 5;
+        string desc = 6;
+        int64 time =7;
+    }
+    string vin = 1;
+    string usid = 2;
+    string rn = 3;
+    string desc = 4;
+    Mode mode = 5;
+    repeated UpgradeInfo info = 6;
+    repeated string environment = 7;
+    repeated string operation = 8;
+    repeated carota.telemetry.CallTrace trace = 9;
+    string campaign_id = 10;
+    int64 appointment_time = 11;
+    string schedule_id = 12;
+    string reserved = 13;    // reserved for hozon to send vconnect response json
+    string displayInfoUrl = 14;
+    int32 update_time = 15;
+}
+
+/*
+* Path : /query
+* Feature :
+*   1. Get ECU Version Information
+*   2. Get Vehicle Information
+*/
+message QueryReq {
+    enum Action {
+        ALL = 0;
+        VERSION = 1;
+        VEHICLE = 2;
+    }
+    Action action = 1;
+    string tag = 2;
+}
+
+message QueryRsp {
+    message EcuInfo {
+         string name = 1;
+         string software = 2;
+         string hardware = 3;
+         string sn = 4;
+         string desc = 5;
+    }
+    string vin = 1;
+    string model = 2;
+    repeated EcuInfo info = 3;
+    repeated carota.telemetry.CallTrace trace = 4;
+    string brand = 5;
+}
+
+/*
+* Path : /download
+* Feature :
+*   1. Add package to Download Manager
+*   2. Pause download @ Download Manager
+*   3. Query progress @ Download Manager
+*/
+message DownloadReq {
+    enum Action {
+        START = 0;
+        STOP = 1;
+        QUERY = 2;
+    } 
+    Action action = 1;
+    string usid = 2;
+    string tag = 3;
+}
+
+message DownloadRsp {
+    enum Status {
+        IDLE = 0;
+        RUN = 1;
+        READY = 2;
+        ERROR = 3;
+    }
+    message Task {
+        string name = 1;
+        int32 progress = 2; 
+        int32 speed = 3;
+    }
+    Status status = 1;
+    repeated Task tasks = 2;
+    repeated carota.telemetry.CallTrace trace = 3;
+}
+
+/*
+* Path : /result
+* Feature :
+*   1. Query upgrade result
+*/
+enum UpgradeStep {
+    SLAVE = 0;
+    MASTER = 1;
+    UI = 2;
+}
+
+message UpgradeResultRsp {
+    enum Status{
+        IDLE = 0;
+        UPGRADE = 1;
+        SUCCESS = 2;
+        ROLLBACK = 3;
+        ERROR = 4;
+        FAILURE = 5;
+    }
+    message Task {
+        string name = 1;
+        int32 progress = 2;
+        Status status = 3;
+        int32 error = 4;
+    }
+    string usid = 1;
+    Status status = 2;
+    UpgradeStep step = 3;// reserved in the future
+    repeated Task tasks = 4;
+    repeated carota.telemetry.CallTrace trace = 5;
+}
+
+/*
+* Path : /upgrade
+* Feature :
+*   1. Trigger upgrade step Slave
+*   2. Trigger upgrade step Master
+*/
+message UpgradeReq {
+    string usid = 1;
+    UpgradeStep step = 2;// reserved in the future
+    string tag = 3;
+}
+
+/*
+* Path : /test
+* Feature :
+*   1. Check module status from RPC
+*   2. Test controller is alive
+*/
+message TestReq {  
+    enum Case {
+        RPC = 0;
+        ALIVE = 1;
+    } 
+    Case type = 1;
+    string tag = 2;
+}
+
+message TestRsp {
+    repeated string data = 1;
+    repeated carota.telemetry.CallTrace trace = 2;
+}
+
+/*
+* Path : /sync
+* Feature :
+*   1. Get controller status
+*   2. Get environment limit from session @ controller
+*/
+message SyncRsp {
+    enum EnvmAction {
+        PRODUCE = 0;
+        UAT = 1;
+    }
+    string usid = 1;
+    // 0x0001 - downloading
+    // 0x0002 - upgrading
+    // 0x0100 - downloaded
+	
+	
+    // 0x0200 - step slave triggered (reserved in the future)
+    // 0x0400 - step master triggered (reserved in the future)
+    // 0x0800 - step UI triggered (reserved in the future)
+    int32 state = 2;
+    repeated string environment = 3;
+    EnvmAction action = 4;
+    repeated carota.telemetry.CallTrace trace = 5;
+}
+
+//Add for CMH Start
+/*
+* Path : /cmh_beat
+* Feture :
+*   1. Add for TBOX CMH Beat
+*/
+message SyncClockReq {
+    int64 system_clock = 1;
+}
+//Add for CMH End
+
+/*
+* Path : /environment
+* Feature :
+*   1. Set Mda connect to Service Environment
+*   2. reserved in hozon
+ */
+message EnvmReq {
+    enum EnvmAction {
+        PRODUCE = 0;
+        UAT = 1;
+    }
+    EnvmAction action = 1;
+    string tag = 2;
+}
+/*
+* Path : /event
+* Feature :
+*   1. Send UI Point Data
+*   2. Send UI Event Data(Schedule Time、Upgrade Result、Car condition)
+*   3. Send FOTA Data
+*/
+message EventReq {
+    enum Action {
+        POINT = 0;
+        EVENT = 1;
+        FOTA = 2;
+    }
+    message Point {
+        int32 id=1;
+        int64 at =2;
+        string msg = 3;
+    }
+    message Event {
+        int64 at = 1;
+        int32 upgradeType = 2;
+        int32 eventCode = 3;
+        string msg = 4;
+        int32 result= 5;
+        string schedule_id = 6;
+        int32 EIC_system = 7;
+    }
+    message Fota {
+        int32 totalState = 1;
+        string ecu = 2;
+        int32 state = 3;
+        int64 time = 4;
+        int32 code = 5;
+        string error = 6;
+    }
+
+    Action action = 1;
+    string tag = 2;
+    repeated Point point = 3;
+    repeated Event event = 4;
+    repeated Fota fota = 5;
+}
+/*
+ * Path : /config
+ * Feture :
+ *   1. Get config url
+ */
+message ConfigReq {
+	string tag = 1;
+	repeated string config_names = 2;		// Required
+}
+
+message ConfigRsp {
+	message ConfigUrl {
+		string config_name  = 1;
+		string url = 2;
+	}
+
+	repeated ConfigUrl config_urls = 1;
+}

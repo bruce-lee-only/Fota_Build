@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package carota.ctrl;
+
+import "Telemetry.proto";
+
+option java_package = "ai.carota.iov.ota.master.mqtt.protobuf";
+
+
+enum CodeType {
+    SUCCESS = 0; //成功
+    SUCCESS_200 = 200; //成功
+    VIN_NOT_FOUND = 1;
+    PROTOBUF_INVALID = 2; // 非法protobuf协议
+    ILLEGAL_INSTRUCTION = 3; // 非法指令
+    MASTER_BOM_EMPTY = 100000001; //获取空的bom列表
+    MASTER_BOM_NETWORK = 100000002; //网络异常
+    MASTER_BOM_FAILURE = 100000003; //获取bom失败
+    MASTER_STATE_EXCEPTION = 100000004; //主控状态跳转异常
+    MASTER_UPGRADING = 102000000; //升级中，不能进行任务检测、升级报下载
+    MASTER_UPGRADE_USER_CANCEL = 102000001; //用户取消升级
+    MASTER_UPGRADE_USID_NOT_FOUND = 102000002; //主控升级USID不存在
+    MASTER_UPGRADE_TASK_INVALID = 102000003; //主控升级USID无效
+    MASTER_UPGRADE_TASK_VALID = 102000004; //升级任务有效
+    MASTER_UPGRADE_TASK_VALID_NOT_CHECK = 102000005; //升级任务有效，不进行任务检测
+
+    MASTER_CONNECT = 100100; //连接
+    MASTER_RECEIVED = 100200; //收到升级任务
+    MASTER_DOWNLOADING = 100300; //开始下载升级包
+    MASTER_DOWNLOAD_CANCEL = 100400; //取消下载升级包
+    MASTER_DOWNLOAD_FAILURE = 100500; //下载升级包失败
+    MASTER_DOWNLOADED = 100600; //完成下载升级包
+    MASTER_UPGRADE_START = 100700; //开始升级
+    MASTER_UPGRADE_INTERRUPT = 100800; //升级中断
+    MASTER_UPGRADE_FAILURE = 100900; //升级失败
+    MASTER_UPGRADE_ROLLBACK = 101000; //升级回滚中
+    MASTER_UPGRADE_ROLLBACK_INTERRUPT = 101100; //升级回滚中断
+    MASTER_UPGRADE_ROLLBACK_FAILURE = 101200; //升级回滚失败
+    MASTER_UPGRADE_ROLLBACK_SUCCESS = 101300; //升级回滚成功
+    MASTER_UPGRADE_UPGRADE_SUCCESS = 101400; //升级成功
+
+
+    HMI_USERUPDATEFEEDCOMFIRE_PASS = 410001000; //not upgrade now
+    HMI_USERUPDATEFEEDCOMFIRE_DONE = 410001001;  //updagade now
+    HMI_STATEMENTCONFIRMATION_UNGREE   = 410002000; //not agree
+    HMI_STATEMENTCONFIRMATION_GREE = 410002001;    //agree statement
+    HMI_MANUALUPDATE_DONE  = 410003000;      //manual update
+    HMI_CDTSTATUSDETECTION_UNPASS = 410004000; //cdt unpass
+    HMI_CDTSTATUSDETECTION_PASS = 410004001; //cdt pass
+    HMI_RELEASENOTETRANSMIT_DONE = 410005000;  //releasenote file  transmit ok
+    HMI_RELEASENOTETRANSMIT_DOWNLOADFAIL = 410005001; //releasenote file ivt download fail
+    HMI_RELEASENOTETRANSMIT_OTHERFAIL = 410005002;// releasenote file transmit to mmi fail
+    HMI_UPGRADE_SUCCESS = 410006001;// upgrade success
+    HMI_UPGRADE_FAIL = 410006002;// upgrade fail
+    HMI_UPGRADE_ROLLBACK_SUCCESS = 410006003;// upgrade rollback success
+    HMI_UPGRADE_ROLLBACK_FAIL = 410006004;// upgrade rollback success
+    HMI_TESTFLOW_TRIGGER_CDTSTATUSDETECTION_UNPASS = 420001000;// trigger cdt unpass
+    HMI_TESTFLOW_TRIGGER_CDTSTATUSDETECTION_PASS = 420001001;// trigger cdt pass
+    HMI_ENTER_OTA_MODE_SUCCESS = 420002000;
+    HMI_ENTER_OTA_MODE_FAIL = 420002001;
+    HMI_EXIT_OTA_MODE_SUCCESS = 420002003;
+    HMI_EXIT_OTA_MODE_FAIL = 420002004;
+    HMI_ECU_VERSION_UNKNOWN = 420003000;
+    HMI_ECU_VERSION_NOT_MATCH = 420003001;
+
+    //pre condition not met code
+    HMI_PRE_CONDITION_SPEED = 410004002; //speed not met
+    HMI_PRE_CONDITION_BATTERY_POWER = 410004003; //battery power not met
+    HMI_PRE_CONDITION_BATTERY_VOLTAGE = 410004004; //battery voltage not met
+    HMI_PRE_CONDITION_POWER_READY = 410004005; //speed not met
+    HMI_PRE_CONDITION_HAND_BREAK = 410004006; //hand break not met
+    HMI_PRE_CONDITION_POWER = 410004007; //power not met
+    HMI_PRE_CONDITION_CHARGING = 410004008; //charge not met
+    HMI_PRE_CONDITION_GEAR = 410004009; //gear not met
+    HMI_PRE_CONDITION_DIAGNOSE = 410004010; //diagnose not met
+    HMI_PRE_CONDITION_TEL_DIAGNOSE = 410004011; //tel diagnose not met
+    HMI_PRE_CONDITION_VEHICLE_MODE = 410004012; //vehicle mode not met
+    HMI_PRE_CONDITION_LOCK = 410004013; //lock not met
+    HMI_PRE_CONDITION_WINDOW = 410004014; //window not met
+    HMI_PRE_CONDITION_SECURITY = 410004015; //security not met
+    HMI_PRE_CONDITION_MOTOR = 410004016; //motor not met
+    HMI_PRE_CONDITION_ENGINE = 410004017; //engine not met
+    HMI_PRE_CONDITION_BATTERY_LEVEL = 410004018; //battery level not met
+    HMI_PRE_CONDITION_START_STOP = 410004019; //start stop level not met
+    HMI_PRE_CONDITION_ACC = 410004020; //acc not met
+    HMI_PRE_CONDITION_DCDC = 410004021; //dcdc not met
+    HMI_PRE_CONDITION_OTA = 410004022; //ota not met
+    HMI_PRE_CONDITION_HV_READY = 410004023; //hv ready not met
+
+    //ota condition not met code
+    HMI_OTA_CONDITION_UNKNOWN = 410014001; //unknown
+    HMI_OTA_CONDITION_SPEED = 410014002; //speed not met
+    HMI_OTA_CONDITION_BATTERY_POWER = 410014003; //battery power not met
+    HMI_OTA_CONDITION_BATTERY_VOLTAGE = 410014004; //battery voltage not met
+    HMI_OTA_CONDITION_POWER_READY = 410014005; //speed not met
+    HMI_OTA_CONDITION_HAND_BREAK = 410014006; //hand break not met
+    HMI_OTA_CONDITION_POWER = 410014007; //power not met
+    HMI_OTA_CONDITION_CHARGING = 410014008; //charge not met
+    HMI_OTA_CONDITION_GEAR = 410014009; //gear not met
+    HMI_OTA_CONDITION_DIAGNOSE = 410014010; //diagnose not met
+    HMI_OTA_CONDITION_TEL_DIAGNOSE = 410014011; //tel diagnose not met
+    HMI_OTA_CONDITION_VEHICLE_MODE = 410014012; //vehicle mode not met
+    HMI_OTA_CONDITION_LOCK = 410014013; //lock not met
+    HMI_OTA_CONDITION_WINDOW = 410014014; //window not met
+    HMI_OTA_CONDITION_SECURITY = 410014015; //security not met
+    HMI_OTA_CONDITION_MOTOR = 410014016; //motor not met
+    HMI_OTA_CONDITION_ENGINE = 410014017; //engine not met
+    HMI_OTA_CONDITION_BATTERY_LEVEL = 410014018; //battery level not met
+    HMI_OTA_CONDITION_START_STOP = 410014019; //start stop level not met
+    HMI_OTA_CONDITION_ACC = 410014020; //acc not met
+    HMI_OTA_CONDITION_DCDC = 410014021; //dcdc not met
+    HMI_OTA_CONDITION_OTA = 410014022; //ota not met
+    HMI_OTA_CONDITION_HV_READY = 410014023; //hv ready not met
+}
+

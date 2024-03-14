@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="dialog_notify_view"
+            type="com.carota.lib.executor.ui.dialog.notify.DialogNotify" />
+
+        <variable
+            name="dialog_notify_viewModel"
+            type="com.carota.lib.executor.ui.dialog.notify.DialogNotifyViewModel" />
+
+        <variable
+            name="dialog_notify_care"
+            type="com.carota.lib.executor.ui.dialog.care.DialogNotifyCare" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/dialog_1200x180_bg"
+            android:layout_marginTop="@dimen/px_size_160"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                style="@style/notify_imageview"
+                android:id="@+id/img_notify_update"
+                android:layout_marginStart="@dimen/px_size_55"
+                android:src="@mipmap/icon_notify"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/image_content_description"/>
+            <TextView
+                android:id="@+id/tv_upgrade"
+                style="@style/text_560_width_48_size_single_line"
+                android:layout_marginStart="@dimen/px_size_53"
+                android:layout_marginTop="@dimen/px_size_17"
+                android:gravity="start"
+                android:text="@string/toast_notify_upgrade"
+                android:textColor="@color/color_black_100"
+                app:layout_constraintStart_toEndOf="@id/img_notify_update"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                style="@style/text_560_width_36_size"
+                android:layout_marginStart="@dimen/px_size_53"
+                android:layout_marginTop="@dimen/px_size_5"
+                android:gravity="start"
+                android:textColor="@color/color_black_50"
+                android:text="@string/toast_notify_info"
+                app:layout_constraintStart_toEndOf="@id/img_notify_update"
+                app:layout_constraintTop_toBottomOf="@id/tv_upgrade" />
+            <Button
+                android:id="@+id/btn_notify_check"
+                style="@style/confirm_button_240x96"
+                android:layout_marginStart="@dimen/px_size_22"
+                android:text="@string/toast_notify_check"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_upgrade"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{view->dialog_notify_view.onConfirmClicked()}"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
