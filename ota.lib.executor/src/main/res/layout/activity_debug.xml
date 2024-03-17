@@ -52,6 +52,20 @@
                 style="@style/debug_button_500x80"
                 android:text="@string/debug_schedule"
                 android:onClick="@{view->debug_activity_view.onSetScheduleTimeClicked()}"/>
+
+            <Button
+                android:id="@+id/btn_low_storage_battery_dialog"
+                android:layout_marginTop="@dimen/px_size_10"
+                style="@style/debug_button_500x80"
+                android:text="@string/debug_low_storage_battery"
+                android:onClick="@{view->debug_activity_view.onDisplayLowStorageBatteryDialog()}"/>
+
+            <Button
+                android:id="@+id/btn_low_power_battery_dialog"
+                android:layout_marginTop="@dimen/px_size_10"
+                style="@style/debug_button_500x80"
+                android:text="@string/debug_low_power_battery"
+                android:onClick="@{view->debug_activity_view.onDisplayLowPowerBatteryDialog()}"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,7 +7,7 @@ import com.carota.lib.common.uitls.CountdownUtil
 import com.carota.lib.common.uitls.EventBus
 import com.carota.lib.common.uitls.Logger
 import com.carota.lib.sdk.CarotaSdkHelper
-import com.carota.lib.ue.pump.PumpDataInit
+import com.carota.lib.executor.ue.pump.PumpDataInit
 
 class NodeInit(private val context: Context, private val policyMap: HashMap<UpgradeType, CarOtaHmi.Policy>): NodeBase(){
     private val initPumper = PumpDataInit()

@@ -30,7 +30,6 @@
 
     <style name="notify_imageview" parent="base_imageview">
         <item name="android:src"                        >@mipmap/icon_notify</item>
-        <item name="android:contentDescription"         >@string/image_content_description</item>
     </style>
     <!--********************************** Imageview style *************************************-->
 

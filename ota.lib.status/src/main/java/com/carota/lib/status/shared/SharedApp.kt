@@ -3,7 +3,9 @@ package com.carota.lib.status.shared
 import android.content.Context
 import android.content.SharedPreferences
 import com.carota.lib.status.shared.SharedManager.Statical.DEF_SCHEDULE_TIME
+import com.carota.lib.status.shared.SharedManager.Statical.DEF_UPGRADE_STATUS
 import com.carota.lib.status.shared.SharedManager.Statical.DEF_VEHICLE_MODE
+import com.carota.lib.status.shared.SharedManager.Statical.TAG_UPGRADE_STATUS
 
 class SharedApp {
 
@@ -45,6 +47,14 @@ class SharedApp {
         set(value)  = with(shared.edit()){
             this.putLong(SharedManager.TAG_VEHICLE_MODE, value)
             this.apply()
+            field = value
+        }
+
+    var upgradeStatus : String = DEF_UPGRADE_STATUS
+        get()       = shared.getString(TAG_UPGRADE_STATUS, DEF_UPGRADE_STATUS) ?: DEF_UPGRADE_STATUS
+        set(value)  = with(shared.edit()){
+            putString(TAG_UPGRADE_STATUS, value)
+            apply()
             field = value
         }
 

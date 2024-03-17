@@ -14,6 +14,10 @@
         <variable
             name="main_activity_viewModel"
             type="MainActivityViewModel" />
+
+        <variable
+            name = "main_care"
+            type = "com.carota.lib.executor.ui.activity.care.MainActivityCare"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +32,7 @@
         tools:context=".ui.activity.MainActivity">
 
         <LinearLayout
+            android:id="@+id/ll_version"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/px_size_60"
             android:layout_marginTop="@dimen/px_size_170"
@@ -35,7 +40,9 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:main_activity_care="@{main_care}"
+            app:main_activity_entity="@{main_activity_view}">
             <ImageView
                 style="@style/base_imageview"
                 android:id="@+id/iv_audio"
@@ -48,6 +55,7 @@
                 style="@style/text_single_line"
                 android:layout_marginStart="@dimen/px_size_18"
                 android:text="@string/audio"
+                android:textSize="@dimen/text_size_36"
                 android:textColor="@color/color_black_100"
                 app:layout_constraintStart_toEndOf="@id/iv_audio"
                 android:onClick="@{view->main_activity_view.onPlaySoundClicked()}"/>
@@ -63,6 +71,7 @@
                 android:id="@+id/tv_version_list"
                 style="@style/text_single_line"
                 android:text="@string/version_list"
+                android:textSize="@dimen/text_size_36"
                 android:layout_marginStart="@dimen/px_size_29"
                 android:textColor="@color/color_black_100"
                 app:layout_constraintStart_toEndOf="@id/iv_version_list"
@@ -77,7 +86,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:onClick="@{view->main_activity_view.onHideViewClicked()}"/>
+            android:onClick="@{view->main_activity_view.onHideViewClicked()}"
+            app:main_activity_care="@{main_care}"
+            app:main_activity_entity="@{main_activity_view}"/>
 
         <TextView
             android:id="@+id/tv_time"
@@ -86,7 +97,9 @@
             android:text="@string/update_required_time"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_new_version"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_new_version"
+            app:main_activity_care="@{main_care}"
+            app:main_activity_entity="@{main_activity_view}"/>
 
         <TextView
             android:id="@+id/tv_detail_part"
@@ -97,7 +110,9 @@
             android:singleLine="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_new_version" />
+            app:layout_constraintTop_toBottomOf="@id/tv_new_version"
+            app:main_activity_care="@{main_care}"
+            app:main_activity_entity="@{main_activity_view}"/>
 
         <TextView
             android:id="@+id/tv_detail_show"
@@ -110,7 +125,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_detail_part"
-            android:onClick="@{View->main_activity_view.onDetailClicked()}"/>
+            android:onClick="@{View->main_activity_view.onDetailClicked()}"
+            app:main_activity_care="@{main_care}"
+            app:main_activity_entity="@{main_activity_view}"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -131,7 +148,9 @@
                 style="@style/confirm_button_500x108"
                 android:layout_marginStart="@dimen/px_size_70"
                 android:onClick="@{view->main_activity_view.onScheduleClicked()}"
-                android:text="@string/update_schedule"/>
+                android:text="@string/update_schedule"
+                app:main_activity_entity="@{main_activity_view}"
+                app:main_activity_care="@{main_care}" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

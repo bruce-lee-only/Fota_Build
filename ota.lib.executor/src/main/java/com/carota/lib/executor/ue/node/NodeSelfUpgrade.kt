@@ -4,7 +4,7 @@ import com.carota.lib.common.uitls.EventBus
 import com.carota.lib.common.uitls.Logger
 import com.carota.lib.sdk.CarotaSdkHelper
 import com.carota.lib.status.ocean.OceanSdkData
-import com.carota.lib.ue.pump.PumpDataSelfUpgrade
+import com.carota.lib.executor.ue.pump.PumpDataSelfUpgrade
 
 class NodeSelfUpgrade: NodeBase() {
     private val pumpDataSelfUpgrade = PumpDataSelfUpgrade()

@@ -1,4 +1,4 @@
-package com.carota.lib.executor.ui.dialog.base
+package com.carota.lib.executor.ui
 
 import com.carota.lib.common.uitls.LiveDataUtil
 

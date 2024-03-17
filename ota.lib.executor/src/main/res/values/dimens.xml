@@ -44,6 +44,7 @@
     <dimen name="px_size_53" tools:ignore="PxUsage"     >53px</dimen>
     <dimen name="px_size_55" tools:ignore="PxUsage"     >55px</dimen>
     <dimen name="px_size_60" tools:ignore="PxUsage"     >60px</dimen>
+    <dimen name="px_size_61" tools:ignore="PxUsage"     >61px</dimen>
     <dimen name="px_size_70" tools:ignore="PxUsage"     >70px</dimen>
     <dimen name="px_size_72" tools:ignore="PxUsage"     >72px</dimen>
     <dimen name="px_size_80" tools:ignore="PxUsage"     >80px</dimen>
@@ -60,6 +61,7 @@
     <dimen name="px_size_500" tools:ignore="PxUsage"    >500px</dimen>
     <dimen name="px_size_560" tools:ignore="PxUsage"    >560px</dimen>
     <dimen name="px_size_590" tools:ignore="PxUsage"    >590px</dimen>
+    <dimen name="px_size_612" tools:ignore="PxUsage"    >612px</dimen>
     <dimen name="px_size_1200" tools:ignore="PxUsage"   >1200px</dimen>
     <dimen name="px_size_1330" tools:ignore="PxUsage"   >1330px</dimen>
     <dimen name="px_size_1680" tools:ignore="PxUsage"   >1680px</dimen>

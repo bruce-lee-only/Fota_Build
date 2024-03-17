@@ -1,7 +1,7 @@
 package com.carota.lib.executor.ui.dialog.care
 
 import com.carota.lib.common.uitls.LiveDataUtil
-import com.carota.lib.executor.ui.dialog.base.BaseCare
+import com.carota.lib.executor.ui.BaseCare
 
 class DialogAttentionCare : BaseCare(){
     private lateinit var liveData: LiveDataUtil<DialogAttentionCare>

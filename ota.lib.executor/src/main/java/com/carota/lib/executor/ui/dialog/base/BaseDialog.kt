@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.carota.lib.common.uitls.Logger
+import com.carota.lib.executor.ui.BaseCare
 import com.carota.lib.executor.ui.dialog.base.basedialog.ToastManager
 import com.carota.lib.executor.ui.dialog.base.basedialog.showDialog
 

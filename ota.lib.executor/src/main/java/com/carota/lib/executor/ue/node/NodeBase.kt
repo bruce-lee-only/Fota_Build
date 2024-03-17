@@ -2,10 +2,10 @@ package com.carota.lib.executor.ue.node
 
 import com.carota.lib.common.uitls.LiveDataUtil
 import com.carota.lib.common.uitls.Logger
-import com.carota.lib.executor.ui.dialog.base.BaseCare
+import com.carota.lib.executor.ui.BaseCare
 import org.koin.core.component.KoinComponent
 
-open class NodeBase: KoinComponent, INode {
+abstract class NodeBase: KoinComponent, INode {
     val className: String = this::class.simpleName ?: ""
 
     val liveData: LiveDataUtil<Boolean> = LiveDataUtil()
@@ -39,4 +39,5 @@ open class NodeBase: KoinComponent, INode {
             false
         }
     }
+
 }

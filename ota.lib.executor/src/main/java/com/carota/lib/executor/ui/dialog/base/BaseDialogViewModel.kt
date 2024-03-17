@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.AndroidViewModel
 import com.carota.lib.common.uitls.LiveDataUtil
+import com.carota.lib.executor.ui.BaseCare
 
 abstract class BaseDialogViewModel<VB : ViewDataBinding, T: BaseCare>(application: Application)
     : AndroidViewModel(application) {
